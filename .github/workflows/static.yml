@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine Dosage Calculator by Saphira</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        h2 {
+            text-align: center;
+            color: #008080;
+        }
+
+        form {
+            max-width: 400px;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        input {
+            width: calc(100% - 16px);
+            padding: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        select {
+            width: calc(100% - 16px);
+            padding: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #008080;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Medicine Dosage Calculator by Saphira</h2>
+
+    <form id="calculatorForm">
+        <label for="medicine">Select Medicine:</label>
+        <select id="medicine" name="medicine">
+            <option value="metronidazole">Metronidazole</option>
+            <option value="penicillin V">Penicillin V</option>
+            <option value="amoxicillin 125">Amoxicillin 125</option>
+            <option value="amoxicillin 250">Amoxicillin 250</option>
+            <option value="amoxicillin 200">Amoxicillin 200</option>
+            <option value="amoxicillin 400">Amoxicillin 400</option>
+            <option value="azithromycin 100">Azithromycin 100</option>
+            <option value="azithromycin 200">Azithromycin 200</option>
+            <option value="cefixime">Cefixime</option>
+            <option value="cephalexin 125">Cephalexin 125</option>
+            <option value="cephalexin 250">Cephalexin 250</option>
+            <option value="clarithromycin 125">Clarithromycin 125</option>
+            <option value="clarithromycin 250">Clarithromycin 250</option>
+            <option value="co- amoxiclave 156">Co- amoxiclave 156</option>
+            <option value="co- amoxiclave 312">Co- amoxiclave 312</option>
+            <option value="co- amoxiclave 228">Co- amoxiclave 228</option>
+            <option value="co- amoxiclave 457">Co- amoxiclave 457</option>
+            <option value="co- amoxiclave 643">Co- amoxiclave 643</option>
+            <option value="co- trimoxazole">Co- trimoxazole</option>
+            <option value="erythromycin">Erythromycin</option>
+        </select>
+
+        <label for="weight">Enter Weight (kg):</label>
+        <input type="number" id="weight" name="weight" step="0.1" placeholder="Enter weight in kg" required>
+
+        <button type="button" onclick="calculateDosage()">Calculate Dosage</button>
+
+        <div id="result"></div>
+    </form>
+
+    <script>
+        function calculateDosage() {
+            var medicine = document.getElementById("medicine").value;
+            var weight = document.getElementById("weight").value;
+            var resultElement = document.getElementById("result");
+
+            if (!weight || isNaN(weight)) {
+                alert("Please enter a valid weight.");
+                return;
+            }
+
+            var dosage;
+            var dosageInfo;
+
+            switch (medicine) {
+                case "metronidazole":
+                    dosage = 1.6 * weight / 3;
+                    dosageInfo = "Every 8 hours for 7 to 10 days";
+                    break;
+                case "penicillin V":
+                    dosage = 0.7 * weight / 4;
+                    dosageInfo = "Every 6 hours for 5 to 10 days";
+                    break;
+                case "amoxicillin 125":
+                    dosage = 2.8 * weight / 3;
+                    dosageInfo = "Every 8 hours for 10 to 14 days";
+                    break;
+                case "amoxicillin 250":
+                    dosage = 1.4 * weight / 3;
+                    dosageInfo = "Every 8 hours for 10 to 14 days";
+                    break;
+                case "amoxicillin 200":
+                    dosage = 1.75 * weight / 2;
+                    dosageInfo = "Every 12 hours for 10 to 14 days";
+                    break;
+                case "amoxicillin 400":
+                    dosage = 0.875 * weight / 2;
+                    dosageInfo = "Every 12 hours for 10 to 14 days";
+                    break;
+                case "azithromycin 100":
+                    dosage = 0.25 * weight / 1;
+                    dosageInfo = "On the first day, twice of the calculated amount, then the calculated amount until the fifth day";
+                    break;
+                case "azithromycin 200":
+                    dosage = 0.125 * weight / 1;
+                    dosageInfo = "On the first day, twice of the calculated amount, then the calculated amount until the fifth day";
+                    break;
+                case "cefixime":
+                    dosage = 0.4 * weight / 2;
+                    dosageInfo = "Every 12 hours for 5 to 7 days";
+                    break;
+                case "cephalexin 125":
+                    dosage = 1.6 * weight / 4;
+                    dosageInfo = "Every 6 hours for 7 to 14 days";
+                    break;
+                case "cephalexin 250":
+                    dosage = 0.8 * weight / 4;
+                    dosageInfo = "Every 6 hours for 7 to 14 days";
+                    break;
+                case "clarithromycin 125":
+                    dosage = 0.6 * weight / 2;
+                    dosageInfo = "Every 12 hours for 7 to 14 days";
+                    break;
+                case "clarithromycin 250":
+                    dosage = 0.3 * weight / 2;
+                    dosageInfo = "Every 12 hours for 7 to 14 days";
+                    break;
+                case "co- amoxiclave 156":
+                    dosage = 3.2 * weight / 3;
+                    dosageInfo = "Every 8 hours for 5 to 14 days";
+                    break;
+                case "co- amoxiclave 312":
+                    dosage = 1.6 * weight / 3;
+                    dosageInfo = "Every 8 hours for 5 to 14 days";
+                    break;
+                case "co- amoxiclave 228":
+                    dosage = 2 * weight / 2;
+                    dosageInfo = "Every 12 hours for 5 to 14 days";
+                    break;
+                case "co- amoxiclave 457":
+                    dosage = 1 * weight / 2;
+                    dosageInfo = "Every 12 hours for 5 to 14 days";
+                    break;
+                case "co- amoxiclave 643":
+                    dosage = 0.6666666666667 * weight / 2;
+                    dosageInfo = "Every 12 hours for 5 to 14 days";
+                    break;
+                case "co- trimoxazole":
+                    dosage = 1.125 * weight / 2;
+                    dosageInfo = "Every 12 hours for 3 to 7 days";
+                    break;
+                case "erythromycin":
+                    dosage = 1.25 * weight / 4;
+                    dosageInfo = "Every 6 hours for 6 to 14 days";
+                    break;
+                default:
+                    alert("Invalid medicine selection");
+                    return;
+            }
+
+            resultElement.innerText = "Recommended Dosage: " + dosage.toFixed(2) + " ml\n" + dosageInfo;
+        }
+    </script>
+
+</body>
+</html>
