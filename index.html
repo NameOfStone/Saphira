@@ -69,6 +69,16 @@
             font-weight: bold;
             color: #008080;
         }
+
+        #manualCalculation {
+            max-width: 400px;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -103,10 +113,37 @@
         <label for="weight">Enter Weight (kg):</label>
         <input type="number" id="weight" name="weight" step="0.1" placeholder="Enter weight in kg" required>
 
+
         <button type="button" onclick="calculateDosage()">Calculate Dosage</button>
 
         <div id="result"></div>
     </form>
+
+    <!-- New section for manual calculation -->
+    <div id="manualCalculation">
+        <h3>Manual Dosage Calculation</h3>
+
+        <label for="patientWeight">patient weight (kg):</label>
+        <input type="number" id="patientWeight" step="0.1" placeholder="kg" required>
+
+        <label for="medicineMg">required dose of medicine per kg patient weight in a day (mg/kg/day):</label>
+        <input type="number" id="medicineMg" placeholder="mg/kg/day" required>
+
+        <label for="medicineIn5Ml">dose of medicine (mg/5ml):</label>
+        <input type="number" id="medicineIn5Ml" placeholder="mg/5ml" required>
+
+        <label for="timesPerDay">required number of times per day:</label>
+        <input type="number" id="timesPerDay" placeholder="number of times per day" required>
+
+        <button type="button" onclick="manualDosageCalculation()">Calculate Manual Dosage</button>
+
+        <div id="manualResult"></div>
+    <!-- Telegram Contact Section -->
+    <div id="telegramContact">
+        <h3>Contact Me on Telegram</h3>
+        <p>If you have any ideas for improving this page, feel free to reach out on Telegram!</p>
+        <a href="https://t.me/reza0rbz" target="_blank" rel="noopener noreferrer">Telegram: @reza0rbz</a>
+    </div>
 
     <script>
         function calculateDosage() {
@@ -209,6 +246,22 @@
             }
 
             resultElement.innerText = "Recommended Dosage: " + dosage.toFixed(2) + " ml\n" + dosageInfo;
+        }
+
+        function manualDosageCalculation() {
+            var patientWeight = document.getElementById("patientWeight").value;
+            var medicineMg = document.getElementById("medicineMg").value;
+            var medicineIn5Ml = document.getElementById("medicineIn5Ml").value;
+            var timesPerDay = document.getElementById("timesPerDay").value;
+            var manualResultElement = document.getElementById("manualResult");
+
+            if (!patientWeight || isNaN(patientWeight) || !medicineMg || isNaN(medicineMg) || !medicineIn5Ml || isNaN(medicineIn5Ml) || !timesPerDay || isNaN(timesPerDay)) {
+                alert("Please enter valid values for all fields.");
+                return;
+            }
+
+            var manualDosage = ((patientWeight * medicineMg * 5) / medicineIn5Ml) / timesPerDay;
+            manualResultElement.innerText = "Manual Dosage: " + manualDosage.toFixed(2) + " ml";
         }
     </script>
 
