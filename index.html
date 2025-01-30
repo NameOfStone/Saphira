@@ -4,82 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Medicine Dosage Calculator by Saphira</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-
-        h2 {
-            text-align: center;
-            color: #008080;
-        }
-
-        form {
-            max-width: 400px;
-            margin: auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-        }
-
-        input {
-            width: calc(100% - 16px);
-            padding: 8px;
-            margin-bottom: 16px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        select {
-            width: calc(100% - 16px);
-            padding: 8px;
-            margin-bottom: 16px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        #result {
-            margin-top: 20px;
-            font-weight: bold;
-            color: #008080;
-        }
-
-        #manualCalculation {
-            max-width: 400px;
-            margin: auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
@@ -88,182 +13,62 @@
     <form id="calculatorForm">
         <label for="medicine">Select Medicine:</label>
         <select id="medicine" name="medicine">
-            <option value="metronidazole">Metronidazole</option>
-            <option value="penicillin V">Penicillin V</option>
-            <option value="amoxicillin 125">Amoxicillin 125</option>
-            <option value="amoxicillin 250">Amoxicillin 250</option>
-            <option value="amoxicillin 200">Amoxicillin 200</option>
-            <option value="amoxicillin 400">Amoxicillin 400</option>
-            <option value="azithromycin 100">Azithromycin 100</option>
-            <option value="azithromycin 200">Azithromycin 200</option>
-            <option value="cefixime">Cefixime</option>
-            <option value="cephalexin 125">Cephalexin 125</option>
-            <option value="cephalexin 250">Cephalexin 250</option>
-            <option value="clarithromycin 125">Clarithromycin 125</option>
-            <option value="clarithromycin 250">Clarithromycin 250</option>
-            <option value="co- amoxiclave 156">Co- amoxiclave 156</option>
-            <option value="co- amoxiclave 312">Co- amoxiclave 312</option>
-            <option value="co- amoxiclave 228">Co- amoxiclave 228</option>
-            <option value="co- amoxiclave 457">Co- amoxiclave 457</option>
-            <option value="co- amoxiclave 643">Co- amoxiclave 643</option>
-            <option value="co- trimoxazole">Co- trimoxazole</option>
-            <option value="erythromycin">Erythromycin</option>
+          <option value="metronidazole">Metronidazole</option>
+          <option value="penicillin_V">Penicillin V</option>
+          <option value="amoxicillin_125">Amoxicillin 125</option>
+          <option value="amoxicillin_250">Amoxicillin 250</option>
+          <option value="amoxicillin_200">Amoxicillin 200</option>
+          <option value="amoxicillin_400">Amoxicillin 400</option>
+          <option value="azithromycin_100">Azithromycin 100</option>
+          <option value="azithromycin_200">Azithromycin 200</option>
+          <option value="cefixime">Cefixime</option>
+          <option value="cephalexin_125">Cephalexin 125</option>
+          <option value="cephalexin_250">Cephalexin 250</option>
+          <option value="clarithromycin_125">Clarithromycin 125</option>
+          <option value="clarithromycin_250">Clarithromycin 250</option>
+          <option value="co-amoxiclave_156">Co-amoxiclave 156</option>
+          <option value="co-amoxiclave_312">Co-amoxiclave 312</option>
+          <option value="co-amoxiclave_228">Co-amoxiclave 228</option>
+          <option value="co-amoxiclave_457">Co-amoxiclave 457</option>
+          <option value="co-amoxiclave_643">Co-amoxiclave 643</option>
+          <option value="co-trimoxazole">Co-trimoxazole</option>
+          <option value="erythromycin">Erythromycin</option>
         </select>
-
+    
         <label for="weight">Enter Weight (kg):</label>
         <input type="number" id="weight" name="weight" step="0.1" placeholder="Enter weight in kg" required>
-
 
         <button type="button" onclick="calculateDosage()">Calculate Dosage</button>
 
         <div id="result"></div>
     </form>
 
-    <!-- New section for manual calculation -->
     <div id="manualCalculation">
         <h3>Manual Dosage Calculation</h3>
 
-        <label for="patientWeight">patient weight (kg):</label>
+        <label for="patientWeight">Patient weight (kg):</label>
         <input type="number" id="patientWeight" step="0.1" placeholder="kg" required>
 
-        <label for="medicineMg">required dose of medicine per kg patient weight in a day (mg/kg/day):</label>
+        <label for="medicineMg">Required dose of medicine per kg patient weight in a day (mg/kg/day):</label>
         <input type="number" id="medicineMg" placeholder="mg/kg/day" required>
 
-        <label for="medicineIn5Ml">dose of medicine (mg/5ml):</label>
+        <label for="medicineIn5Ml">Dose of medicine (mg/5ml):</label>
         <input type="number" id="medicineIn5Ml" placeholder="mg/5ml" required>
 
-        <label for="timesPerDay">required number of times per day:</label>
+        <label for="timesPerDay">Required number of times per day:</label>
         <input type="number" id="timesPerDay" placeholder="number of times per day" required>
 
         <button type="button" onclick="manualDosageCalculation()">Calculate Manual Dosage</button>
 
         <div id="manualResult"></div>
-    <!-- Telegram Contact Section -->
+    </div>
+
     <div id="telegramContact">
         <h3>Contact Me on Telegram</h3>
         <p>If you have any ideas for improving this page, feel free to reach out on Telegram!</p>
         <a href="https://t.me/reza0rbz" target="_blank" rel="noopener noreferrer">Telegram: @reza0rbz</a>
     </div>
 
-    <script>
-        function calculateDosage() {
-            var medicine = document.getElementById("medicine").value;
-            var weight = document.getElementById("weight").value;
-            var resultElement = document.getElementById("result");
-
-            if (!weight || isNaN(weight)) {
-                alert("Please enter a valid weight.");
-                return;
-            }
-
-            var dosage;
-            var dosageInfo;
-
-            switch (medicine) {
-                case "metronidazole":
-                    dosage = 1.6 * weight / 3;
-                    dosageInfo = "Every 8 hours for 7 to 10 days";
-                    break;
-                case "penicillin V":
-                    dosage = 0.7 * weight / 4;
-                    dosageInfo = "Every 6 hours for 5 to 10 days";
-                    break;
-                case "amoxicillin 125":
-                    dosage = 2.8 * weight / 3;
-                    dosageInfo = "Every 8 hours for 10 to 14 days";
-                    break;
-                case "amoxicillin 250":
-                    dosage = 1.4 * weight / 3;
-                    dosageInfo = "Every 8 hours for 10 to 14 days";
-                    break;
-                case "amoxicillin 200":
-                    dosage = 1.75 * weight / 2;
-                    dosageInfo = "Every 12 hours for 10 to 14 days";
-                    break;
-                case "amoxicillin 400":
-                    dosage = 0.875 * weight / 2;
-                    dosageInfo = "Every 12 hours for 10 to 14 days";
-                    break;
-                case "azithromycin 100":
-                    dosage = 0.25 * weight / 1;
-                    dosageInfo = "On the first day, twice of the calculated amount, then the calculated amount until the fifth day";
-                    break;
-                case "azithromycin 200":
-                    dosage = 0.125 * weight / 1;
-                    dosageInfo = "On the first day, twice of the calculated amount, then the calculated amount until the fifth day";
-                    break;
-                case "cefixime":
-                    dosage = 0.4 * weight / 2;
-                    dosageInfo = "Every 12 hours for 5 to 7 days";
-                    break;
-                case "cephalexin 125":
-                    dosage = 1.6 * weight / 4;
-                    dosageInfo = "Every 6 hours for 7 to 14 days";
-                    break;
-                case "cephalexin 250":
-                    dosage = 0.8 * weight / 4;
-                    dosageInfo = "Every 6 hours for 7 to 14 days";
-                    break;
-                case "clarithromycin 125":
-                    dosage = 0.6 * weight / 2;
-                    dosageInfo = "Every 12 hours for 7 to 14 days";
-                    break;
-                case "clarithromycin 250":
-                    dosage = 0.3 * weight / 2;
-                    dosageInfo = "Every 12 hours for 7 to 14 days";
-                    break;
-                case "co- amoxiclave 156":
-                    dosage = 3.2 * weight / 3;
-                    dosageInfo = "Every 8 hours for 5 to 14 days";
-                    break;
-                case "co- amoxiclave 312":
-                    dosage = 1.6 * weight / 3;
-                    dosageInfo = "Every 8 hours for 5 to 14 days";
-                    break;
-                case "co- amoxiclave 228":
-                    dosage = 2 * weight / 2;
-                    dosageInfo = "Every 12 hours for 5 to 14 days";
-                    break;
-                case "co- amoxiclave 457":
-                    dosage = 1 * weight / 2;
-                    dosageInfo = "Every 12 hours for 5 to 14 days";
-                    break;
-                case "co- amoxiclave 643":
-                    dosage = 0.6666666666667 * weight / 2;
-                    dosageInfo = "Every 12 hours for 5 to 14 days";
-                    break;
-                case "co- trimoxazole":
-                    dosage = 1.125 * weight / 2;
-                    dosageInfo = "Every 12 hours for 3 to 7 days";
-                    break;
-                case "erythromycin":
-                    dosage = 1.25 * weight / 4;
-                    dosageInfo = "Every 6 hours for 6 to 14 days";
-                    break;
-                default:
-                    alert("Invalid medicine selection");
-                    return;
-            }
-
-            resultElement.innerText = "Recommended Dosage: " + dosage.toFixed(2) + " ml\n" + dosageInfo;
-        }
-
-        function manualDosageCalculation() {
-            var patientWeight = document.getElementById("patientWeight").value;
-            var medicineMg = document.getElementById("medicineMg").value;
-            var medicineIn5Ml = document.getElementById("medicineIn5Ml").value;
-            var timesPerDay = document.getElementById("timesPerDay").value;
-            var manualResultElement = document.getElementById("manualResult");
-
-            if (!patientWeight || isNaN(patientWeight) || !medicineMg || isNaN(medicineMg) || !medicineIn5Ml || isNaN(medicineIn5Ml) || !timesPerDay || isNaN(timesPerDay)) {
-                alert("Please enter valid values for all fields.");
-                return;
-            }
-
-            var manualDosage = ((patientWeight * medicineMg * 5) / medicineIn5Ml) / timesPerDay;
-            manualResultElement.innerText = "Manual Dosage: " + manualDosage.toFixed(2) + " ml";
-        }
-    </script>
+    <script src="script.js"></script>
 
 </body>
-</html>
