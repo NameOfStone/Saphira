@@ -1,163 +1,93 @@
-/* Default Light Mode (Day) */
+/* Default (Light Mode) */
 body {
     font-family: 'Poppins', sans-serif;
-    margin: 0;
-    padding: 0;
-    background: linear-gradient(to bottom, #ffffff, #e6e6e6); /* Light gradient */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
+    background: linear-gradient(to bottom, #ffffff, #e6e6e6);
+    color: black;
     transition: 0.5s;
-}
-
-/* Dark Mode (Night) */
-@media (prefers-color-scheme: dark) {
-    body {
-        background: linear-gradient(to bottom, #1a1a1a, #000000); /* Dark gradient */
-        color: white;
-    }
-    form, #manualCalculation, #telegramContact {
-        background: rgba(30, 30, 30, 0.6);
-    }
-    input, select {
-        background: rgba(40, 40, 40, 0.6);
-    }
-}
-
-/* Toggle Dark Mode (Manual Override) */
-body.dark-mode {
-    background: linear-gradient(to bottom, #1a1a1a, #000000) !important;
-    color: white !important;
-}
-body.light-mode {
-    background: linear-gradient(to bottom, #ffffff, #e6e6e6) !important;
-    color: black !important;
-}
-
-/* Form Containers */
-form, #manualCalculation, #telegramContact {
-    max-width: 400px;
-    width: 90%;
-    background: rgba(255, 255, 255, 0.2);
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
     text-align: center;
-    margin-bottom: 20px;
+}
+
+/* Dark Mode */
+body.dark-mode {
+    background: linear-gradient(to bottom, #1a1a1a, #000000);
+    color: white;
+}
+
+/* Form Container */
+.container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
     transition: 0.3s;
 }
 
-/* Labels */
-label {
-    display: block;
-    margin: 10px 0 5px;
-    font-weight: 600;
+/* Dark Mode Form */
+body.dark-mode .container {
+    background: rgba(40, 40, 40, 0.6);
 }
 
-/* Inputs and Select */
-input, select {
+/* Input Fields */
+input, select, button {
     width: 100%;
     padding: 10px;
-    margin-bottom: 15px;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    text-align: center;
-    background: rgba(255, 255, 255, 0.2);
-    color: black;
-    outline: none;
-    transition: 0.3s;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
 }
 
-input::placeholder, select {
-    color: black;
-    opacity: 0.7;
-}
-
-input:focus, select:focus {
-    background: rgba(255, 255, 255, 0.4);
-}
-
-/* Buttons with Green-to-Blue Gradient */
-button {
-    background: linear-gradient(to right, #00c851, #007eec); /* Green to Blue */
+/* Dark Mode Inputs */
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode button {
+    background: rgba(60, 60, 60, 0.8);
     color: white;
-    padding: 12px 18px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    transition: 0.3s;
-    width: 100%;
+    border: 1px solid #555;
 }
 
-button:hover {
-    background: linear-gradient(to right, #009d40, #005fcc); /* Darker gradient */
-    transform: scale(1.05);
-}
-
-/* Results */
-#result, #manualResult {
-    margin-top: 20px;
-    font-weight: bold;
-    font-size: 18px;
-}
-
-/* Telegram Contact Section */
-#telegramContact a {
-    color: #ffd700;
-    font-weight: bold;
-    text-decoration: none;
-    transition: 0.3s;
-}
-
-#telegramContact a:hover {
-    text-decoration: underline;
-}
-
-/* Dark Mode Adjustments */
-body.dark-mode form, body.dark-mode #manualCalculation, body.dark-mode #telegramContact {
-    background: rgba(30, 30, 30, 0.6) !important;
-    color: white !important;
-}
-
-body.dark-mode input, body.dark-mode select {
-    background: rgba(40, 40, 40, 0.6) !important;
-    color: white !important;
-}
-
-body.dark-mode input::placeholder, body.dark-mode select {
-    color: white !important;
-}
-
-/* Toggle Mode Button */
-/* Toggle Mode Button */
+/* Toggle Button */
 #toggleMode {
     position: fixed;
-    top: 10px; /* Reduce top distance */
-    right: 10px; /* Reduce right distance */
+    top: 10px;
+    right: 10px;
     background: linear-gradient(to right, #00c851, #007eec);
-    border-radius: 50px;
-    padding: 4px 10px; /* Further reduced padding */
-    font-size: 10px; /* Smaller font size */
+    border: none;
+    border-radius: 20px;
+    padding: 10px 15px;
+    font-size: 14px;
     font-weight: bold;
     cursor: pointer;
     transition: 0.3s;
-    width: 60px; /* Reduced width */
-    text-align: center; /* Center text */
 }
 
+/* Button Hover Effect */
 #toggleMode:hover {
-    transform: scale(1.1);
+    background: linear-gradient(to right, #009d40, #005fcc);
 }
 
-/* Responsive Design */
-@media (max-width: 480px) {
-    form, #manualCalculation, #telegramContact {
-        width: 95%;
-    }
+/* 📌 Contact Section Styling */
+footer {
+    margin-top: 50px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.1);
+    border-top: 2px solid #ccc;
+    text-align: center;
+}
+
+/* Dark Mode Contact */
+body.dark-mode footer {
+    background: rgba(255, 255, 255, 0.1);
+    border-top: 2px solid #444;
+}
+
+/* Contact Links */
+footer a {
+    color: #007eec;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
 }
