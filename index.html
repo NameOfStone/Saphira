@@ -3,72 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medicine Dosage Calculator by Saphira</title>
+    <title>Medicine Dosage Calculator</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-    <h2>Medicine Dosage Calculator by Saphira</h2>
+    <button id="toggleMode" onclick="toggleMode()">🌙 Dark Mode</button>
 
-    <form id="calculatorForm">
-        <label for="medicine">Select Medicine:</label>
-        <select id="medicine" name="medicine">
-          <option value="metronidazole">Metronidazole</option>
-          <option value="penicillin_V">Penicillin V</option>
-          <option value="amoxicillin_125">Amoxicillin 125</option>
-          <option value="amoxicillin_250">Amoxicillin 250</option>
-          <option value="amoxicillin_200">Amoxicillin 200</option>
-          <option value="amoxicillin_400">Amoxicillin 400</option>
-          <option value="azithromycin_100">Azithromycin 100</option>
-          <option value="azithromycin_200">Azithromycin 200</option>
-          <option value="cefixime">Cefixime</option>
-          <option value="cephalexin_125">Cephalexin 125</option>
-          <option value="cephalexin_250">Cephalexin 250</option>
-          <option value="clarithromycin_125">Clarithromycin 125</option>
-          <option value="clarithromycin_250">Clarithromycin 250</option>
-          <option value="co-amoxiclave_156">Co-amoxiclave 156</option>
-          <option value="co-amoxiclave_312">Co-amoxiclave 312</option>
-          <option value="co-amoxiclave_228">Co-amoxiclave 228</option>
-          <option value="co-amoxiclave_457">Co-amoxiclave 457</option>
-          <option value="co-amoxiclave_643">Co-amoxiclave 643</option>
-          <option value="co-trimoxazole">Co-trimoxazole</option>
-          <option value="erythromycin">Erythromycin</option>
-        </select>
-    
-        <label for="weight">Enter Weight (kg):</label>
-        <input type="number" id="weight" name="weight" step="0.1" placeholder="Enter weight in kg" required>
+    <div class="container">
+        <h1>Medicine Dosage Calculator</h1>
 
-        <button type="button" onclick="calculateDosage()">Calculate Dosage</button>
+        <form id="dosageForm">
+            <label for="weight">Patient Weight (kg):</label>
+            <input type="number" id="weight" required>
+
+            <label for="medicine">Select Medicine:</label>
+            <select id="medicine" onchange="updateDiseases()">
+                <option value="">-- Select Medicine --</option>
+                <option value="metronidazole">Metronidazole</option>
+                <option value="penicillin_V">Penicillin V</option>
+                <option value="amoxicillin_125">Amoxicillin 125</option>
+                <option value="amoxicillin_250">Amoxicillin 250</option>
+                <option value="amoxicillin_200">Amoxicillin 200</option>
+                <option value="amoxicillin_400">Amoxicillin 400</option>
+                <option value="azithromycin_100">Azithromycin 100</option>
+                <option value="azithromycin_200">Azithromycin 200</option>
+                <option value="cefixime">Cefixime</option>
+                <option value="cephalexin_125">Cephalexin 125</option>
+                <option value="cephalexin_250">Cephalexin 250</option>
+                <option value="clarithromycin_125">Clarithromycin 125</option>
+                <option value="clarithromycin_250">Clarithromycin 250</option>
+                <option value="co_amoxiclave_156">Co-amoxiclave 156</option>
+                <option value="co_amoxiclave_312">Co-amoxiclave 312</option>
+                <option value="co_amoxiclave_228">Co-amoxiclave 228</option>
+                <option value="co_amoxiclave_457">Co-amoxiclave 457</option>
+                <option value="co_amoxiclave_643">Co-amoxiclave 643</option>
+                <option value="co_trimoxazole">Co-trimoxazole</option>
+                <option value="erythromycin">Erythromycin</option>
+</select>
+            </select>
+
+            <label for="disease">Select Disease:</label>
+            <select id="disease">
+                <option value="">-- Select Disease --</option>
+            </select>
+
+            <button type="button" onclick="calculateDosage()">Calculate</button>
+        </form>
 
         <div id="result"></div>
-    </form>
-
-    <div id="manualCalculation">
-        <h3>Manual Dosage Calculation</h3>
-
-        <label for="patientWeight">Patient weight (kg):</label>
-        <input type="number" id="patientWeight" step="0.1" placeholder="kg" required>
-
-        <label for="medicineMg">Required dose of medicine per kg patient weight in a day (mg/kg/day):</label>
-        <input type="number" id="medicineMg" placeholder="mg/kg/day" required>
-
-        <label for="medicineIn5Ml">Dose of medicine (mg/5ml):</label>
-        <input type="number" id="medicineIn5Ml" placeholder="mg/5ml" required>
-
-        <label for="timesPerDay">Required number of times per day:</label>
-        <input type="number" id="timesPerDay" placeholder="number of times per day" required>
-
-        <button type="button" onclick="manualDosageCalculation()">Calculate Manual Dosage</button>
-
-        <div id="manualResult"></div>
     </div>
 
-    <div id="telegramContact">
-        <h3>Contact Me on Telegram</h3>
-        <p>If you have any ideas for improving this page, feel free to reach out on Telegram!</p>
-        <a href="https://t.me/reza0rbz" target="_blank" rel="noopener noreferrer">Telegram: @reza0rbz</a>
-    </div>
+    <!-- 📌 Contact Information Section -->
+    <footer>
+        <h2>Contact Information</h2>
+        <p>Telegram: <a href="https://t.me/reza0rbz" target="_blank">@reza0rbz</a></p>
+    </footer>
 
     <script src="script.js"></script>
 
 </body>
+</html>
