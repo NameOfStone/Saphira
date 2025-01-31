@@ -1,157 +1,199 @@
-function calculateDosage() {
-    var medicine = document.getElementById("medicine").value;
-    var weight = document.getElementById("weight").value;
-    var resultElement = document.getElementById("result");
-
-    if (!weight || isNaN(weight)) {
-        alert("Please enter a valid weight.");
-        return;
-    }
-
-    var dosage;
-    var dosageInfo;
-
-    switch (medicine) {
-    case "metronidazole":
-        dosage = 1.6 * weight / 3;
-        dosageInfo = "Every 8 hours for 7 to 10 days";
-        break;
-    case "penicillin_V":
-        dosage = 0.7 * weight / 4;
-        dosageInfo = "Every 6 hours for 5 to 10 days";
-        break;
-    case "amoxicillin_125":
-        dosage = 2.8 * weight / 3;
-        dosageInfo = "Every 8 hours for 10 to 14 days";
-        break;
-    case "amoxicillin_250":
-        dosage = 1.4 * weight / 3;
-        dosageInfo = "Every 8 hours for 10 to 14 days";
-        break;
-    case "amoxicillin_200":
-        dosage = 1.75 * weight / 2;
-        dosageInfo = "Every 12 hours for 10 to 14 days";
-        break;
-    case "amoxicillin_400":
-        dosage = 0.875 * weight / 2;
-        dosageInfo = "Every 12 hours for 10 to 14 days";
-        break;
-    case "azithromycin_100":
-        dosage = 0.25 * weight / 1;
-        dosageInfo = "On the first day, twice of the calculated amount, then the calculated amount until the fifth day";
-        break;
-    case "azithromycin_200":
-        dosage = 0.125 * weight / 1;
-        dosageInfo = "On the first day, twice of the calculated amount, then the calculated amount until the fifth day";
-        break;
-    case "cefixime":
-        dosage = 0.4 * weight / 2;
-        dosageInfo = "Every 12 hours for 5 to 7 days";
-        break;
-    case "cephalexin_125":
-        dosage = 1.6 * weight / 4;
-        dosageInfo = "Every 6 hours for 7 to 14 days";
-        break;
-    case "cephalexin_250":
-        dosage = 0.8 * weight / 4;
-        dosageInfo = "Every 6 hours for 7 to 14 days";
-        break;
-    case "clarithromycin_125":
-        dosage = 0.6 * weight / 2;
-        dosageInfo = "Every 12 hours for 7 to 14 days";
-        break;
-    case "clarithromycin_250":
-        dosage = 0.3 * weight / 2;
-        dosageInfo = "Every 12 hours for 7 to 14 days";
-        break;
-    case "co-amoxiclave_156":
-        dosage = 3.2 * weight / 3;
-        dosageInfo = "Every 8 hours for 5 to 14 days";
-        break;
-    case "co-amoxiclave_312":
-        dosage = 1.6 * weight / 3;
-        dosageInfo = "Every 8 hours for 5 to 14 days";
-        break;
-    case "co-amoxiclave_228":
-        dosage = 2 * weight / 2;
-        dosageInfo = "Every 12 hours for 5 to 14 days";
-        break;
-    case "co-amoxiclave_457":
-        dosage = 1 * weight / 2;
-        dosageInfo = "Every 12 hours for 5 to 14 days";
-        break;
-    case "co-amoxiclave_643":
-        dosage = 0.6667 * weight / 2;
-        dosageInfo = "Every 12 hours for 5 to 14 days";
-        break;
-    case "co-trimoxazole":
-        dosage = 1.125 * weight / 2;
-        dosageInfo = "Every 12 hours for 3 to 7 days";
-        break;
-    case "erythromycin":
-        dosage = 1.25 * weight / 4;
-        dosageInfo = "Every 6 hours for 6 to 14 days";
-        break;
-    default:
-        alert("Invalid medicine selection");
-        return;
-}
-
-    resultElement.innerText = "Recommended Dosage: " + dosage.toFixed(2) + " ml\n" + dosageInfo;
-}
-
-function manualDosageCalculation() {
-    var patientWeight = document.getElementById("patientWeight").value;
-    var medicineMg = document.getElementById("medicineMg").value;
-    var medicineIn5Ml = document.getElementById("medicineIn5Ml").value;
-    var timesPerDay = document.getElementById("timesPerDay").value;
-    var manualResultElement = document.getElementById("manualResult");
-
-    if (!patientWeight || !medicineMg || !medicineIn5Ml || !timesPerDay) {
-        alert("Please enter valid values for all fields.");
-        return;
-    }
-
-    var manualDosage = ((patientWeight * medicineMg * 5) / medicineIn5Ml) / timesPerDay;
-    manualResultElement.innerText = "Manual Dosage: " + manualDosage.toFixed(2) + " ml";
-}
-// Toggle Between Dark and Light Mode
+// Function to toggle between light and dark mode
 function toggleMode() {
     let body = document.body;
     let button = document.getElementById("toggleMode");
-    
+
+    // Toggle dark mode class
+    body.classList.toggle("dark-mode");
+
+    // Save user preference
     if (body.classList.contains("dark-mode")) {
-        body.classList.remove("dark-mode");
-        body.classList.add("light-mode");
-        localStorage.setItem("mode", "light"); // Save mode preference
-        button.innerText = "Day"; // Change button text to "Day"
+        localStorage.setItem("theme", "dark");
+        button.innerText = "☀️ Light Mode";
     } else {
-        body.classList.remove("light-mode");
-        body.classList.add("dark-mode");
-        localStorage.setItem("mode", "dark");
-        button.innerText = "Night"; // Change button text to "Night"
+        localStorage.setItem("theme", "light");
+        button.innerText = "🌙 Dark Mode";
     }
 }
 
-// Load Preferred Mode on Page Load
+// Load saved theme from localStorage
 window.onload = function () {
-    let savedMode = localStorage.getItem("mode");
+    let savedTheme = localStorage.getItem("theme");
     let button = document.getElementById("toggleMode");
-    
-    if (savedMode === "dark") {
+
+    if (savedTheme === "dark") {
         document.body.classList.add("dark-mode");
-        button.innerText = "Night"; // Set button text to "Night" for dark mode
+        button.innerText = "☀️ Light Mode";
     } else {
-        document.body.classList.add("light-mode");
-        button.innerText = "Day"; // Set button text to "Day" for light mode
+        button.innerText = "🌙 Dark Mode";
     }
 };
 
-// Add Toggle Button to the Page
-document.addEventListener("DOMContentLoaded", function () {
-    let button = document.createElement("button");
-    button.id = "toggleMode";
-    button.innerText = "Toggle Mode";
-    button.onclick = toggleMode;
-    document.body.appendChild(button);
-});
+// Medicine dosage factors
+const dosageFactors = {
+    metronidazole: {
+        Anaerobic_infections: { factor: 0.54, message: "3 times a day for 7- 10 days; used dose 40 mg/kg/day" },
+        Giardiasis: { factor: 0.4, message: "3 times a day for 5- 7 days; used dose 30 mg/kg/day" },
+        Amebiasis: { factor: 0.54, message: "3 times a day for 7- 10 days; used dose 40 mg/kg/day" },
+        Trichomoniasis_single_dose: { factor: 0.6, message: "just once; used dose 15 mg/kg/day" },
+        Trichomoniasis: { factor: 0.2, message: "3 times a day for 7 days; used dose 15 mg/kg/day" },
+        Clostridium_difficile_infection: { factor: 0.075, message: "4 times a day for 10 days; used dose 7.5 mg/kg/day" }
+    },
+    penicillin_V: {
+        Streptococcal_pharyngitis: { factor: 0.34, message: "3 times a day for 10 days; used dose 50 mg/kg/day" },
+        Scarletfever: { factor: 0.27, message: "3 times a day for 10 days; used dose 40 mg/kg/day" },
+        Mild_skin_infections: { factor: 0.34, message: "3 times a day for 7- 10 days; used dose 50 mg/kg/day" }
+    },
+    amoxicillin_125: {
+        Otitis_media: { factor: 1.2, message: "3 times a day for 7- 10 days; used dose 90 mg/kg/day" },
+        Pneumonia: { factor: 1.07, message: "3 times a day for 7- 10 days; used dose 80 mg/kg/day" },
+        Tonsillitis_or_pharyngitis: { factor: 0.67, message: "3 times a day for 10 days; used dose 50 mg/kg/day" },
+        Sinusitis: { factor: 1.07, message: "3 times a day for 10 days; used dose 80 mg/kg/day" },
+        Urinary_tract_infections: { factor: 0.67, message: "3 times a day for 7 days; used dose 50 mg/kg/day" }
+    },
+    amoxicillin_250: {
+        Otitis_media: { factor: 0.6, message: "3 times a day for 7- 10 days; used dose 90 mg/kg/day" },
+        Pneumonia: { factor: 0.53, message: "3 times a day for 7- 10 days; used dose 80 mg/kg/day" },
+        Tonsillitis_or_pharyngitis: { factor: 0.33, message: "3 times a day for 10 days; used dose 50 mg/kg/day" },
+        Sinusitis: { factor: 0.53, message: "3 times a day for 10 days; used dose 80 mg/kg/day" },
+        Urinary_tract_infections: { factor: 0.33, message: "3 times a day for 7 days; used dose 50 mg/kg/day" }
+    },
+    amoxicillin_200: {
+        Otitis_media: { factor: 1.125, message: "2 times a day for 7- 10 days; used dose 90 mg/kg/day" },
+        Pneumonia: { factor: 1, message: "2 times a day for 7- 10 days; used dose 80 mg/kg/day" },
+        Tonsillitis_or_pharyngitis: { factor: 0.625, message: "2 times a day for 10 days; used dose 50 mg/kg/day" },
+        Sinusitis: { factor: 1, message: "2 times a day for 10 days; used dose 80 mg/kg/day" },
+        Urinary_tract_infections: { factor: 0.625, message: "2 times a day for 7 days; used dose 50 mg/kg/day" }
+    },
+    amoxicillin_400: {
+        Otitis_media: { factor: 0.56, message: "2 times a day for 7- 10 days; used dose 90 mg/kg/day" },
+        Pneumonia: { factor: 0.5, message: "2 times a day for 7- 10 days; used dose 80 mg/kg/day" },
+        Tonsillitis_or_pharyngitis: { factor: 0.31, message: "2 times a day for 10 days; used dose 50 mg/kg/day" },
+        Sinusitis: { factor: 0.5, message: "2 times a day for 10 days; used dose 80 mg/kg/day" },
+        Urinary_tract_infections: { factor: 0.31, message: "2 times a day for 7 days; used dose 50 mg/kg/day" }
+    },
+    azithromycin_100: {
+        Strep_throat: { factor: 0.6, message: "once a day for 5 days; used dose 12 mg/kg/day" },
+        Otitis_media: { factor: 0.5, message: "once a day for 5 days, day 2- 5 half of the calculated dose; used dose for first day 10 mg/kg/day" },
+        Community_acquired_pneumonia: { factor: 0.5, message: "once a day for 5 days, day 2- 5 half of the calculated dose; used dose for first day 10 mg/kg/day" },
+        Sinusitis: { factor: 0.5, message: "once a day for 3 days; used dose 10 mg/kg/day" }
+    },
+    azithromycin_200: {
+        Strep_throat: { factor: 0.3, message: "once a day for 5 days; used dose 12 mg/kg/day." },
+        Otitis_media: { factor: 0.25, message: "once a day for 5 days, day 2- 5 half of the calculated dose; used dose for first day 10 mg/kg/day" },
+        Community_acquired_pneumonia: { factor: 0.25, message: "once a day for 5 days, day 2- 5 half of the calculated dose; used dose for first day 10 mg/kg/day" },
+        Sinusitis: { factor: 0.25, message: "once a day for 3 days; used dose 10 mg/kg/day" }
+    },
+    cefixime: {
+        Otitis_media: { factor: 0.2, message: "2 times a day for 5- 10 days; used dose 8 mg/kg/day" },
+        Urinary_tract_infections: { factor: 0.4, message: "once a day for 7- 10 days; used dose 8 mg/kg/day" },
+        Pharyngitis: { factor: 0.2, message: "2 times a day for 5- 10 days; used dose 8 mg/kg/day" },
+        Typhoid_fever: { factor: 0.375, message: "2 times a day for 10- 14 days; used dose 15 mg/kg/day" }
+    },
+    cephalexin_125: {
+        Skin_infections: { factor: 0.5, message: "4 times a day for 7- 10 days; used dose 50 mg/kg/day" },
+        Pharyngitis: { factor: 0.8, message: "2 times a day for 10 days; used dose 40 mg/kg/day" },
+        Urinary_tract_infections: { factor: 0.5, message: "4 times a day for 7- 14 days; used dose 50 mg/kg/day" }
+    },
+    cephalexin_250: {
+        Skin_infections: { factor: 0.25, message: "4 times a day for 7- 10 days; used dose 50 mg/kg/day" },
+        Pharyngitis: { factor: 0.4, message: "2 times a day for 10 days; used dose 40 mg/kg/day" },
+        Urinary_tract_infections: { factor: 0.25, message: "4 times a day for 7- 14 days; used dose 50 mg/kg/day" }
+    },
+    clarithromycin_125: {
+        Strep_throat: { factor: 0.3, message: "2 times a day for 10 days; used dose 15 mg/kg/day" },
+        Pneumonia: { factor: 0.3, message: "2 times a day for 7- 10 days; used dose 15 mg/kg/day" },
+        Otitis_media: { factor: 0.3, message: "2 times a day for 7- 10 days; used dose 15 mg/kg/day" },
+        Helicobacter_pylori_infection: { factor: 0.3, message: "2 times a day for 14 days; used dose 15 mg/kg/day" }
+    },
+    clarithromycin_250: {
+        Strep_throat: { factor: 0.15, message: "2 times a day for 10 days; used dose 15 mg/kg/day" },
+        Pneumonia: { factor: 0.15, message: "2 times a day for 7- 10 days; used dose 15 mg/kg/day" },
+        Otitis_media: { factor: 0.15, message: "2 times a day for 7- 10 days; used dose 15 mg/kg/day" },
+        Helicobacter_pylori_infection: { factor: 0.15, message: "2 times a day for 14 days; used dose 15 mg/kg/day" }
+    },
+    co_amoxiclave_156: {
+        Otitis_media: { factor: 0.54, message: "3 times a day for 7- 10 days; used dose 40 mg/kg/day" },
+        Pneumonia: { factor: 0.54, message: "3 times a day for 7- 14 days; used dose 40 mg/kg/day" },
+        Sinusitis: { factor: 0.54, message: "3 times a day for 10 days; used dose 40 mg/kg/day" },
+        Skin_infections: { factor: 0.4, message: "3 times a day for 7- 10 days; used dose 30 mg/kg/day" },
+        Urinary_tract_infections: { factor: 0.4, message: "3 times a day for 7 days; used dose 30 mg/kg/day" }
+    },
+    co_amoxiclave_312: {
+        Otitis_media: { factor: 0.27, message: "3 times a day for 7- 10 days; used dose 40 mg/kg/day" },
+        Pneumonia: { factor: 0.27, message: "3 times a day for 7- 14 days; used dose 40 mg/kg/day" },
+        Sinusitis: { factor: 0.27, message: "3 times a day for 10 days; used dose 40 mg/kg/day" },
+        Skin_infections: { factor: 0.2, message: "3 times a day for 7- 10 days; used dose 30 mg/kg/day" },
+        Urinary_tract_infections: { factor: 0.2, message: "3 times a day for 7 days; used dose 30 mg/kg/day" }
+    },
+    co_amoxiclave_228: {
+        Otitis_media: { factor: 0.5, message: "2 times a day for 7- 10 days; used dose 40 mg/kg/day" },
+        Pneumonia: { factor: 0.5, message: "2 times a day for 7- 14 days; used dose 40 mg/kg/day" },
+        Sinusitis: { factor: 0.5, message: "2 times a day for 10 days; used dose 40 mg/kg/day" },
+        Skin_infections: { factor: 0.375, message: "2 times a day for 7- 10 days; used dose 30 mg/kg/day" },
+        Urinary_tract_infections: { factor: 0.375, message: "2 times a day for 7 days; used dose 30 mg/kg/day" }
+    },
+    co_amoxiclave_457: {
+        Otitis_media: { factor: 0.25, message: "2 times a day for 7- 10 days; used dose 40 mg/kg/day" },
+        Pneumonia: { factor: 0.25, message: "2 times a day for 7- 14 days; used dose 40 mg/kg/day" },
+        Sinusitis: { factor: 0.25, message: "2 times a day for 10 days; used dose 40 mg/kg/day" },
+        Skin_infections: { factor: 0.19, message: "2 times a day for 7- 10 days; used dose 30 mg/kg/day" },
+        Urinary_tract_infections: { factor: 0.19, message: "2 times a day for 7 days; used dose 30 mg/kg/day" }
+    },
+    co_amoxiclave_643: {
+        Otitis_media: { factor: 0.17, message: "2 times a day for 7- 10 days; used dose 40 mg/kg/day" },
+        Pneumonia: { factor: 0.17, message: "2 times a day for 7- 14 days; used dose 40 mg/kg/day" },
+        Sinusitis: { factor: 0.17, message: "2 times a day for 10 days; used dose 40 mg/kg/day" },
+        Skin_infections: { factor: 0.125, message: "2 times a day for 7- 10 days; used dose 30 mg/kg/day" },
+        Urinary_tract_infections: { factor: 0.125, message: "2 times a day for 7 days; used dose 30 mg/kg/day" }
+    },
+    co_trimoxazole: {
+        Urinary_tract_infections: { factor: 0.375, message: "2 times a day for 7- 10 days; used dose 6 mg/kg/day trimethoprim" },
+        Otitis_media: { factor: 0.5, message: "2 times a day for 10 days; used dose 8 mg/kg/day trimethoprim" },
+        Pneumocystis_pneumonia_prophylaxis: { factor: 0.625, message: "once a day for a long time; used dose 5 mg/kg/day trimethoprim" }
+    },
+    erythromycin: {
+        Strep_throat: { factor: 0.4, message: "4 times a day for 10 days; used dose 40 mg/kg/day" },
+        Pneumonia: { factor: 0.4, message: "4 times a day for 7- 10 days; used dose 40 mg/kg/day" },
+        Pertussis: { factor: 0.5, message: "4 times a day for 14 days; used dose 50 mg/kg/day" }
+    }
+};
+
+// Update disease dropdown based on selected medicine
+function updateDiseases() {
+    let medicine = document.getElementById("medicine").value;
+    let diseaseSelect = document.getElementById("disease");
+
+    // Clear previous options
+    diseaseSelect.innerHTML = '<option value="">-- Select Disease --</option>';
+
+    if (dosageFactors[medicine]) {
+        for (let disease in dosageFactors[medicine]) {
+            let option = document.createElement("option");
+            option.value = disease;
+            option.textContent = disease;
+            diseaseSelect.appendChild(option);
+        }
+    }
+}
+
+// Calculate dosage and show custom message
+function calculateDosage() {
+    let weight = parseFloat(document.getElementById("weight").value);
+    let medicine = document.getElementById("medicine").value;
+    let disease = document.getElementById("disease").value;
+    let resultDiv = document.getElementById("result");
+
+    if (!weight || !medicine || !disease) {
+        resultDiv.innerHTML = "<p style='color:red;'>Please fill all fields!</p>";
+        return;
+    }
+
+    let { factor, message } = dosageFactors[medicine][disease];
+    let dosage = factor * weight;
+
+    resultDiv.innerHTML = `
+        <p>Recommended Dosage: <strong>${dosage.toFixed(2)}</strong> ml</p>
+        <p style="color:blue;"><strong></strong> ${message}</p>
+    `;
+}
