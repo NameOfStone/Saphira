@@ -113,39 +113,39 @@ const dosageFactors = {
         Helicobacter_pylori_infection: { factor: 0.15, message: "2 times a day for 14 days; used dose 15 mg/kg/day" }
     },
     co_amoxiclave_156: {
-        Otitis_media: { factor: 0.54, message: "3 times a day for 7- 10 days; used dose 40 mg/kg/day" },
-        Pneumonia: { factor: 0.54, message: "3 times a day for 7- 14 days; used dose 40 mg/kg/day" },
-        Sinusitis: { factor: 0.54, message: "3 times a day for 10 days; used dose 40 mg/kg/day" },
-        Skin_infections: { factor: 0.4, message: "3 times a day for 7- 10 days; used dose 30 mg/kg/day" },
-        Urinary_tract_infections: { factor: 0.4, message: "3 times a day for 7 days; used dose 30 mg/kg/day" }
+        Otitis_media: { factor: 1.07, message: "3 times a day for 7- 10 days; used dose 80 mg/kg/day" },
+        Pneumonia: { factor: 1.07, message: "3 times a day for 7- 14 days; used dose 80 mg/kg/day" },
+        Sinusitis: { factor: 1.07, message: "3 times a day for 10 days; used dose 80 mg/kg/day" },
+        Skin_infections: { factor: 1.07, message: "3 times a day for 7- 10 days; used dose 80 mg/kg/day" },
+        Urinary_tract_infections: { factor: 1.07, message: "3 times a day for 7 days; used dose 80 mg/kg/day" }
     },
     co_amoxiclave_312: {
-        Otitis_media: { factor: 0.27, message: "3 times a day for 7- 10 days; used dose 40 mg/kg/day" },
-        Pneumonia: { factor: 0.27, message: "3 times a day for 7- 14 days; used dose 40 mg/kg/day" },
-        Sinusitis: { factor: 0.27, message: "3 times a day for 10 days; used dose 40 mg/kg/day" },
-        Skin_infections: { factor: 0.2, message: "3 times a day for 7- 10 days; used dose 30 mg/kg/day" },
-        Urinary_tract_infections: { factor: 0.2, message: "3 times a day for 7 days; used dose 30 mg/kg/day" }
+        Otitis_media: { factor: 0.53, message: "3 times a day for 7- 10 days; used dose 80 mg/kg/day" },
+        Pneumonia: { factor: 0.53, message: "3 times a day for 7- 14 days; used dose 80 mg/kg/day" },
+        Sinusitis: { factor: 0.53, message: "3 times a day for 10 days; used dose 80 mg/kg/day" },
+        Skin_infections: { factor: 0.53, message: "3 times a day for 7- 10 days; used dose 80 mg/kg/day" },
+        Urinary_tract_infections: { factor: 0.53, message: "3 times a day for 7 days; used dose 80 mg/kg/day" }
     },
     co_amoxiclave_228: {
-        Otitis_media: { factor: 0.5, message: "2 times a day for 7- 10 days; used dose 40 mg/kg/day" },
-        Pneumonia: { factor: 0.5, message: "2 times a day for 7- 14 days; used dose 40 mg/kg/day" },
-        Sinusitis: { factor: 0.5, message: "2 times a day for 10 days; used dose 40 mg/kg/day" },
-        Skin_infections: { factor: 0.375, message: "2 times a day for 7- 10 days; used dose 30 mg/kg/day" },
-        Urinary_tract_infections: { factor: 0.375, message: "2 times a day for 7 days; used dose 30 mg/kg/day" }
+        Otitis_media: { factor: 1, message: "2 times a day for 7- 10 days; used dose 80 mg/kg/day" },
+        Pneumonia: { factor: 1, message: "2 times a day for 7- 14 days; used dose 80 mg/kg/day" },
+        Sinusitis: { factor: 1, message: "2 times a day for 10 days; used dose 80 mg/kg/day" },
+        Skin_infections: { factor: 1, message: "2 times a day for 7- 10 days; used dose 80 mg/kg/day" },
+        Urinary_tract_infections: { factor: 1, message: "2 times a day for 7 days; used dose 80 mg/kg/day" }
     },
     co_amoxiclave_457: {
-        Otitis_media: { factor: 0.25, message: "2 times a day for 7- 10 days; used dose 40 mg/kg/day" },
-        Pneumonia: { factor: 0.25, message: "2 times a day for 7- 14 days; used dose 40 mg/kg/day" },
-        Sinusitis: { factor: 0.25, message: "2 times a day for 10 days; used dose 40 mg/kg/day" },
-        Skin_infections: { factor: 0.19, message: "2 times a day for 7- 10 days; used dose 30 mg/kg/day" },
-        Urinary_tract_infections: { factor: 0.19, message: "2 times a day for 7 days; used dose 30 mg/kg/day" }
+        Otitis_media: { factor: 0.5, message: "2 times a day for 7- 10 days; used dose 80 mg/kg/day" },
+        Pneumonia: { factor: 0.5, message: "2 times a day for 7- 14 days; used dose 80 mg/kg/day" },
+        Sinusitis: { factor: 0.5, message: "2 times a day for 10 days; used dose 80 mg/kg/day" },
+        Skin_infections: { factor: 0.5, message: "2 times a day for 7- 10 days; used dose 80 mg/kg/day" },
+        Urinary_tract_infections: { factor: 0.5, message: "2 times a day for 7 days; used dose 80 mg/kg/day" }
     },
     co_amoxiclave_643: {
-        Otitis_media: { factor: 0.17, message: "2 times a day for 7- 10 days; used dose 40 mg/kg/day" },
-        Pneumonia: { factor: 0.17, message: "2 times a day for 7- 14 days; used dose 40 mg/kg/day" },
-        Sinusitis: { factor: 0.17, message: "2 times a day for 10 days; used dose 40 mg/kg/day" },
-        Skin_infections: { factor: 0.125, message: "2 times a day for 7- 10 days; used dose 30 mg/kg/day" },
-        Urinary_tract_infections: { factor: 0.125, message: "2 times a day for 7 days; used dose 30 mg/kg/day" }
+        Otitis_media: { factor: 0.33, message: "2 times a day for 7- 10 days; used dose 80 mg/kg/day" },
+        Pneumonia: { factor: 0.33, message: "2 times a day for 7- 14 days; used dose 80 mg/kg/day" },
+        Sinusitis: { factor: 0.33, message: "2 times a day for 10 days; used dose 80 mg/kg/day" },
+        Skin_infections: { factor: 0.33, message: "2 times a day for 7- 10 days; used dose 80 mg/kg/day" },
+        Urinary_tract_infections: { factor: 0.33, message: "2 times a day for 7 days; used dose 80 mg/kg/day" }
     },
     co_trimoxazole: {
         Urinary_tract_infections: { factor: 0.375, message: "2 times a day for 7- 10 days; used dose 6 mg/kg/day trimethoprim" },
