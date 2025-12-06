@@ -26,6 +26,7 @@
       --note-bg: #e9ecef;
       --warning-color: #c00;
       --tab-bg: #e9ecef;
+      --highlight-color: #d9480f;
     }
 
     body[data-theme="dark"] {
@@ -36,10 +37,11 @@
       --primary-color: #4dabf7;
       --primary-hover: #339af0;
       --result-bg: #1b2838;
-      --dose-bg: #3b2f16;
+      --dose-bg: #2c2614;
       --note-bg: #232837;
       --warning-color: #ff6b6b;
       --tab-bg: #232837;
+      --highlight-color: #ffd43b;
     }
 
     body {
@@ -71,18 +73,6 @@
       align-items: center;
       gap: 10px;
       text-align: right;
-    }
-
-    .logo {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid rgba(0,0,0,0.06);
-    }
-
-    body[data-theme="dark"] .logo {
-      border-color: rgba(255,255,255,0.12);
     }
 
     .top-title {
@@ -190,6 +180,7 @@
       cursor: pointer;
       font-family: inherit;
       transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+      color: var(--text-color);
     }
 
     .tab-btn.active {
@@ -289,6 +280,7 @@
       background: var(--result-bg);
       font-size: 14px;
       line-height: 1.8;
+      color: var(--text-color);
     }
 
     .dose-box {
@@ -297,6 +289,7 @@
       border-radius: 12px;
       background: var(--dose-bg);
       font-size: 14px;
+      color: var(--text-color);
     }
 
     .note-box {
@@ -306,6 +299,12 @@
       background: var(--note-bg);
       font-size: 13px;
       white-space: pre-line;
+      color: var(--text-color);
+    }
+
+    .highlight-dose {
+      color: var(--highlight-color);
+      font-weight: 700;
     }
 
     .footer {
@@ -378,9 +377,10 @@
   </style>
 </head>
 <body>
-  <!-- هدر بالا چپ + آیکون تم بالا راست -->
+  <!-- هدر بالا + آیکون تم -->
   <div class="top-bar">
     <div class="header-area">
+      <div class="top-title">محاسبه دوز شربت اطفال سافیرا</div>
     </div>
 
     <label class="theme-toggle" title="تغییر حالت روز / شب">
@@ -396,7 +396,7 @@
     </div>
 
     <div class="warning">
-      این نرم‌افزار تنها یک ابزار کمکی برای محاسبهٔ عددی دوز است و به‌هیچ‌وجه جایگزین معاینه و تصمیم‌گیری پزشک یا داروساز مسئول درمان بیمار نمی‌شود.
+      این نرم‌افزار تنها یک ابزار کمک‌آموزشی و کمکی برای محاسبهٔ عددی دوز است و به‌هیچ‌وجه جایگزین معاینه و تصمیم‌گیری پزشک یا داروساز مسئول درمان بیمار نمی‌شود.
       استفاده از این محاسبات باید همواره با رفرنس‌های معتبر و قضاوت بالینی تطبیق داده شود.
     </div>
 
@@ -1360,7 +1360,7 @@
       const mgPer5ml = strength.mgPer5ml;
       const intervalHours = 24 / dosesPerDay;
 
-      // حالت خاص: آزیترومایسین رژیم ۵ روزه (روز اول ۱۰ mg/kg، روزهای ۲–۵: ۵ mg/kg)
+      // حالت خاص: آزیترومایسین رژیم ۵ روزه
       if (drug.id === "azithromycin" && disease.id === "azi_5day") {
         const day1MgPerKg = 10;
         const nextMgPerKg = 5;
@@ -1375,10 +1375,10 @@
           برای کودک با وزن <strong>${weight.toFixed(1)} کیلوگرم</strong>:<br /><br />
           <strong>روز اول:</strong><br />
           • دوز روز اول: <strong>${totalDay1.toFixed(1)} میلی‌گرم (۱۰ mg/kg)</strong><br />
-          • حجم روز اول: <strong>${mlDay1.toFixed(1)} میلی‌لیتر یک‌بار در روز</strong><br /><br />
+          • حجم روز اول: <strong class="highlight-dose">${mlDay1.toFixed(1)} میلی‌لیتر یک‌بار در روز</strong><br /><br />
           <strong>روزهای ۲ تا ۵:</strong><br />
           • دوز هر روز: <strong>${totalNext.toFixed(1)} میلی‌گرم (۵ mg/kg)</strong><br />
-          • حجم هر روز: <strong>${mlNext.toFixed(1)} میلی‌لیتر یک‌بار در روز</strong><br /><br />
+          • حجم هر روز: <strong class="highlight-dose">${mlNext.toFixed(1)} میلی‌لیتر یک‌بار در روز</strong><br /><br />
           • تعداد روزهای درمان: <strong>${days} روز</strong>
         `;
 
@@ -1387,7 +1387,7 @@
         return;
       }
 
-      // حالت عمومی برای بقیه داروها
+      // حالت عمومی
       const totalMgPerDay = weight * mgPerKgPerDay;
       const mgPerDose = totalMgPerDay / dosesPerDay;
       const mlPerDose = mgPerDose * (5 / mgPer5ml);
@@ -1396,9 +1396,9 @@
         برای کودک با وزن <strong>${weight.toFixed(1)} کیلوگرم</strong>:<br /><br />
         • دوز روزانهٔ کل: <strong>${totalMgPerDay.toFixed(1)} میلی‌گرم در روز</strong><br />
         • دوز هر نوبت: <strong>${mgPerDose.toFixed(1)} میلی‌گرم در هر نوبت</strong><br />
-        • حجم هر نوبت شربت: <strong>${mlPerDose.toFixed(1)} میلی‌لیتر در هر نوبت</strong><br />
+        • حجم هر نوبت شربت: <strong class="highlight-dose">${mlPerDose.toFixed(1)} میلی‌لیتر در هر نوبت</strong><br />
         • تعداد نوبت در روز: <strong>${dosesPerDay} بار در روز</strong><br />
-        • فاصلهٔ بین نوبت‌ها: <strong>هر ${intervalHours} ساعت یک‌بار</strong><br />
+        • فاصلهٔ بین نوبت‌ها: <strong class="highlight-dose">هر ${intervalHours} ساعت یک‌بار</strong><br />
         • مدت درمان تقریبی: <strong>${days} روز</strong>
       `;
 
@@ -1425,7 +1425,7 @@
     });
 
     /************************************************************
-     *  بخش ১১: تغییر دارو (سن‌محور)
+     *  بخش ۱۱: تغییر دارو (سن‌محور)
      ************************************************************/
     ageDrugSelect.addEventListener("change", () => {
       const drug = findAgeDrugById(ageDrugSelect.value);
@@ -1533,9 +1533,9 @@
         بازهٔ سنی دوز: <strong>${label}</strong><br /><br />
         • دوز روزانهٔ کل: <strong>${mgPerDay} میلی‌گرم در روز</strong><br />
         • دوز هر نوبت: <strong>${mgPerDose.toFixed(1)} میلی‌گرم در هر نوبت</strong><br />
-        • حجم هر نوبت شربت: <strong>${mlPerDose.toFixed(1)} میلی‌لیتر در هر نوبت</strong><br />
+        • حجم هر نوبت شربت: <strong class="highlight-dose">${mlPerDose.toFixed(1)} میلی‌لیتر در هر نوبت</strong><br />
         • تعداد نوبت در روز: <strong>${dosesPerDay} بار در روز</strong><br />
-        • فاصلهٔ بین نوبت‌ها: <strong>هر ${intervalHours} ساعت یک‌بار</strong><br />
+        • فاصلهٔ بین نوبت‌ها: <strong class="highlight-dose">هر ${intervalHours} ساعت یک‌بار</strong><br />
         • مدت مصرف: بر اساس نوع آلرژی و پاسخ بیمار تنظیم می‌شود.
       `;
       ageResultDiv.innerHTML = html;
@@ -1577,4 +1577,3 @@
   </script>
 </body>
 </html>
-
