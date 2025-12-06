@@ -1,66 +1,1579 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medicine Dosage Calculator</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <title>محاسبه دوز شربت اطفال سافیرا</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- فونت فارسی Vazirmatn -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <!-- فونت انگلیسی Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-color: #f5f5f5;
+      --card-bg: #ffffff;
+      --text-color: #212529;
+      --border-color: #d0d0d0;
+      --primary-color: #0d6efd;
+      --primary-hover: #0b5ed7;
+      --result-bg: #f0f8ff;
+      --dose-bg: #fff3cd;
+      --note-bg: #e9ecef;
+      --warning-color: #c00;
+      --tab-bg: #e9ecef;
+    }
+
+    body[data-theme="dark"] {
+      --bg-color: #10121a;
+      --card-bg: #171a23;
+      --text-color: #f1f3f5;
+      --border-color: #333a46;
+      --primary-color: #4dabf7;
+      --primary-hover: #339af0;
+      --result-bg: #1b2838;
+      --dose-bg: #3b2f16;
+      --note-bg: #232837;
+      --warning-color: #ff6b6b;
+      --tab-bg: #232837;
+    }
+
+    body {
+      font-family: "Vazirmatn", "Inter", sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 8px 16px;
+      transition: background 0.25s ease, color 0.25s ease;
+    }
+
+    .top-bar {
+      width: 100%;
+      max-width: 960px;
+      margin-top: 10px;
+      padding: 0 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-sizing: border-box;
+    }
+
+    .header-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-align: right;
+    }
+
+    .logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(0,0,0,0.06);
+    }
+
+    body[data-theme="dark"] .logo {
+      border-color: rgba(255,255,255,0.12);
+    }
+
+    .top-title {
+      font-size: 18px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .theme-toggle {
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .theme-toggle input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .theme-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      background: rgba(0,0,0,0.05);
+      border: 1px solid rgba(0,0,0,0.08);
+      transition: background 0.2s ease, transform 0.1s ease, border-color 0.2s ease;
+    }
+
+    .theme-toggle:hover .theme-icon {
+      transform: translateY(-1px);
+      background: rgba(0,0,0,0.08);
+    }
+
+    body[data-theme="dark"] .theme-icon {
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.18);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 960px;
+      margin-top: 10px;
+      background: var(--card-bg);
+      padding: 20px 20px 24px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      min-height: calc(100vh - 90px);
+    }
+
+    h1 {
+      font-size: 22px;
+      text-align: center;
+      margin: 0 0 10px;
+    }
+
+    .sub-title {
+      text-align: center;
+      font-size: 13px;
+      opacity: 0.8;
+      margin-bottom: 12px;
+    }
+
+    .warning {
+      margin-top: 4px;
+      margin-bottom: 15px;
+      font-size: 12px;
+      line-height: 1.7;
+      color: var(--warning-color);
+      background: rgba(255, 243, 205, 0.7);
+      border-radius: 10px;
+      padding: 10px;
+      border: 1px solid rgba(255, 193, 7, 0.7);
+    }
+
+    body[data-theme="dark"] .warning {
+      background: rgba(255,255,255,0.03);
+      border-color: rgba(255, 107, 107, 0.6);
+    }
+
+    .tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 14px;
+      background: var(--tab-bg);
+      border-radius: 999px;
+      padding: 3px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      border-radius: 999px;
+      border: none;
+      background: transparent;
+      padding: 6px 8px;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--card-bg);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+
+    .field {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 9px 11px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      box-sizing: border-box;
+      font-size: 14px;
+      background: transparent;
+      color: var(--text-color);
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    input[type="number"]::placeholder {
+      color: #999;
+    }
+
+    input[type="number"]:focus,
+    select:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(13,110,253,0.2);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 5px;
+    }
+
+    button {
+      padding: 10px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 500;
+      border: none;
+      font-family: inherit;
+      transition: background 0.2s ease, transform 0.05s ease, box-shadow 0.15s ease, border-color 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary-color);
+      color: white;
+      width: 100%;
+      box-shadow: 0 6px 15px rgba(13,110,253,0.25);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      box-shadow: 0 8px 20px rgba(13,110,253,0.35);
+    }
+
+    .btn-primary:active {
+      transform: translateY(1px);
+      box-shadow: 0 4px 10px rgba(13,110,253,0.2);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      width: 100%;
+      color: var(--text-color);
+      box-shadow: none;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(0,0,0,0.03);
+    }
+
+    body[data-theme="dark"] .btn-secondary:hover {
+      background: rgba(255,255,255,0.04);
+    }
+
+    .result-box {
+      margin-top: 20px;
+      padding: 12px;
+      border-radius: 12px;
+      background: var(--result-bg);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .dose-box {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 12px;
+      background: var(--dose-bg);
+      font-size: 14px;
+    }
+
+    .note-box {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 12px;
+      background: var(--note-bg);
+      font-size: 13px;
+      white-space: pre-line;
+    }
+
+    .footer {
+      margin-top: auto;
+      text-align: center;
+      font-size: 13px;
+      opacity: 0.9;
+      padding-top: 12px;
+      border-top: 1px dashed rgba(0,0,0,0.12);
+    }
+
+    body[data-theme="dark"] .footer {
+      border-top-color: rgba(255,255,255,0.18);
+    }
+
+    .footer a {
+      text-decoration: none;
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      .top-bar {
+        flex-direction: row;
+        align-items: center;
+      }
+
+      .header-area {
+        max-width: 70%;
+      }
+
+      .top-title {
+        font-size: 16px;
+      }
+
+      .container {
+        margin-top: 8px;
+        padding: 16px 14px 20px;
+        border-radius: 14px;
+        min-height: auto;
+      }
+
+      h1 {
+        font-size: 18px;
+      }
+
+      .sub-title {
+        font-size: 12px;
+      }
+
+      label,
+      input[type="number"],
+      select,
+      button {
+        font-size: 13px;
+      }
+
+      .btn-row {
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
 <body>
-
-    <button id="toggleMode" onclick="toggleMode()">🌙 Dark Mode</button>
-
-    <div class="container">
-        <h1>Medicine Dosage Calculator</h1>
-
-        <form id="dosageForm">
-            <label for="weight">Patient Weight (kg):</label>
-            <input type="number" id="weight" required>
-
-            <label for="medicine">Select Medicine:</label>
-            <select id="medicine" onchange="updateDiseases()">
-                <option value="">-- Select Medicine --</option>
-                <option value="metronidazole">Metronidazole</option>
-                <option value="penicillin_V">Penicillin V</option>
-                <option value="amoxicillin_125">Amoxicillin 125</option>
-                <option value="amoxicillin_250">Amoxicillin 250</option>
-                <option value="amoxicillin_200">Amoxicillin 200</option>
-                <option value="amoxicillin_400">Amoxicillin 400</option>
-                <option value="azithromycin_100">Azithromycin 100</option>
-                <option value="azithromycin_200">Azithromycin 200</option>
-                <option value="cefixime">Cefixime</option>
-                <option value="cephalexin_125">Cephalexin 125</option>
-                <option value="cephalexin_250">Cephalexin 250</option>
-                <option value="clarithromycin_125">Clarithromycin 125</option>
-                <option value="clarithromycin_250">Clarithromycin 250</option>
-                <option value="co_amoxiclave_156">Co-amoxiclave 156</option>
-                <option value="co_amoxiclave_312">Co-amoxiclave 312</option>
-                <option value="co_amoxiclave_228">Co-amoxiclave 228</option>
-                <option value="co_amoxiclave_457">Co-amoxiclave 457</option>
-                <option value="co_amoxiclave_643">Co-amoxiclave 643</option>
-                <option value="co_trimoxazole">Co-trimoxazole</option>
-                <option value="erythromycin">Erythromycin</option>
-</select>
-            </select>
-
-            <label for="disease">Select Disease:</label>
-            <select id="disease">
-                <option value="">-- Select Disease --</option>
-            </select>
-
-            <button type="button" onclick="calculateDosage()">Calculate</button>
-        </form>
-
-        <div id="result"></div>
+  <!-- هدر بالا چپ + آیکون تم بالا راست -->
+  <div class="top-bar">
+    <div class="header-area">
     </div>
 
-    <!-- 📌 Contact Information Section -->
-    <footer>
-        <h2>Contact Information</h2>
-        <p>Telegram: <a href="https://t.me/reza0rbz" target="_blank">@reza0rbz</a></p>
-    </footer>
+    <label class="theme-toggle" title="تغییر حالت روز / شب">
+      <input type="checkbox" id="themeSwitch" />
+      <span id="themeIcon" class="theme-icon" aria-hidden="true">☀️</span>
+    </label>
+  </div>
 
-    <script src="script.js"></script>
+  <div class="container">
+    <h1>محاسبه دوز شربت اطفال سافیرا</h1>
+    <div class="sub-title">
+      محاسبه حجم مصرفی شربت‌های رایج در بیماری‌های کودکان
+    </div>
 
+    <div class="warning">
+      این نرم‌افزار تنها یک ابزار کمک‌آموزشی و کمکی برای محاسبهٔ عددی دوز است و به‌هیچ‌وجه جایگزین معاینه و تصمیم‌گیری پزشک یا داروساز مسئول درمان بیمار نمی‌شود.
+      استفاده از این محاسبات باید همواره با رفرنس‌های معتبر و قضاوت بالینی تطبیق داده شود.
+    </div>
+
+    <!-- تب‌ها -->
+    <div class="tabs">
+      <button id="tabWeight" class="tab-btn active">محاسبه بر اساس وزن</button>
+      <button id="tabAge" class="tab-btn">آنتی‌هیستامین سن‌محور</button>
+    </div>
+
+    <!-- حالت وزن‌محور -->
+    <div id="weightMode">
+      <!-- ۱. دارو -->
+      <div class="field">
+        <label for="drugSelect">انتخاب دارو</label>
+        <select id="drugSelect">
+          <option value="">-- دارو را انتخاب کنید --</option>
+        </select>
+      </div>
+
+      <!-- ۲. وزن -->
+      <div class="field">
+        <label for="weight">وزن کودک (کیلوگرم)</label>
+        <input type="number" id="weight" min="0" step="0.1" placeholder="مثلاً ۱۲٫۵ کیلوگرم" />
+      </div>
+
+      <!-- نکات دارویی -->
+      <div id="drugNotesWrapper" class="field hidden">
+        <label>نکات مهم دارویی</label>
+        <div id="drugNotes" class="note-box"></div>
+      </div>
+
+      <!-- غلظت شربت -->
+      <div id="strengthWrapper" class="field hidden">
+        <label for="strengthSelect">غلظت شربت (میلی‌گرم در ۵ میلی‌لیتر)</label>
+        <select id="strengthSelect"></select>
+      </div>
+
+      <!-- بیماری / اندیکاسیون -->
+      <div id="diseaseWrapper" class="field hidden">
+        <label for="diseaseSelect">بیماری / اندیکاسیون</label>
+        <select id="diseaseSelect"></select>
+      </div>
+
+      <!-- فقط دوز mg/kg/day -->
+      <div id="doseInfoWrapper" class="field hidden">
+        <label>دوز مورد استفاده بر اساس بیماری</label>
+        <div id="doseInfo" class="dose-box"></div>
+      </div>
+
+      <!-- دکمه‌ها -->
+      <div class="field btn-row">
+        <button id="calcBtn" class="btn-primary">محاسبه دوز</button>
+        <button id="resetBtn" type="button" class="btn-secondary">شروع مجدد</button>
+      </div>
+
+      <!-- نتیجه -->
+      <div id="result" class="result-box hidden"></div>
+    </div>
+
+    <!-- حالت آنتی‌هیستامین سن‌محور -->
+    <div id="ageMode" class="hidden">
+      <!-- داروی آنتی‌هیستامین -->
+      <div class="field">
+        <label for="ageDrugSelect">انتخاب آنتی‌هیستامین سن‌محور</label>
+        <select id="ageDrugSelect">
+          <option value="">-- دارو را انتخاب کنید --</option>
+        </select>
+      </div>
+
+      <!-- سن -->
+      <div class="field">
+        <label for="ageYears">سن کودک (سال)</label>
+        <input type="number" id="ageYears" min="0" step="0.1" placeholder="مثلاً ۳٫۵ سال" />
+      </div>
+
+      <!-- نکات دارویی آنتی‌هیستامین -->
+      <div id="ageDrugNotesWrapper" class="field hidden">
+        <label>نکات مهم دارویی</label>
+        <div id="ageDrugNotes" class="note-box"></div>
+      </div>
+
+      <!-- غلظت شربت -->
+      <div id="ageStrengthWrapper" class="field hidden">
+        <label for="ageStrengthSelect">غلظت شربت (میلی‌گرم در ۵ میلی‌لیتر)</label>
+        <select id="ageStrengthSelect"></select>
+      </div>
+
+      <!-- اطلاعات دوز سن‌محور -->
+      <div id="ageDoseInfoWrapper" class="field hidden">
+        <label>دوز بر اساس سن</label>
+        <div id="ageDoseInfo" class="dose-box"></div>
+      </div>
+
+      <!-- دکمه محاسبه سن‌محور -->
+      <div class="field btn-row">
+        <button id="ageCalcBtn" class="btn-primary">محاسبه دوز</button>
+      </div>
+
+      <!-- نتیجه سن‌محور -->
+      <div id="ageResult" class="result-box hidden"></div>
+    </div>
+
+    <div class="footer">
+      ارتباط از طریق تلگرام:
+      <a href="https://t.me/reza0rbz" target="_blank">@reza0rbz</a>
+    </div>
+  </div>
+
+  <script>
+    /************************************************************
+     *  بخش ۱: دیتابیس داروها (محاسبه بر اساس وزن)
+     *  دوزها بر حسب "میلی‌گرم به ازای هر کیلوگرم در روز"
+     ************************************************************/
+    const DRUGS = [
+      {
+        id: "acetaminophen",
+        name: "Acetaminophen شربت",
+        notes: `
+اندیکاسیون‌های شایع:
+- تب با هر علت
+- درد خفیف تا متوسط (گوش، گلو، دندان، سردرد، درد پس از واکسیناسیون)
+
+دوزینگ کودکان:
+- حدود ۱۰ تا ۱۵ میلی‌گرم به ازای هر کیلوگرم در هر نوبت، هر ۴ تا ۶ ساعت در صورت نیاز
+- حداکثر معمولاً ۶۰ تا ۷۵ میلی‌گرم به ازای هر کیلوگرم در روز
+
+نکات کلیدی:
+- می‌تواند با معدهٔ خالی یا همراه غذا مصرف شود؛ همراه غذا تحمل گوارشی را بهتر می‌کند.
+- در بیماری‌های کبدی، سوءتغذیه، یا مصرف هم‌زمان داروهای هپاتوتوکسیک باید دوز کلی روزانه محافظه‌کارانه‌تر انتخاب شود.
+- در صورت استفادهٔ هم‌زمان با ایبوپروفن، فاصلهٔ زمانی و تعداد دوزها باید واضح به والدین توضیح داده شود تا اشتباهاً دوز مضاعف داده نشود.
+- شربت‌های با غلظت‌های مختلف (۱۲۰ و ۱۶۰ میلی‌گرم در ۵ میلی‌لیتر) باید برای والدین دقیقاً توضیح داده شوند تا از مصرف بیش از حد جلوگیری شود.`,
+        strengths: [
+          { id: "apap_120", label: "۱۲۰ میلی‌گرم در ۵ میلی‌لیتر", mgPer5ml: 120 },
+          { id: "apap_160", label: "۱۶۰ میلی‌گرم در ۵ میلی‌لیتر", mgPer5ml: 160 }
+        ],
+        diseases: [
+          {
+            id: "apap_fever_pain",
+            name: "تب / درد خفیف تا متوسط – Fever / Mild Pain",
+            mgPerKgPerDay: 60,
+            dosesPerDay: 4,
+            days: 3,
+            extraNote: "برای محاسبه از ۶۰ میلی‌گرم به ازای هر کیلوگرم در روز (تقسیم در ۴ نوبت) استفاده شده است."
+          }
+        ]
+      },
+      {
+        id: "ibuprofen",
+        name: "Ibuprofen سوسپانسیون",
+        notes: `
+اندیکاسیون‌های شایع:
+- تب وقتی پاسخ به استامینوفن ناکافی است
+- درد التهابی (اوتیت، دندان، گلودرد، درد عضلانی یا اسکلتی)
+
+دوزینگ کودکان:
+- حدود ۵ تا ۱۰ میلی‌گرم به ازای هر کیلوگرم در هر نوبت، هر ۶ تا ۸ ساعت
+- حداکثر حدود ۴۰ میلی‌گرم به ازای هر کیلوگرم در روز
+
+نکات کلیدی:
+- بهتر است همراه غذا یا بلافاصله بعد از غذا مصرف شود تا تحریک گوارشی کمتر شود.
+- در کم‌آبی، استفراغ شدید، اسهال، بیماری کلیوی، یا سابقهٔ زخم گوارشی باید با احتیاط و در مواردی از داروی جایگزین (استامینوفن) استفاده شود.
+- در کودکان با سابقهٔ حساسیت به آسپیرین یا سایر NSAID ها (مثلاً حملات آسم وابسته به NSAID) تجویز نشود و از استامینوفن استفاده شود.
+- برای تب‌های طول‌کشیده باید علت زمینه‌ای بررسی شود و صرفاً تکرار دوز ایبوپروفن کافی نیست.`,
+        strengths: [
+          { id: "ibu_100", label: "۱۰۰ میلی‌گرم در ۵ میلی‌لیتر", mgPer5ml: 100 }
+        ],
+        diseases: [
+          {
+            id: "ibu_fever_pain",
+            name: "تب / درد التهابی – Fever / Inflammatory Pain",
+            mgPerKgPerDay: 30,
+            dosesPerDay: 3,
+            days: 3,
+            extraNote: "برای محاسبه از ۳۰ میلی‌گرم به ازای هر کیلوگرم در روز (۳ نوبت) استفاده شده است."
+          }
+        ]
+      },
+      {
+        id: "chlorpheniramine",
+        name: "Chlorpheniramine شربت",
+        notes: `
+اندیکاسیون‌های شایع:
+- رینیت آلرژیک
+- آبریزش و عطسهٔ آلرژیک یا ویروسی (کنترل علامتی)
+- کهیر حاد
+- خارش آلرژیک
+
+دوز تقریبی کودکان:
+- حدود ۰٫۱ میلی‌گرم به ازای هر کیلوگرم در هر نوبت، هر ۴ تا ۶ ساعت
+- دوز کلی روزانه بسته به سن معمولاً تا حداکثر ۶ تا ۱۲ میلی‌گرم در روز محدود می‌شود.
+
+نکات کلیدی:
+- آنتی‌هیستامین نسل اول است و خواب‌آلودگی، کاهش تمرکز و در کودکان کوچک‌تر گاهی بی‌قراری و تحریک‌پذیری پارادوکسیک ایجاد می‌کند.
+- در آسم کنترل‌نشده، گلوکوم زاویهٔ بسته، و احتباس ادرار باید با احتیاط مصرف شود.
+- برای استفادهٔ مزمن در آلرژی‌های طول‌کشیده، معمولاً نسل دوم آنتی‌هیستامین‌ها (Cetirizine، Loratadine، Fexofenadine) انتخاب‌های مناسب‌تری هستند.
+- در ترکیب با بسیاری از شربت‌های سرماخوردگی آماده وجود دارد؛ باید مراقب جمع‌شدن دوزها بود.`,
+        strengths: [
+          { id: "cpn_2", label: "۲ میلی‌گرم در ۵ میلی‌لیتر", mgPer5ml: 2 }
+        ],
+        diseases: [
+          {
+            id: "cpn_allergy",
+            name: "رینیت آلرژیک / کهیر حاد – Allergic Rhinitis / Acute Urticaria",
+            mgPerKgPerDay: 0.4,
+            dosesPerDay: 4,
+            days: 5,
+            extraNote: "برای محاسبه از ۰٫۴ میلی‌گرم به ازای هر کیلوگرم در روز (تقسیم در ۴ نوبت) استفاده شده است."
+          }
+        ]
+      },
+      {
+        id: "diphenhydramine",
+        name: "Diphenhydramine شربت",
+        notes: `
+اندیکاسیون‌ها:
+- آلرژی حاد و کهیر
+- واکنش‌های آلرژیک خفیف پوستی یا مخاطی
+
+دوز کودکان:
+- حدود ۱ میلی‌گرم به ازای هر کیلوگرم در هر نوبت، هر ۶ ساعت
+- حداکثر حدود ۵ میلی‌گرم به ازای هر کیلوگرم در روز یا حداکثر مطلق روزانه (هر کدام که کمتر باشد)
+
+نکات کلیدی:
+- خواب‌آور قوی است؛ روی هوشیاری و عملکرد روان‌حرکتی اثر می‌گذارد.
+- در کودکان خردسال ممکن است بی‌قراری و تحریک‌پذیری پارادوکسیک ایجاد کند.
+- برای درمان مزمن آلرژی مناسب نیست و در آن موارد بهتر است از نسل دوم آنتی‌هیستامین‌ها استفاده شود.
+- در کودکان زیر ۲ سال معمولاً توصیه نمی‌شود و باید فقط با تصمیم و پایش دقیق متخصص استفاده شود.`,
+        strengths: [
+          { id: "dph_12_5", label: "۱۲٫۵ میلی‌گرم در ۵ میلی‌لیتر", mgPer5ml: 12.5 }
+        ],
+        diseases: [
+          {
+            id: "dph_allergy",
+            name: "آلرژی حاد / کهیر – Acute Allergy / Urticaria",
+            mgPerKgPerDay: 4,
+            dosesPerDay: 4,
+            days: 3,
+            extraNote: "برای محاسبه از ۴ میلی‌گرم به ازای هر کیلوگرم در روز (تقسیم در ۴ نوبت) استفاده شده است."
+          }
+        ]
+      },
+      {
+        id: "amoxicillin",
+        name: "Amoxicillin شربت",
+        notes: `
+اندیکاسیون‌های شایع:
+- اوتیت میانی حاد (Acute Otitis Media – اوتیت میانی حاد)
+- فارنژیت استرپتوکوکی (Streptococcal Pharyngitis – فارنژیت استرپتوکوکی)
+- سینوزیت باکتریال (Bacterial Sinusitis – سینوزیت باکتریال)
+- پنومونی اکتسابی جامعهٔ خفیف–متوسط (CAP)
+- بعضی عفونت‌های ادراری خفیف و عفونت‌های دندانی
+
+دوزینگ:
+- عفونت خفیف تا متوسط: حدود ۴۰ تا ۴۵ میلی‌گرم به ازای هر کیلوگرم در روز
+- AOM / سینوزیت / CAP (مقاومت بالاتر): ۸۰ تا ۹۰ میلی‌گرم به ازای هر کیلوگرم در روز (معمولاً در دو نوبت)
+
+نکات کلیدی:
+- معمولاً می‌تواند با غذا یا بدون غذا مصرف شود، ولی در صورت ناراحتی گوارشی همراه غذا بهتر تحمل می‌شود.
+- در بیماران با سابقهٔ حساسیت شدید (آنافیلاکسی، کهیر گسترده) به پنی‌سیلین، باید از آموکسی‌سیلین و سایر بتالاکتام‌های مشابه اجتناب شود و به سراغ ماکرولیدها یا کلیندامایسین رفت.
+- در زمینهٔ عفونت ویروسی مانند منونوکلئوز عفونی، تجویز آموکسی‌سیلین می‌تواند راش ماکولوپاپولر مشخص ایجاد کند که الزاماً به معنای آلرژی حقیقی نیست.
+- سوسپانسیون باید قبل از هر نوبت به‌خوبی تکان داده شود و دورهٔ نگهداری پس از تهیه (معمولاً در یخچال) به والدین یادآوری شود.
+- در عفونت‌های پوستی ناشی از استافیلوکوک، بوردرلاین بودن پوشش آموکسی‌سیلین باید در نظر گرفته شود و در صورت نیاز به پوشش بهتر استافیلوکوک، Cephalexin گزینهٔ مناسب‌تری است.`,
+        strengths: [
+          { id: "amox_125", label: "۱۲۵ میلی‌گرم در ۵ میلی‌لیتر", mgPer5ml: 125 },
+          { id: "amox_250", label: "۲۵۰ میلی‌گرم در ۵ میلی‌لیتر", mgPer5ml: 250 },
+          { id: "amox_200", label: "۲۰۰ میلی‌گرم در ۵ میلی‌لیتر", mgPer5ml: 200 },
+          { id: "amox_400", label: "۴۰۰ میلی‌گرم در ۵ میلی‌لیتر", mgPer5ml: 400 }
+        ],
+        diseases: [
+          {
+            id: "amox_mild_tds",
+            name: "عفونت خفیف تنفسی / دندانی – Mild Respiratory / Dental (سه بار در روز – tds/q8h)",
+            mgPerKgPerDay: 45,
+            dosesPerDay: 3,
+            days: 7,
+            extraNote: "۴۵ میلی‌گرم به ازای هر کیلوگرم در روز در ۳ نوبت (حدود ۱۵ میلی‌گرم به ازای هر کیلوگرم در هر نوبت)."
+          },
+          {
+            id: "amox_mild_bd",
+            name: "عفونت خفیف تنفسی / دندانی – Mild Respiratory / Dental (دو بار در روز – bd/q12h)",
+            mgPerKgPerDay: 45,
+            dosesPerDay: 2,
+            days: 7,
+            extraNote: "۴۵ میلی‌گرم به ازای هر کیلوگرم در روز در ۲ نوبت (حدود ۲۲٫۵ میلی‌گرم به ازای هر کیلوگرم در هر نوبت)."
+          },
+          {
+            id: "amox_highdose_bd",
+            name: "AOM / سینوزیت / CAP (دوز بالا – High-dose bd/q12h)",
+            mgPerKgPerDay: 90,
+            dosesPerDay: 2,
+            days: 10,
+            extraNote: "۹۰ میلی‌گرم به ازای هر کیلوگرم در روز در ۲ نوبت (۴۵ میلی‌گرم به ازای هر کیلوگرم در هر نوبت) برای پوشش بهتر پنوموکوک مقاوم."
+          }
+        ]
+      },
+      {
+        id: "amoxiclav",
+        name: "Amoxicillin/Clavulanate شربت (Co-amoxiclav)",
+        notes: `
+اندیکاسیون‌ها:
+- اوتیت میانی حاد یا سینوزیت که به آموکسی‌سیلین ساده پاسخ نداده یا مظنون به تولید بتالاکتاماز است
+- عفونت‌های تنفسی تحتانی با احتمال زیاد باکتری‌های تولیدکنندهٔ بتالاکتاماز
+- عفونت‌های پوست و بافت نرم
+
+دوز بر اساس جزء آموکسی‌سیلین:
+- معمول: حدود ۴۰ تا ۴۵ میلی‌گرم به ازای هر کیلوگرم در روز
+- اوتیت/سینوزیت مقاوم: ۸۰ تا ۹۰ میلی‌گرم به ازای هر کیلوگرم در روز
+
+نکات کلیدی:
+- حتماً همراه غذا مصرف شود تا تهوع، استفراغ و اسهال کمتر شود و جذب بهتر گردد.
+- در بیمارانی که سابقهٔ هپاتیت کولستاتیک مرتبط با Co-amoxiclav دارند، نباید دوباره تجویز شود.
+- اسهال، دل‌درد و در مواردی کاندیدا اورال یا ناحیهٔ پوشک دیده می‌شود؛ به والدین هشدار داده شود ولی در اغلب موارد خفیف است.
+- در صورت امکان، برای عفونت‌های ساده ترجیح دارد از آنتی‌بیوتیک‌های با طیف باریک‌تر استفاده شود و Co-amoxiclav را برای مواردی که نیاز به پوشش بتالاکتاماز است نگه داشت.`,
+        strengths: [
+          { id: "amcl_156", label: "۱۵۶ (۱۲۵/۳۱٫۲۵) میلی‌گرم در ۵ میلی‌لیتر – دوز بر اساس ۱۲۵ میلی‌گرم آموکسی‌سیلین", mgPer5ml: 125 },
+          { id: "amcl_228", label: "۲۲۸ (۲۰۰/۲۸٫۵) میلی‌گرم در ۵ میلی‌لیتر – دوز بر اساس ۲۰۰ میلی‌گرم آموکسی‌سیلین", mgPer5ml: 200 },
+          { id: "amcl_312", label: "۳۱۲ (۲۵۰/۶۲٫۵) میلی‌گرم در ۵ میلی‌لیتر – دوز بر اساس ۲۵۰ میلی‌گرم آموکسی‌سیلین", mgPer5ml: 250 },
+          { id: "amcl_457", label: "۴۵۷ (۴۰۰/۵۷) میلی‌گرم در ۵ میلی‌لیتر – دوز بر اساس ۴۰۰ میلی‌گرم آموکسی‌سیلین", mgPer5ml: 400 },
+          { id: "amcl_643", label: "۶۴۳ (۶۰۰/۴۲٫۹) میلی‌گرم در ۵ میلی‌لیتر – دوز بر اساس ۶۰۰ میلی‌گرم آموکسی‌سیلین", mgPer5ml: 600 }
+        ],
+        diseases: [
+          {
+            id: "amcl_mild_tds",
+            name: "عفونت تنفسی / پوستی خفیف–متوسط – Mild Respiratory / SSTI (سه بار در روز – tds/q8h)",
+            mgPerKgPerDay: 45,
+            dosesPerDay: 3,
+            days: 7,
+            extraNote: "۴۵ میلی‌گرم آموکسی‌سیلین به ازای هر کیلوگرم در روز در ۳ نوبت."
+          },
+          {
+            id: "amcl_mild_bd",
+            name: "عفونت تنفسی / پوستی خفیف–متوسط – Mild Respiratory / SSTI (دو بار در روز – bd/q12h)",
+            mgPerKgPerDay: 45,
+            dosesPerDay: 2,
+            days: 7,
+            extraNote: "۴۵ میلی‌گرم آموکسی‌سیلین به ازای هر کیلوگرم در روز در ۲ نوبت."
+          },
+          {
+            id: "amcl_highdose_bd",
+            name: "AOM / سینوزیت باکتریال (دوز بالا – High-dose bd/q12h)",
+            mgPerKgPerDay: 90,
+            dosesPerDay: 2,
+            days: 10,
+            extraNote: "۹۰ میلی‌گرم آموکسی‌سیلین به ازای هر کیلوگرم در روز برای اوتیت و سینوزیت مقاوم."
+          }
+        ]
+      },
+      {
+        id: "cephalexin",
+        name: "Cephalexin شربت",
+        notes: `
+اندیکاسیون‌های شایع:
+- عفونت پوست و بافت نرم ناشی از استافیلوکوک و استرپتوکوک (Impetigo, Cellulitis)
+- عفونت‌های ادراری خفیف
+- برخی عفونت‌های تنفسی خفیف
+- فارنژیت استرپتوکوکی (به‌عنوان جایگزین در عدم تحمل پنی‌سیلین غیرآنافیلاکسی)
+
+دوزینگ:
+- حدود ۲۵ تا ۵۰ میلی‌گرم به ازای هر کیلوگرم در روز، در ۲ تا ۴ نوبت
+- در عفونت‌های شدید پوستی تا ۷۵ تا ۱۰۰ میلی‌گرم به ازای هر کیلوگرم در روز
+
+نکات کلیدی:
+- نسبت به آموکسی‌سیلین پوشش بهتری روی استافیلوکوک‌های حساس (MSSA) دارد و در عفونت‌های پوستی انتخاب شایعی است.
+- در بیماران با سابقهٔ آنافیلاکسی به پنی‌سیلین بهتر است از Cephalexin اجتناب شود و به سمت ماکرولیدها یا کلیندامایسین رفت.
+- می‌توان آن را با غذا یا بدون غذا مصرف کرد؛ در صورت ناراحتی گوارشی همراه غذا بهتر است.
+- طعم شربت معمولاً قابل قبول است، ولی نیاز به چند نوبت در روز ممکن است پایبندی را کاهش دهد.`,
+        strengths: [
+          { id: "ceph_125", label: "۱۲۵ میلی‌گرم در ۵ میلی‌لیتر", mgPer5ml: 125 },
+          { id: "ceph_250", label: "۲۵۰ میلی‌گرم در ۵ میلی‌لیتر", mgPer5ml: 250 }
+        ],
+        diseases: [
+          {
+            id: "ceph_mild",
+            name: "UTI خفیف / فارنژیت / عفونت خفیف پوست – Mild UTI / Pharyngitis / Mild SSTI",
+            mgPerKgPerDay: 40,
+            dosesPerDay: 3,
+            days: 7,
+            extraNote: "در محدودهٔ ۲۵–۵۰ میلی‌گرم به ازای هر کیلوگرم در روز قرار می‌گیرد."
+          },
+          {
+            id: "ceph_severe",
+            name: "عفونت شدید پوست و بافت نرم – Severe SSTI",
+            mgPerKgPerDay: 80,
+            dosesPerDay: 4,
+            days: 10,
+            extraNote: "برای عفونت‌های شدید پوستی با دوز بالا (حدود ۸۰ میلی‌گرم به ازای هر کیلوگرم در روز در ۴ نوبت)."
+          }
+        ]
+      },
+      {
+        id: "cefixime",
+        name: "Cefixime سوسپانسیون",
+        notes: `
+اندیکاسیون‌ها:
+- عفونت ادراری (به‌خصوص در نسخه‌نویسی رایج)
+- اوتیت میانی
+- سینوزیت
+- برخی موارد CAP خفیف
+
+دوزینگ:
+- حدود ۸ میلی‌گرم به ازای هر کیلوگرم در روز، یک‌بار در روز
+- یا حدود ۴ میلی‌گرم به ازای هر کیلوگرم هر ۱۲ ساعت (دو بار در روز)
+
+نکات کلیدی:
+- نیمه‌عمر نسبتاً طولانی دارد و امکان تجویز یک‌بار در روز را فراهم می‌کند که به پایبندی کمک می‌کند.
+- پوشش آن روی استافیلوکوک ضعیف‌تر از Cephalexin است و برای عفونت‌های پوستی استافیلوکوکی انتخاب اول نیست.
+- می‌توان آن را با غذا یا بدون غذا مصرف کرد؛ در برخی موارد اسهال و ناراحتی گوارشی رخ می‌دهد.
+- در UTI های غیرپیچیدهٔ کودکان انتخاب پرکاربردی است، اما باید الگوهای مقاومت محلی در نظر گرفته شود.`,
+        strengths: [
+          { id: "cefi_100", label: "۱۰۰ میلی‌گرم در ۵ میلی‌لیتر", mgPer5ml: 100 }
+        ],
+        diseases: [
+          {
+            id: "cefi_uti",
+            name: "UTI / AOM / سینوزیت / CAP خفیف – UTI / AOM / Sinusitis / CAP (یک‌بار در روز – od)",
+            mgPerKgPerDay: 8,
+            dosesPerDay: 1,
+            days: 7,
+            extraNote: "رژیم متداول ۸ میلی‌گرم به ازای هر کیلوگرم در روز، یک‌بار در روز."
+          },
+          {
+            id: "cefi_uti_bd",
+            name: "UTI / AOM / سینوزیت / CAP – رژیم دو بار در روز (bd/q12h)",
+            mgPerKgPerDay: 8,
+            dosesPerDay: 2,
+            days: 7,
+            extraNote: "دوز روزانه ۸ mg/kg که در دو نوبت (هر ۱۲ ساعت) تقسیم می‌شود؛ هر نوبت حدود ۴ mg/kg."
+          }
+        ]
+      },
+      {
+        id: "cefuroxime",
+        name: "Cefuroxime سوسپانسیون",
+        notes: `
+اندیکاسیون‌ها:
+- اوتیت میانی حاد (AOM)
+- سینوزیت باکتریال
+- CAP خفیف–متوسط
+- عفونت‌های پوست و بافت نرم
+
+دوز:
+- حدود ۲۰ تا ۳۰ میلی‌گرم به ازای هر کیلوگرم در روز، تقسیم در دو نوبت (هر ۱۲ ساعت)
+
+نکات کلیدی:
+- جذب خوراکی آن با غذا بهتر می‌شود؛ توصیه می‌شود همراه غذا مصرف شود.
+- طعم شربت برخی برندها چندان خوشایند نیست و این موضوع باید هنگام مشاوره به والدین ذکر شود.
+- نسبت به Cephalexin و Amoxicillin طیف گسترده‌تری دارد؛ بهتر است برای مواردی که واقعاً به آن نیاز است استفاده شود.
+- می‌تواند جایگزین مناسب برای Amoxiclav در برخی عفونت‌های تنفسی باشد، به‌خصوص اگر تحمل گوارشی Amoxiclav ضعیف باشد.`,
+        strengths: [
+          { id: "cefu_125", label: "۱۲۵ میلی‌گرم در ۵ میلی‌لیتر", mgPer5ml: 125 },
+          { id: "cefu_250", label: "۲۵۰ میلی‌گرم در ۵ میلی‌لیتر", mgPer5ml: 250 }
+        ],
+        diseases: [
+          {
+            id: "cefu_respiratory",
+            name: "AOM / سینوزیت / CAP / عفونت پوستی – AOM / Sinusitis / CAP / SSTI",
+            mgPerKgPerDay: 25,
+            dosesPerDay: 2,
+            days: 7,
+            extraNote: "میانگین بازهٔ ۲۰–۳۰ میلی‌گرم به ازای هر کیلوگرم در روز، در دو نوبت."
+          }
+        ]
+      },
+      {
+        id: "azithromycin",
+        name: "Azithromycin سوسپانسیون",
+        notes: `
+اندیکاسیون‌ها:
+- فارنژیت/تونسیلیت در کودکان با حساسیت شدید به بتالاکتام
+- اوتیت میانی
+- پنومونی آتیپیک (Mycoplasma, Chlamydia)
+- عفونت‌های تنفسی فوقانی و تحتانی خفیف در برخی سناریوها
+
+رژیم‌های متداول:
+- ۱۰ میلی‌گرم به ازای هر کیلوگرم در روز اول سپس ۵ میلی‌گرم در روزهای ۲ تا ۵
+- یا ۱۰ میلی‌گرم به ازای هر کیلوگرم در روز به مدت ۳ روز
+
+نکات کلیدی:
+- نیمه‌عمر طولانی دارد و پس از قطع دارو نیز چند روز در بدن باقی می‌ماند.
+- برای درمان فارنژیت استرپتوکوکی انتخاب اول نیست و معمولاً در حساسیت شدید به پنی‌سیلین استفاده می‌شود.
+- ناراحتی گوارشی (تهوع، درد شکم، اسهال) نسبتاً شایع است؛ می‌توان همراه غذا مصرف کرد.
+- به‌طور تئوریک می‌تواند فاصلهٔ QT را طولانی کند؛ در بیماران دارای ریسک (بیماری قلبی ساختاری، داروهای طولانی‌کنندهٔ QT) باید احتیاط شود.`,
+        strengths: [
+          { id: "azi_200", label: "۲۰۰ میلی‌گرم در ۵ میلی‌لیتر", mgPer5ml: 200 },
+          { id: "azi_100", label: "۱۰۰ میلی‌گرم در ۵ میلی‌لیتر", mgPer5ml: 100 }
+        ],
+        diseases: [
+          {
+            id: "azi_3day",
+            name: "رژیم ۳ روزه – 3-Day Regimen",
+            mgPerKgPerDay: 10,
+            dosesPerDay: 1,
+            days: 3,
+            extraNote: "برای سادگی محاسبه، دوز روزانهٔ ثابت ۱۰ میلی‌گرم به ازای هر کیلوگرم در روز در نظر گرفته شده است."
+          },
+          {
+            id: "azi_5day",
+            name: "رژیم ۵ روزه – 5-Day Regimen (روز اول ۱۰ mg/kg، روزهای ۲–۵: ۵ mg/kg)",
+            mgPerKgPerDay: 10,
+            dosesPerDay: 1,
+            days: 5,
+            extraNote: "روز اول: ۱۰ mg/kg؛ روزهای ۲ تا ۵: ۵ mg/kg. در خروجی ماشین‌حساب دوز روز اول و روزهای بعد جداگانه نشان داده می‌شود."
+          }
+        ]
+      },
+      {
+        id: "clarithromycin",
+        name: "Clarithromycin سوسپانسیون",
+        notes: `
+اندیکاسیون‌ها:
+- عفونت‌های تنفسی فوقانی و تحتانی
+- بخشی از رژیم‌های درمان H. pylori
+- جایگزین در آلرژی به پنی‌سیلین (غیرآنافیلاکسی یا بنا به تصمیم پزشک)
+
+دوز:
+- حدود ۱۵ میلی‌گرم به ازای هر کیلوگرم در روز، تقسیم در دو نوبت
+
+نکات کلیدی:
+- بهتر است همراه غذا مصرف شود تا تحمل گوارشی بهبود یابد.
+- طعم فلزی دهان و تهوع می‌تواند رخ دهد؛ توضیح این نکته به والدین کمک می‌کند از قطع خودسرانه جلوگیری شود.
+- مهارکنندهٔ مهم CYP3A4 است؛ در بیماران بزرگ‌تر که هم‌زمان داروهای متابولیزه‌شونده از این مسیر دریافت می‌کنند باید تداخلات بررسی شود.
+- نسبت به Azithromycin طیف مشابه دارد اما دفعات مصرف و تداخلات بیشتر است؛ در انتخاب نهایی باید شرایط بیمار در نظر گرفته شود.`,
+        strengths: [
+          { id: "clar_125", label: "۱۲۵ میلی‌گرم در ۵ میلی‌لیتر", mgPer5ml: 125 },
+          { id: "clar_250", label: "۲۵۰ میلی‌گرم در ۵ میلی‌لیتر", mgPer5ml: 250 }
+        ],
+        diseases: [
+          {
+            id: "clar_respiratory",
+            name: "عفونت تنفسی فوقانی / تحتانی – URTI / LRTI",
+            mgPerKgPerDay: 15,
+            dosesPerDay: 2,
+            days: 10,
+            extraNote: "۱۵ میلی‌گرم به ازای هر کیلوگرم در روز، در دو نوبت به مدت حدود ۷ تا ۱۰ روز."
+          }
+        ]
+      },
+      {
+        id: "tmpsmx",
+        name: "Co-trimoxazole (TMP–SMX) شربت",
+        notes: `
+اندیکاسیون‌ها:
+- عفونت ادراری
+- برخی عفونت‌های پوست و بافت نرم (از جمله بعضی MRSA های جامعه‌بنیاد)
+- پروفیلاکسی یا درمان Pneumocystis jirovecii در بیماران خاص
+
+دوز بر اساس جزء TMP:
+- حدود ۸ میلی‌گرم TMP به ازای هر کیلوگرم در روز، تقسیم در دو نوبت
+
+نکات کلیدی:
+- بر اساس جزء Trimethoprim دوز محاسبه می‌شود؛ روی برچسب شربت معمولاً نسبت TMP/SMX (مثلاً ۴۰/۲۰۰) ذکر می‌شود.
+- در بیماران با سابقهٔ حساسیت به سولفونامیدها، یا سابقهٔ بثورات پوستی شدید مانند Stevens-Johnson نباید استفاده شود.
+- می‌تواند باعث افزایش پتاسیم، به‌ویژه در مصرف طولانی‌مدت یا همراه داروهای دیگرِ بالا برندهٔ پتاسیم شود.
+- حساسیت به نور (فتوتوکسیسیتی) و اختلالات خونی از عوارضی هستند که در مصرف طولانی باید مد نظر قرار گیرند.
+- در شیرخواران خیلی کوچک و بارداری اواخر به‌دلیل خطر تئوریک کرنیکتروس با احتیاط جدی یا منع مصرف روبه‌رو است.`,
+        strengths: [
+          { id: "tmp_40", label: "۴۰ میلی‌گرم TMP در ۵ میلی‌لیتر (فرمول ۴۰/۲۰۰)", mgPer5ml: 40 }
+        ],
+        diseases: [
+          {
+            id: "tmp_uti",
+            name: "UTI / عفونت خفیف پوست – UTI / Mild SSTI",
+            mgPerKgPerDay: 8,
+            dosesPerDay: 2,
+            days: 10,
+            extraNote: "دوز بر اساس جزء Trimethoprim و حدود ۸ میلی‌گرم به ازای هر کیلوگرم در روز در دو نوبت است."
+          }
+        ]
+      },
+      {
+        id: "clindamycin",
+        name: "Clindamycin سوسپانسیون",
+        notes: `
+اندیکاسیون‌ها:
+- عفونت‌های پوست و بافت نرم با شک به MRSA جامعه‌ای
+- عفونت‌های دندانی
+- فارنژیت استرپتوکوکی در حساسیت شدید به بتالاکتام
+
+دوز:
+- حدود ۲۰ تا ۴۰ میلی‌گرم به ازای هر کیلوگرم در روز، تقسیم هر ۶ تا ۸ ساعت
+
+نکات کلیدی:
+- مهم‌ترین عارضهٔ بالینی آن خطر کولیت ناشی از Clostridioides difficile است؛ اسهال شدید، مدفوع خونی یا درد شکمی مداوم نیاز به ارزیابی فوری دارد.
+- بهتر است همراه یک لیوان آب خورده شود و کودک بعد از مصرف تا چند دقیقه دراز نکشد تا خطر التهاب مری کاهش یابد.
+- در عفونت‌های دندانی و برخی SSTI های مقاوم یا در بیماران با آلرژی شدید به بتالاکتام، جایگاه مهمی دارد.
+- تهوع و طعم ناخوشایند دهانی نسبتاً شایع است و باید به والدین توضیح داده شود.`,
+        strengths: [
+          { id: "clin_75", label: "۷۵ میلی‌گرم در ۵ میلی‌لیتر", mgPer5ml: 75 }
+        ],
+        diseases: [
+          {
+            id: "clin_ssti",
+            name: "SSTI / عفونت دندانی / فارنژیت – SSTI / Dental / Pharyngitis",
+            mgPerKgPerDay: 30,
+            dosesPerDay: 3,
+            days: 10,
+            extraNote: "میانگین بازهٔ ۲۰–۴۰ میلی‌گرم به ازای هر کیلوگرم در روز، در ۳ نوبت."
+          }
+        ]
+      },
+      {
+        id: "metronidazole",
+        name: "Metronidazole شربت",
+        notes: `
+اندیکاسیون‌ها:
+- ژیاردیازیس
+- آمیبیاز روده‌ای
+- عفونت‌های بی‌هوازی گوارشی یا دهانی
+- به‌صورت ترکیبی در بعضی عفونت‌های شکمی
+
+دوز:
+- حدود ۳۰ تا ۵۰ میلی‌گرم به ازای هر کیلوگرم در روز، تقسیم هر ۸ ساعت
+
+نکات کلیدی:
+- بهتر است همراه غذا مصرف شود تا تهوع و درد شکم کمتر شود.
+- می‌تواند طعم فلزی دهان ایجاد کند و رنگ ادرار را تیره‌تر کند؛ این تغییر رنگ معمولاً بی‌خطر است.
+- نباید همراه الکل استفاده شود، چون می‌تواند واکنش شبه دی‌سولفیرام (تهوع شدید، گرگرفتگی، افت فشار) ایجاد کند.
+- در صورت بروز علائم عصبی (بی‌حسی، گزگز اندام‌ها) در مصرف طولانی‌مدت باید ارزیابی مجدد صورت گیرد.`,
+        strengths: [
+          { id: "metro_125", label: "۱۲۵ میلی‌گرم در ۵ میلی‌لیتر", mgPer5ml: 125 }
+        ],
+        diseases: [
+          {
+            id: "metro_gi",
+            name: "ژیاردیا / آمیبیاز / عفونت گوارشی بی‌هوازی – Giardiasis / Amoebiasis / Anaerobic GI",
+            mgPerKgPerDay: 40,
+            dosesPerDay: 3,
+            days: 7,
+            extraNote: "در محدودهٔ ۳۰–۵۰ میلی‌گرم به ازای هر کیلوگرم در روز، در ۳ نوبت."
+          }
+        ]
+      }
+    ];
+
+    /************************************************************
+     *  بخش ۲: دیتابیس آنتی‌هیستامین‌های سن‌محور
+     *  دوز بر اساس سن (میلی‌گرم در روز)
+     ************************************************************/
+    const AGE_ANTIHISTAMINES = [
+      {
+        id: "cetirizine",
+        name: "Cetirizine (ستیریزین) شربت",
+        notes: `
+اندیکاسیون‌ها:
+- رینیت آلرژیک فصلی یا دائمی
+- کهیر مزمن ایدیوپاتیک
+
+دوز بر اساس سن:
+- ۶ ماه تا ۲ سال: حدود ۲٫۵ میلی‌گرم در روز
+- ۲ تا ۶ سال: حدود ۵ میلی‌گرم در روز
+- ۶ سال و بالاتر: ۱۰ میلی‌گرم در روز
+
+نکات کلیدی:
+- نسل دوم آنتی‌هیستامین است؛ خواب‌آلودگی کمتر از نسل اول دارد، اما در برخی کودکان همچنان می‌تواند خواب‌آور باشد.
+- معمولاً یک‌بار در روز (ترجیحاً عصر یا قبل از خواب) داده می‌شود؛ در صورت خواب‌آلودگی روزانه می‌توان زمان مصرف را جابه‌جا کرد.
+- در نارسایی کلیوی متوسط تا شدید، کاهش دوز یا افزایش فاصلهٔ مصرف لازم است.
+- برای کنترل طولانی‌مدت کهیر مزمن طبق بسیاری از گایدلاین‌ها از داروهای خط اول محسوب می‌شود.`,
+        strengths: [
+          { id: "ctz_5", label: "۵ میلی‌گرم در ۵ میلی‌لیتر", mgPer5ml: 5 }
+        ],
+        ageBands: [
+          {
+            id: "ctz_0_2",
+            label: "۶ ماه تا ۲ سال",
+            minAge: 0.5,
+            maxAge: 2,
+            mgPerDay: 2.5,
+            dosesPerDay: 1,
+            note: "۲٫۵ میلی‌گرم در روز (معمولاً یک‌بار در روز)."
+          },
+          {
+            id: "ctz_2_6",
+            label: "۲ تا ۶ سال",
+            minAge: 2,
+            maxAge: 6,
+            mgPerDay: 5,
+            dosesPerDay: 1,
+            note: "۵ میلی‌گرم در روز (یک‌بار در روز)."
+          },
+          {
+            id: "ctz_6plus",
+            label: "۶ سال و بالاتر",
+            minAge: 6,
+            maxAge: 18,
+            mgPerDay: 10,
+            dosesPerDay: 1,
+            note: "۱۰ میلی‌گرم در روز (یک‌بار در روز)."
+          }
+        ]
+      },
+      {
+        id: "loratadine",
+        name: "Loratadine (لوراتادین) شربت",
+        notes: `
+اندیکاسیون‌ها:
+- رینیت آلرژیک
+- کهیر مزمن
+
+دوز بر اساس سن:
+- ۲ تا ۶ سال: ۵ میلی‌گرم در روز
+- ۶ سال و بالاتر: ۱۰ میلی‌گرم در روز
+
+نکات کلیدی:
+- نسل دوم آنتی‌هیستامین با خواب‌آلودگی بسیار کم است و برای مصرف روزانه مناسب است.
+- معمولاً یک‌بار در روز مصرف می‌شود و برای آلرژی فصلی می‌توان به صورت روزانه در فصل آلرژی ادامه داد.
+- در نارسایی کبدی باید دوز تعدیل شود و معمولاً با فواصل بیشتر تجویز می‌شود.
+- از ترکیب هم‌زمان با سایر داروهای خواب‌آور باید پرهیز شود، هرچند اثر خواب‌آوری آن اندک است.`,
+        strengths: [
+          { id: "lor_5", label: "۵ میلی‌گرم در ۵ میلی‌لیتر", mgPer5ml: 5 }
+        ],
+        ageBands: [
+          {
+            id: "lor_2_6",
+            label: "۲ تا ۶ سال",
+            minAge: 2,
+            maxAge: 6,
+            mgPerDay: 5,
+            dosesPerDay: 1,
+            note: "۵ میلی‌گرم در روز (یک‌بار در روز)."
+          },
+          {
+            id: "lor_6plus",
+            label: "۶ سال و بالاتر",
+            minAge: 6,
+            maxAge: 18,
+            mgPerDay: 10,
+            dosesPerDay: 1,
+            note: "۱۰ میلی‌گرم در روز (یک‌بار در روز)."
+          }
+        ]
+      },
+      {
+        id: "fexofenadine",
+        name: "Fexofenadine (فکسوفنادین) شربت",
+        notes: `
+اندیکاسیون‌ها:
+- رینیت آلرژیک
+- کهیر مزمن
+
+دوز بر اساس سن (برای شربت ۳۰ میلی‌گرم در ۵ میلی‌لیتر):
+- ۲ تا ۱۱ سال: ۳۰ میلی‌گرم دو بار در روز (جمعاً ۶۰ میلی‌گرم در روز)
+
+نکات کلیدی:
+- از نسل دوم آنتی‌هیستامین‌ها است و تقریباً بدون اثر خواب‌آور محسوب می‌شود، زیرا عبور کمی از سد خونی‌ـ‌مغزی دارد.
+- نباید همراه آب‌میوه‌هایی مانند گریپ‌فروت، پرتقال و سیب مصرف شود، زیرا می‌تواند جذب آن را کاهش دهد؛ بهترین گزینه مصرف با آب ساده است.
+- در کهیر مزمن می‌تواند در صورت نیاز با دوزهای بالاتر (طبق گایدلاین‌ها) تنظیم شود که خارج از حیطهٔ این ماشین‌حساب است و باید توسط پزشک انجام شود.`,
+        strengths: [
+          { id: "fexo_30", label: "۳۰ میلی‌گرم در ۵ میلی‌لیتر", mgPer5ml: 30 }
+        ],
+        ageBands: [
+          {
+            id: "fexo_2_11",
+            label: "۲ تا ۱۱ سال",
+            minAge: 2,
+            maxAge: 12,
+            mgPerDay: 60,
+            dosesPerDay: 2,
+            note: "۳۰ میلی‌گرم دو بار در روز (جمعاً ۶۰ میلی‌گرم در روز)."
+          }
+        ]
+      }
+    ];
+
+    /************************************************************
+     *  بخش ۳: گرفتن المان‌ها
+     ************************************************************/
+    const weightMode = document.getElementById("weightMode");
+    const ageMode = document.getElementById("ageMode");
+    const tabWeight = document.getElementById("tabWeight");
+    const tabAge = document.getElementById("tabAge");
+
+    const weightInput = document.getElementById("weight");
+    const drugSelect = document.getElementById("drugSelect");
+    const strengthSelect = document.getElementById("strengthSelect");
+    const diseaseSelect = document.getElementById("diseaseSelect");
+    const drugNotesWrapper = document.getElementById("drugNotesWrapper");
+    const drugNotes = document.getElementById("drugNotes");
+    const strengthWrapper = document.getElementById("strengthWrapper");
+    const diseaseWrapper = document.getElementById("diseaseWrapper");
+    const doseInfoWrapper = document.getElementById("doseInfoWrapper");
+    const doseInfo = document.getElementById("doseInfo");
+    const resultDiv = document.getElementById("result");
+    const calcBtn = document.getElementById("calcBtn");
+    const resetBtn = document.getElementById("resetBtn");
+
+    const ageDrugSelect = document.getElementById("ageDrugSelect");
+    const ageYearsInput = document.getElementById("ageYears");
+    const ageDrugNotesWrapper = document.getElementById("ageDrugNotesWrapper");
+    const ageDrugNotes = document.getElementById("ageDrugNotes");
+    const ageStrengthWrapper = document.getElementById("ageStrengthWrapper");
+    const ageStrengthSelect = document.getElementById("ageStrengthSelect");
+    const ageDoseInfoWrapper = document.getElementById("ageDoseInfoWrapper");
+    const ageDoseInfo = document.getElementById("ageDoseInfo");
+    const ageCalcBtn = document.getElementById("ageCalcBtn");
+    const ageResultDiv = document.getElementById("ageResult");
+
+    const themeSwitch = document.getElementById("themeSwitch");
+    const themeIcon = document.getElementById("themeIcon");
+
+    /************************************************************
+     *  بخش ۴: توابع کمکی
+     ************************************************************/
+    function findDrugById(id) {
+      return DRUGS.find(d => d.id === id) || null;
+    }
+
+    function findStrength(drug, strengthId) {
+      if (!drug) return null;
+      return drug.strengths.find(s => s.id === strengthId) || null;
+    }
+
+    function findDisease(drug, diseaseId) {
+      if (!drug) return null;
+      return drug.diseases.find(d => d.id === diseaseId) || null;
+    }
+
+    function findAgeDrugById(id) {
+      return AGE_ANTIHISTAMINES.find(d => d.id === id) || null;
+    }
+
+    /************************************************************
+     *  بخش ۵: پر کردن لیست‌ها
+     ************************************************************/
+    function populateDrugs() {
+      DRUGS.forEach(drug => {
+        const opt = document.createElement("option");
+        opt.value = drug.id;
+        opt.textContent = drug.name;
+        drugSelect.appendChild(opt);
+      });
+    }
+
+    function populateAgeDrugs() {
+      AGE_ANTIHISTAMINES.forEach(drug => {
+        const opt = document.createElement("option");
+        opt.value = drug.id;
+        opt.textContent = drug.name;
+        ageDrugSelect.appendChild(opt);
+      });
+    }
+
+    /************************************************************
+     *  بخش ۶: تب‌ها
+     ************************************************************/
+    tabWeight.addEventListener("click", () => {
+      tabWeight.classList.add("active");
+      tabAge.classList.remove("active");
+      weightMode.classList.remove("hidden");
+      ageMode.classList.add("hidden");
+    });
+
+    tabAge.addEventListener("click", () => {
+      tabAge.classList.add("active");
+      tabWeight.classList.remove("active");
+      ageMode.classList.remove("hidden");
+      weightMode.classList.add("hidden");
+    });
+
+    /************************************************************
+     *  بخش ۷: تغییر دارو (وزن‌محور)
+     ************************************************************/
+    drugSelect.addEventListener("change", () => {
+      const drug = findDrugById(drugSelect.value);
+
+      strengthSelect.innerHTML = "";
+      diseaseSelect.innerHTML = "";
+      strengthWrapper.classList.add("hidden");
+      diseaseWrapper.classList.add("hidden");
+      drugNotesWrapper.classList.add("hidden");
+      doseInfoWrapper.classList.add("hidden");
+      resultDiv.classList.add("hidden");
+      drugNotes.textContent = "";
+      doseInfo.innerHTML = "";
+      resultDiv.innerHTML = "";
+
+      if (!drug) return;
+
+      drugNotes.textContent = drug.notes || "نکته‌ای ثبت نشده است.";
+      drugNotesWrapper.classList.remove("hidden");
+
+      if (drug.strengths && drug.strengths.length > 0) {
+        drug.strengths.forEach(s => {
+          const opt = document.createElement("option");
+          opt.value = s.id;
+          opt.textContent = s.label;
+          strengthSelect.appendChild(opt);
+        });
+        strengthWrapper.classList.remove("hidden");
+      }
+
+      if (drug.diseases && drug.diseases.length > 0) {
+        diseaseSelect.innerHTML = `<option value="">-- بیماری / اندیکاسیون را انتخاب کنید --</option>`;
+        drug.diseases.forEach(d => {
+          const opt = document.createElement("option");
+          opt.value = d.id;
+          opt.textContent = d.name;
+          diseaseSelect.appendChild(opt);
+        });
+        diseaseWrapper.classList.remove("hidden");
+      }
+    });
+
+    /************************************************************
+     *  بخش ۸: انتخاب بیماری (وزن‌محور)
+     ************************************************************/
+    diseaseSelect.addEventListener("change", () => {
+      const drug = findDrugById(drugSelect.value);
+      const disease = findDisease(drug, diseaseSelect.value);
+
+      doseInfoWrapper.classList.add("hidden");
+      doseInfo.innerHTML = "";
+
+      if (!disease) return;
+
+      const { mgPerKgPerDay, extraNote, dosesPerDay } = disease;
+
+      let html = `
+        دوز انتخاب‌شده برای این بیماری:<br />
+        <strong>${mgPerKgPerDay} میلی‌گرم به ازای هر کیلوگرم در روز</strong><br />
+        تعداد نوبت در روز: <strong>${dosesPerDay} بار در روز</strong>
+      `;
+      if (extraNote) {
+        html += `<br /><span style="font-size:12px; opacity:0.85;">${extraNote}</span>`;
+      }
+
+      doseInfo.innerHTML = html;
+      doseInfoWrapper.classList.remove("hidden");
+    });
+
+    /************************************************************
+     *  بخش ۹: محاسبه دوز (وزن‌محور)
+     ************************************************************/
+    calcBtn.addEventListener("click", () => {
+      const weight = parseFloat(weightInput.value);
+      if (!weight || weight <= 0) {
+        alert("لطفاً وزن معتبر وارد کنید.");
+        return;
+      }
+
+      const drug = findDrugById(drugSelect.value);
+      if (!drug) {
+        alert("لطفاً ابتدا دارو را انتخاب کنید.");
+        return;
+      }
+
+      const strength = findStrength(drug, strengthSelect.value);
+      if (!strength) {
+        alert("لطفاً غلظت شربت را انتخاب کنید.");
+        return;
+      }
+
+      const disease = findDisease(drug, diseaseSelect.value);
+      if (!disease) {
+        alert("لطفاً بیماری / اندیکاسیون را انتخاب کنید.");
+        return;
+      }
+
+      const mgPerKgPerDay = disease.mgPerKgPerDay;
+      const dosesPerDay = disease.dosesPerDay;
+      const days = disease.days;
+      const mgPer5ml = strength.mgPer5ml;
+      const intervalHours = 24 / dosesPerDay;
+
+      // حالت خاص: آزیترومایسین رژیم ۵ روزه (روز اول ۱۰ mg/kg، روزهای ۲–۵: ۵ mg/kg)
+      if (drug.id === "azithromycin" && disease.id === "azi_5day") {
+        const day1MgPerKg = 10;
+        const nextMgPerKg = 5;
+
+        const totalDay1 = weight * day1MgPerKg;
+        const totalNext = weight * nextMgPerKg;
+
+        const mlDay1 = totalDay1 * (5 / mgPer5ml);
+        const mlNext = totalNext * (5 / mgPer5ml);
+
+        const resultHtml = `
+          برای کودک با وزن <strong>${weight.toFixed(1)} کیلوگرم</strong>:<br /><br />
+          <strong>روز اول:</strong><br />
+          • دوز روز اول: <strong>${totalDay1.toFixed(1)} میلی‌گرم (۱۰ mg/kg)</strong><br />
+          • حجم روز اول: <strong>${mlDay1.toFixed(1)} میلی‌لیتر یک‌بار در روز</strong><br /><br />
+          <strong>روزهای ۲ تا ۵:</strong><br />
+          • دوز هر روز: <strong>${totalNext.toFixed(1)} میلی‌گرم (۵ mg/kg)</strong><br />
+          • حجم هر روز: <strong>${mlNext.toFixed(1)} میلی‌لیتر یک‌بار در روز</strong><br /><br />
+          • تعداد روزهای درمان: <strong>${days} روز</strong>
+        `;
+
+        resultDiv.innerHTML = resultHtml;
+        resultDiv.classList.remove("hidden");
+        return;
+      }
+
+      // حالت عمومی برای بقیه داروها
+      const totalMgPerDay = weight * mgPerKgPerDay;
+      const mgPerDose = totalMgPerDay / dosesPerDay;
+      const mlPerDose = mgPerDose * (5 / mgPer5ml);
+
+      const resultHtml = `
+        برای کودک با وزن <strong>${weight.toFixed(1)} کیلوگرم</strong>:<br /><br />
+        • دوز روزانهٔ کل: <strong>${totalMgPerDay.toFixed(1)} میلی‌گرم در روز</strong><br />
+        • دوز هر نوبت: <strong>${mgPerDose.toFixed(1)} میلی‌گرم در هر نوبت</strong><br />
+        • حجم هر نوبت شربت: <strong>${mlPerDose.toFixed(1)} میلی‌لیتر در هر نوبت</strong><br />
+        • تعداد نوبت در روز: <strong>${dosesPerDay} بار در روز</strong><br />
+        • فاصلهٔ بین نوبت‌ها: <strong>هر ${intervalHours} ساعت یک‌بار</strong><br />
+        • مدت درمان تقریبی: <strong>${days} روز</strong>
+      `;
+
+      resultDiv.innerHTML = resultHtml;
+      resultDiv.classList.remove("hidden");
+    });
+
+    /************************************************************
+     *  بخش ۱۰: شروع مجدد (وزن‌محور)
+     ************************************************************/
+    resetBtn.addEventListener("click", () => {
+      weightInput.value = "";
+      drugSelect.value = "";
+      strengthSelect.innerHTML = "";
+      diseaseSelect.innerHTML = "";
+      strengthWrapper.classList.add("hidden");
+      diseaseWrapper.classList.add("hidden");
+      drugNotesWrapper.classList.add("hidden");
+      doseInfoWrapper.classList.add("hidden");
+      resultDiv.classList.add("hidden");
+      drugNotes.textContent = "";
+      doseInfo.innerHTML = "";
+      resultDiv.innerHTML = "";
+    });
+
+    /************************************************************
+     *  بخش ১১: تغییر دارو (سن‌محور)
+     ************************************************************/
+    ageDrugSelect.addEventListener("change", () => {
+      const drug = findAgeDrugById(ageDrugSelect.value);
+
+      ageStrengthSelect.innerHTML = "";
+      ageStrengthWrapper.classList.add("hidden");
+      ageDrugNotesWrapper.classList.add("hidden");
+      ageDoseInfoWrapper.classList.add("hidden");
+      ageResultDiv.classList.add("hidden");
+      ageDrugNotes.textContent = "";
+      ageDoseInfo.innerHTML = "";
+
+      if (!drug) return;
+
+      ageDrugNotes.textContent = drug.notes || "نکته‌ای ثبت نشده است.";
+      ageDrugNotesWrapper.classList.remove("hidden");
+
+      if (drug.strengths && drug.strengths.length > 0) {
+        drug.strengths.forEach(s => {
+          const opt = document.createElement("option");
+          opt.value = s.id;
+          opt.textContent = s.label;
+          ageStrengthSelect.appendChild(opt);
+        });
+        ageStrengthWrapper.classList.remove("hidden");
+      }
+
+      updateAgeDoseInfo();
+    });
+
+    /************************************************************
+     *  بخش ۱۲: محاسبه / نمایش دوز بر اساس سن
+     ************************************************************/
+    function getAgeBand(drug, ageYears) {
+      if (!drug || !drug.ageBands) return null;
+      return drug.ageBands.find(b =>
+        ageYears >= b.minAge && (b.maxAge == null || ageYears < b.maxAge)
+      ) || null;
+    }
+
+    function updateAgeDoseInfo() {
+      const ageYears = parseFloat(ageYearsInput.value);
+      const drug = findAgeDrugById(ageDrugSelect.value);
+      if (!drug || !Number.isFinite(ageYears) || ageYears <= 0) {
+        ageDoseInfoWrapper.classList.add("hidden");
+        ageDoseInfo.innerHTML = "";
+        return;
+      }
+
+      const band = getAgeBand(drug, ageYears);
+      if (!band) {
+        ageDoseInfoWrapper.classList.add("hidden");
+        ageDoseInfo.innerHTML = "";
+        return;
+      }
+
+      const { mgPerDay, dosesPerDay, label, note } = band;
+      let html = `
+        بازهٔ سنی: <strong>${label}</strong><br />
+        دوز روزانه: <strong>${mgPerDay} میلی‌گرم در روز</strong><br />
+        تعداد نوبت در روز: <strong>${dosesPerDay} بار در روز</strong>
+      `;
+      if (note) {
+        html += `<br /><span style="font-size:12px; opacity:0.85;">${note}</span>`;
+      }
+      ageDoseInfo.innerHTML = html;
+      ageDoseInfoWrapper.classList.remove("hidden");
+    }
+
+    ageYearsInput.addEventListener("input", updateAgeDoseInfo);
+    ageDrugSelect.addEventListener("change", updateAgeDoseInfo);
+
+    ageCalcBtn.addEventListener("click", () => {
+      const ageYears = parseFloat(ageYearsInput.value);
+      if (!Number.isFinite(ageYears) || ageYears <= 0) {
+        alert("لطفاً سن معتبر وارد کنید.");
+        return;
+      }
+
+      const drug = findAgeDrugById(ageDrugSelect.value);
+      if (!drug) {
+        alert("لطفاً دارو را انتخاب کنید.");
+        return;
+      }
+
+      const strength = drug.strengths.find(s => s.id === ageStrengthSelect.value);
+      if (!strength) {
+        alert("لطفاً غلظت شربت را انتخاب کنید.");
+        return;
+      }
+
+      const band = getAgeBand(drug, ageYears);
+      if (!band) {
+        alert("برای این سن دوزی ثبت نشده است.");
+        return;
+      }
+
+      const { mgPerDay, dosesPerDay, label } = band;
+      const mgPerDose = mgPerDay / dosesPerDay;
+      const mlPerDose = mgPerDose * (5 / strength.mgPer5ml);
+      const intervalHours = 24 / dosesPerDay;
+
+      const html = `
+        سن کودک: <strong>${ageYears.toFixed(1)} سال</strong><br />
+        بازهٔ سنی دوز: <strong>${label}</strong><br /><br />
+        • دوز روزانهٔ کل: <strong>${mgPerDay} میلی‌گرم در روز</strong><br />
+        • دوز هر نوبت: <strong>${mgPerDose.toFixed(1)} میلی‌گرم در هر نوبت</strong><br />
+        • حجم هر نوبت شربت: <strong>${mlPerDose.toFixed(1)} میلی‌لیتر در هر نوبت</strong><br />
+        • تعداد نوبت در روز: <strong>${dosesPerDay} بار در روز</strong><br />
+        • فاصلهٔ بین نوبت‌ها: <strong>هر ${intervalHours} ساعت یک‌بار</strong><br />
+        • مدت مصرف: بر اساس نوع آلرژی و پاسخ بیمار تنظیم می‌شود.
+      `;
+      ageResultDiv.innerHTML = html;
+      ageResultDiv.classList.remove("hidden");
+      updateAgeDoseInfo();
+    });
+
+    /************************************************************
+     *  بخش ۱۳: تم روز/شب
+     ************************************************************/
+    function applyTheme(theme) {
+      document.body.setAttribute("data-theme", theme);
+      themeSwitch.checked = theme === "dark";
+      themeIcon.textContent = theme === "dark" ? "🌙" : "☀️";
+    }
+
+    (function initTheme() {
+      const saved = localStorage.getItem("theme");
+      if (saved === "dark" || saved === "light") {
+        applyTheme(saved);
+      } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        applyTheme("dark");
+      } else {
+        applyTheme("light");
+      }
+    })();
+
+    themeSwitch.addEventListener("change", () => {
+      const theme = themeSwitch.checked ? "dark" : "light";
+      applyTheme(theme);
+      localStorage.setItem("theme", theme);
+    });
+
+    /************************************************************
+     *  بخش ۱۴: اجرا در شروع
+     ************************************************************/
+    populateDrugs();
+    populateAgeDrugs();
+  </script>
 </body>
 </html>
