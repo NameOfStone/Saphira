@@ -1,1 +1,142 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+  <title>محاسبه دوز شربت اطفال</title>
 
+  <!-- فونت‌ها و آیکون‌ها -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+  <!-- استایل اصلی -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- پس‌زمینه‌ی حروف (Canvas) -->
+  <canvas id="sceneBg"></canvas>
+  <div class="bg-grain"></div>
+
+  <!-- نوار بالا -->
+  <header class="top-bar">
+    <div class="header-area">
+      <span class="top-title"><i class="fas fa-syringe"></i> محاسبه دوز شربت اطفال</span>
+    </div>
+    <label class="theme-toggle" title="تغییر حالت روز / شب">
+      <input type="checkbox" id="themeSwitch" />
+      <span id="themeIcon" class="theme-icon" aria-hidden="true">☀️</span>
+    </label>
+  </header>
+
+  <!-- ناحیه‌ی تشکیل کلمه Saphira (با Canvas) -->
+  <div class="hero"></div>
+
+  <!-- کارت اصلی -->
+  <main class="container">
+
+    <div class="sub-title">
+      <i class="fas fa-calculator"></i> محاسبه حجم مصرفی شربت‌های رایج در بیماری‌های کودکان
+    </div>
+
+    <div class="warning">
+      <i class="fas fa-exclamation-triangle"></i>
+      این نرم‌افزار تنها یک ابزار کمکی برای محاسبهٔ عددی دوز است و به‌هیچ‌وجه جایگزین معاینه و تصمیم‌گیری پزشک یا داروساز مسئول درمان بیمار نمی‌شود. استفاده از این محاسبات باید همواره با رفرنس‌های معتبر و قضاوت بالینی تطبیق داده شود.
+    </div>
+
+    <!-- تب‌ها -->
+    <div class="tabs">
+      <button id="tabWeight" class="tab-btn active"><i class="fas fa-weight"></i> محاسبه بر اساس وزن</button>
+      <button id="tabAge" class="tab-btn"><i class="fas fa-clock"></i> آنتی‌هیستامین سن‌محور</button>
+    </div>
+
+    <!-- حالت وزن‌محور -->
+    <div id="weightMode">
+      <div class="field">
+        <label for="drugSelect"><i class="fas fa-capsules"></i> انتخاب دارو</label>
+        <select id="drugSelect">
+          <option value="">-- دارو را انتخاب کنید --</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="weight"><i class="fas fa-weight-scale"></i> وزن کودک (کیلوگرم)</label>
+        <input type="number" id="weight" min="0" step="0.1" placeholder="مثلاً ۱۲٫۵ کیلوگرم" inputmode="decimal" />
+      </div>
+
+      <div id="drugNotesWrapper" class="field hidden">
+        <label><i class="fas fa-info-circle"></i> نکات مهم دارویی</label>
+        <div id="drugNotes" class="note-box"></div>
+      </div>
+
+      <div id="strengthWrapper" class="field hidden">
+        <label for="strengthSelect"><i class="fas fa-flask"></i> غلظت شربت (میلی‌گرم در ۵ میلی‌لیتر)</label>
+        <select id="strengthSelect"></select>
+      </div>
+
+      <div id="diseaseWrapper" class="field hidden">
+        <label for="diseaseSelect"><i class="fas fa-bolt"></i> بیماری / اندیکاسیون</label>
+        <select id="diseaseSelect"></select>
+      </div>
+
+      <div id="doseInfoWrapper" class="field hidden">
+        <label><i class="fas fa-prescription"></i> دوز مورد استفاده بر اساس بیماری</label>
+        <div id="doseInfo" class="dose-box"></div>
+      </div>
+
+      <div class="field btn-row">
+        <button id="calcBtn" class="btn-primary"><i class="fas fa-calculator"></i> محاسبه دوز</button>
+        <button id="resetBtn" type="button" class="btn-secondary"><i class="fas fa-undo-alt"></i> شروع مجدد</button>
+      </div>
+
+      <div id="result" class="result-box hidden"></div>
+    </div>
+
+    <!-- حالت سن‌محور (آنتی‌هیستامین‌ها) -->
+    <div id="ageMode" class="hidden">
+      <div class="field">
+        <label for="ageDrugSelect"><i class="fas fa-capsules"></i> انتخاب آنتی‌هیستامین سن‌محور</label>
+        <select id="ageDrugSelect">
+          <option value="">-- دارو را انتخاب کنید --</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="ageYears"><i class="fas fa-clock"></i> سن کودک (سال)</label>
+        <input type="number" id="ageYears" min="0" step="0.1" placeholder="مثلاً ۳٫۵ سال" inputmode="decimal" />
+      </div>
+
+      <div id="ageDrugNotesWrapper" class="field hidden">
+        <label><i class="fas fa-info-circle"></i> نکات مهم دارویی</label>
+        <div id="ageDrugNotes" class="note-box"></div>
+      </div>
+
+      <div id="ageStrengthWrapper" class="field hidden">
+        <label for="ageStrengthSelect"><i class="fas fa-flask"></i> غلظت شربت (میلی‌گرم در ۵ میلی‌لیتر)</label>
+        <select id="ageStrengthSelect"></select>
+      </div>
+
+      <div id="ageDoseInfoWrapper" class="field hidden">
+        <label><i class="fas fa-prescription"></i> دوز بر اساس سن</label>
+        <div id="ageDoseInfo" class="dose-box"></div>
+      </div>
+
+      <div class="field btn-row">
+        <button id="ageCalcBtn" class="btn-primary"><i class="fas fa-calculator"></i> محاسبه دوز</button>
+      </div>
+
+      <div id="ageResult" class="result-box hidden"></div>
+    </div>
+
+    <footer class="footer">
+      <i class="fas fa-telegram-plane"></i> ارتباط از طریق تلگرام:
+      <a href="https://t.me/reza0rbz" target="_blank">@reza0rbz</a>
+    </footer>
+  </main>
+
+  <!-- اسکریپت اصلی -->
+  <script src="script.js"></script>
+</body>
+</html>
