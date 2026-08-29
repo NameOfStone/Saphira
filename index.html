@@ -1,163 +1,330 @@
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
   <meta name="theme-color" content="#0b1220">
-  <meta name="description" content="Saphira؛ ابزار کمکی محاسبه حجم مصرفی سوسپانسیون خوراکی آنتی‌بیوتیک در کودکان بر اساس وزن و اندیکاسیون.">
+  <meta name="description" content="Saphira - محاسبه‌گر دوز آنتی‌بیوتیک‌های خوراکی کودکان">
+
   <title>Saphira | محاسبه دوز آنتی‌بیوتیک اطفال</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <canvas id="sceneBg" aria-hidden="true"></canvas>
-  <div class="bg-noise" aria-hidden="true"></div>
+
+  <canvas id="backgroundCanvas" aria-hidden="true"></canvas>
 
   <header class="topbar">
     <div class="brand">
-      <div class="brand-mark" aria-hidden="true">✦</div>
+      <div class="brand-mark">S</div>
       <div>
         <div class="brand-name">Saphira</div>
-        <div class="brand-subtitle">Pediatric Dose Helper</div>
+        <div class="brand-subtitle">Pediatric Dose Calculator</div>
       </div>
     </div>
 
     <div class="top-actions">
-      <button id="sourcesBtn" class="icon-btn" type="button" aria-label="منابع علمی" title="منابع علمی">⌕</button>
-      <button id="themeBtn" class="icon-btn" type="button" aria-label="تغییر حالت روشن و تاریک" title="تغییر حالت روشن و تاریک"><span id="themeIcon">☾</span></button>
+      <button id="themeButton" class="icon-button" type="button" aria-label="تغییر حالت نمایش">
+        ☾
+      </button>
     </div>
   </header>
 
-  <main class="page-shell">
-    <section class="hero-section">
-      <div class="hero-kicker">محاسبهٔ سریع، خوانا و قابل کنترل</div>
+  <main class="page">
+
+    <section class="hero">
+      <div class="hero-badge">
+        <span class="pulse-dot"></span>
+        Pediatric Pharmacotherapy
+      </div>
+
       <h1>محاسبه دوز آنتی‌بیوتیک اطفال</h1>
-      <p class="hero-copy">وزن، اندیکاسیون و غلظت فرآورده را وارد کنید؛ حجم هر نوبت و مقدار کل روزانه را با سقف دوز قابل بررسی ببینید.</p>
-      <div class="hero-pills">
-        <span>mg/kg/day</span>
-        <span>mL / dose</span>
-        <span>Max dose</span>
-        <span>RTL + Mobile</span>
-      </div>
+
+      <p>
+        تبدیل دوز وزن‌محور به مقدار واقعی سوسپانسیون،
+        با درنظرگرفتن اندیکاسیون، غلظت فرآورده و سقف دوز.
+      </p>
     </section>
 
-    <section class="app-card" aria-labelledby="calculatorTitle">
-      <div class="app-card-head">
+    <section class="calculator-card">
+
+      <div class="card-header">
         <div>
-          <div class="eyebrow">CALCULATOR</div>
-          <h2 id="calculatorTitle">محاسبه‌گر خوراکی</h2>
+          <span class="section-kicker">CALCULATOR</span>
+          <h2>محاسبه‌گر دوز</h2>
         </div>
-        <div id="statusBadge" class="status-badge">آماده</div>
+
+        <span id="statusBadge" class="status-badge">
+          آماده
+        </span>
       </div>
 
-      <div class="safety-note">
-        <strong>توجه بالینی</strong>
-        <span>این صفحه فقط ابزار محاسبهٔ عددی است؛ تشخیص، انتخاب آنتی‌بیوتیک، مدت درمان، تعدیل کلیوی/کبدی و سقف دوز باید با وضعیت بیمار و رفرنس معتبر تطبیق داده شود.</span>
-      </div>
-
-      <div class="field-grid">
-        <div class="field-card field-card-wide">
-          <label for="drugSelect">دارو</label>
-          <select id="drugSelect" autocomplete="off">
-            <option value="">دارو را انتخاب کنید</option>
-          </select>
-          <div id="drugMeta" class="micro-hint">ابتدا یک آنتی‌بیوتیک انتخاب کنید.</div>
-        </div>
-
-        <div class="field-card">
-          <label for="weight">وزن کودک <span>(kg)</span></label>
-          <input id="weight" type="number" inputmode="decimal" min="0.5" max="200" step="0.1" placeholder="مثلاً ۱۲٫۵">
-          <div class="micro-hint">وزن واقعی فعلی کودک را وارد کنید.</div>
-        </div>
-
-        <div class="field-card">
-          <label for="ageMonths">سن <span>(اختیاری)</span></label>
-          <input id="ageMonths" type="number" inputmode="numeric" min="0" max="216" step="1" placeholder="ماه؛ مثلاً ۳۶">
-          <div class="micro-hint">برای بررسی برخی محدودیت‌های سنی و مدت درمان.</div>
-        </div>
-
-        <div id="strengthField" class="field-card is-hidden">
-          <label for="strengthSelect">غلظت فرآورده</label>
-          <select id="strengthSelect"></select>
-          <div id="strengthHint" class="micro-hint"></div>
-        </div>
-
-        <div id="indicationField" class="field-card is-hidden field-card-wide">
-          <label for="indicationSelect">اندیکاسیون / سناریوی دوزینگ</label>
-          <select id="indicationSelect"></select>
-          <div id="indicationHint" class="micro-hint"></div>
+      <div class="warning-box">
+        <div class="warning-icon">!</div>
+        <div>
+          <strong>ابزار محاسباتی، نه جایگزین تصمیم بالینی</strong>
+          <p>
+            دوز، اندیکاسیون، مدت درمان، عملکرد کلیه/کبد، آلرژی و شرایط بیمار
+            باید با رفرنس معتبر و وضعیت بالینی بیمار تطبیق داده شود.
+          </p>
         </div>
       </div>
 
-      <div id="drugDetails" class="details-panel is-hidden">
-        <div class="details-header">
-          <span class="details-icon">i</span>
-          <span>نکات دارویی</span>
+      <form id="doseForm" novalidate>
+
+        <div class="form-grid">
+
+          <div class="field field-full">
+            <label for="drugSelect">آنتی‌بیوتیک</label>
+
+            <select id="drugSelect">
+              <option value="">انتخاب آنتی‌بیوتیک...</option>
+            </select>
+
+            <div id="drugMeta" class="field-hint">
+              ابتدا دارو را انتخاب کنید.
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="weight">
+              وزن کودک
+              <span class="required">*</span>
+            </label>
+
+            <div class="input-with-unit">
+              <input
+                id="weight"
+                type="number"
+                inputmode="decimal"
+                min="0.5"
+                max="200"
+                step="0.1"
+                placeholder="مثلاً 12.5"
+                autocomplete="off"
+              >
+              <span>kg</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="ageMonths">
+              سن
+              <span class="optional">(اختیاری ولی توصیه‌شده)</span>
+            </label>
+
+            <div class="input-with-unit">
+              <input
+                id="ageMonths"
+                type="number"
+                inputmode="numeric"
+                min="0"
+                max="240"
+                step="1"
+                placeholder="ماه"
+                autocomplete="off"
+              >
+              <span>ماه</span>
+            </div>
+          </div>
+
+          <div id="strengthField" class="field field-full hidden">
+            <label for="strengthSelect">
+              غلظت فرآورده
+            </label>
+
+            <select id="strengthSelect"></select>
+
+            <div id="strengthHint" class="field-hint"></div>
+          </div>
+
+          <div id="indicationField" class="field field-full hidden">
+            <label for="indicationSelect">
+              اندیکاسیون / رژیم درمانی
+            </label>
+
+            <select id="indicationSelect"></select>
+
+            <div id="indicationHint" class="field-hint"></div>
+          </div>
+
         </div>
-        <div id="drugNotes" class="details-body"></div>
-      </div>
 
-      <div class="action-row">
-        <button id="calcBtn" class="primary-btn" type="button">محاسبه دوز</button>
-        <button id="resetBtn" class="secondary-btn" type="button">پاک کردن</button>
-      </div>
+        <div id="drugDetails" class="drug-details hidden">
+          <div class="drug-details-title">
+            نکات مهم دارویی
+          </div>
 
-      <div id="result" class="result-panel is-hidden" aria-live="polite"></div>
-
-      <details class="info-details">
-        <summary>چند نکتهٔ ایمنی برای نسخه‌خوانی و تحویل دارو</summary>
-        <div class="info-list">
-          <div><b>غلظت مهم است:</b> «mg/5 mL» فرآورده را دقیقاً با برچسب تطبیق دهید؛ حجم یکسان برای دو غلظت مختلف به معنی دوز یکسان نیست.</div>
-          <div><b>آموکسی‌کلاو:</b> در رژیم‌های high-dose، دوز بر اساس جزء آموکسی‌سیلین است و نسبت آموکسی‌سیلین به کلاوولانات اهمیت دارد.</div>
-          <div><b>سقف دوز:</b> مقدار محاسبه‌شده ممکن است به سقف روزانه یا سقف هر نوبت برسد؛ عدد نهایی باید این محدودیت‌ها را نشان دهد.</div>
-          <div><b>عدم انطباق تشخیصی:</b> طول درمان و حتی انتخاب دارو با توجه به سن، شدت، آلرژی، مقاومت محلی، عملکرد کلیه و محل عفونت تغییر می‌کند.</div>
-          <div><b>اندازه‌گیری:</b> برای تحویل سوسپانسیون، سرنگ خوراکی مدرج دقیق‌تر از قاشق خانگی است.</div>
+          <div id="drugNotes" class="drug-notes"></div>
         </div>
-      </details>
+
+        <div class="action-row">
+
+          <button
+            id="calculateButton"
+            class="primary-button"
+            type="submit"
+          >
+            <span>محاسبه دوز</span>
+            <span class="button-arrow">←</span>
+          </button>
+
+          <button
+            id="resetButton"
+            class="secondary-button"
+            type="button"
+          >
+            پاک کردن
+          </button>
+
+        </div>
+
+      </form>
+
+      <section id="result" class="result hidden" aria-live="polite"></section>
+
     </section>
 
-    <section class="footer-card">
-      <div>
-        <strong>آخرین بازبینی محتوای این نسخه</strong>
-        <span>اوت ۲۰۲۶ · دوزهای منتخب سرپایی، نه فهرست جامع همهٔ اندیکاسیون‌ها</span>
-      </div>
-      <button id="aboutBtn" class="text-btn" type="button">دربارهٔ Saphira</button>
+    <section class="info-grid">
+
+      <article class="info-card">
+        <div class="info-icon">⚕</div>
+        <h3>مبنای محاسبه</h3>
+        <p>
+          مقدار ماده فعال ابتدا بر اساس mg/kg محاسبه و سپس با توجه به
+          غلظت واقعی فرآورده به mL تبدیل می‌شود.
+        </p>
+      </article>
+
+      <article class="info-card">
+        <div class="info-icon">✓</div>
+        <h3>کنترل سقف دوز</h3>
+        <p>
+          در رژیم‌هایی که سقف روزانه یا سقف هر دوز مشخص است،
+          محاسبه از آن فراتر نمی‌رود و هشدار مربوطه نمایش داده می‌شود.
+        </p>
+      </article>
+
+      <article class="info-card">
+        <div class="info-icon">⌁</div>
+        <h3>فرمولاسیون مهم است</h3>
+        <p>
+          غلظت‌های مختلف یک دارو می‌توانند حجم مصرفی کاملاً متفاوتی ایجاد کنند.
+          همیشه برچسب فرآورده را با گزینه انتخاب‌شده تطبیق دهید.
+        </p>
+      </article>
+
     </section>
+
+    <footer class="footer">
+
+      <div class="footer-links">
+
+        <button id="sourcesButton" type="button">
+          منابع علمی
+        </button>
+
+        <button id="aboutButton" type="button">
+          درباره Saphira
+        </button>
+
+      </div>
+
+      <div class="footer-copy">
+        Saphira · Pediatric Dose Calculator
+      </div>
+
+    </footer>
+
   </main>
 
-  <dialog id="sourcesDialog" class="modal-dialog">
-    <div class="modal-head">
+  <dialog id="sourcesDialog" class="modal">
+
+    <div class="modal-header">
       <div>
-        <div class="eyebrow">SOURCES</div>
-        <h3>منابع و دامنهٔ استفاده</h3>
+        <span class="section-kicker">REFERENCES</span>
+        <h3>منابع علمی</h3>
       </div>
-      <button class="close-btn" data-close="sourcesDialog" type="button" aria-label="بستن">×</button>
+
+      <button
+        class="close-button"
+        data-close="sourcesDialog"
+        type="button"
+      >
+        ×
+      </button>
     </div>
-    <div class="modal-body">
-      <p>دوزهای موجود در نسخهٔ جدید از ترکیبی از راهنماهای معتبر کودکان و برچسب‌های دارویی به‌روز انتخاب شده‌اند. برای تصمیم درمانی، منبع اصلی هر اندیکاسیون و شرایط بیمار باید جداگانه بررسی شود.</p>
-      <div id="sourceLinks" class="source-links"></div>
-      <div class="source-disclaimer">این لیست «منبع مرجع» است و به معنی پوشش تمام بیماری‌ها، تمام گروه‌های سنی یا تمامی فرآورده‌های موجود در بازار نیست.</div>
+
+    <div id="sourceLinks" class="source-list"></div>
+
+    <div class="modal-note">
+      منابع فوق برای پشتیبانی از رژیم‌های موجود در نسخه فعلی استفاده شده‌اند.
+      این ابزار پوشش‌دهنده تمام اندیکاسیون‌ها، بیماران خاص یا همه فرآورده‌های بازار نیست.
     </div>
+
   </dialog>
 
-  <dialog id="aboutDialog" class="modal-dialog">
-    <div class="modal-head">
+  <dialog id="aboutDialog" class="modal">
+
+    <div class="modal-header">
       <div>
-        <div class="eyebrow">ABOUT</div>
-        <h3>Saphira</h3>
+        <span class="section-kicker">ABOUT</span>
+        <h3>درباره Saphira</h3>
       </div>
-      <button class="close-btn" data-close="aboutDialog" type="button" aria-label="بستن">×</button>
+
+      <button
+        class="close-button"
+        data-close="aboutDialog"
+        type="button"
+      >
+        ×
+      </button>
     </div>
-    <div class="modal-body">
-      <p>Saphira یک ابزار سبک و آفلاین‌محور برای تبدیل دوز تجویزیِ منتخب از mg/kg به مقدار واقعی سوسپانسیون بر حسب mL است.</p>
-      <p><b>اصل طراحی:</b> محاسبه‌گر باید مقدار مادهٔ فعال، دفعات مصرف، سقف دوز و غلظت فرآورده را شفاف نشان دهد و از ایجاد «عدد ظاهراً دقیق ولی بالینیِ نامطمئن» جلوگیری کند.</p>
-      <p class="developer-line">ارتباط: <a href="https://t.me/reza0rbz" target="_blank" rel="noopener noreferrer">@reza0rbz</a></p>
+
+    <div class="about-content">
+
+      <p>
+        <strong>Saphira</strong> یک محاسبه‌گر سبک و آفلاین‌محور برای
+        محاسبه دوز منتخب آنتی‌بیوتیک‌های خوراکی کودکان است.
+      </p>
+
+      <p>
+        هدف اصلی برنامه کاهش خطاهای ناشی از تبدیل
+        <strong>mg/kg → mg/dose → mL/dose</strong>
+        و شفاف‌کردن غلظت فرآورده است.
+      </p>
+
+      <div class="about-principles">
+
+        <div>
+          <strong>۱</strong>
+          <span>اندیکاسیون قبل از محاسبه</span>
+        </div>
+
+        <div>
+          <strong>۲</strong>
+          <span>محاسبه بر اساس ماده فعال</span>
+        </div>
+
+        <div>
+          <strong>۳</strong>
+          <span>کنترل سقف دوز</span>
+        </div>
+
+      </div>
+
     </div>
+
   </dialog>
 
   <script src="script.js" defer></script>
+
 </body>
 </html>
