@@ -40,7 +40,7 @@
       <span>این نرم‌افزار تنها یک ابزار کمکی برای محاسبهٔ عددی دوز است و به‌هیچ‌وجه جایگزین معاینه و تصمیم‌گیری پزشک یا داروساز مسئول درمان بیمار نمی‌شود. استفاده از این محاسبات باید همواره با رفرنس‌های معتبر و قضاوت بالینی تطبیق داده شود.</span>
     </div>
 
-    <!-- تب‌ها -->
+    <!-- تب‌های اصلی -->
     <div class="tabs">
       <button id="tabWeight" class="tab-btn active"><i class="fas fa-weight"></i> محاسبه بر اساس وزن</button>
       <button id="tabAge" class="tab-btn"><i class="fas fa-clock"></i> آنتی‌هیستامین سن‌محور</button>
@@ -48,16 +48,12 @@
 
     <!-- ====== حالت وزن‌محور ====== -->
     <div id="weightMode">
-      <!-- دسته‌بندی دارو -->
-      <div class="field">
-        <label for="categorySelect"><i class="fas fa-tag"></i> دسته دارو</label>
-        <select id="categorySelect">
-          <option value="">-- دسته را انتخاب کنید --</option>
-          <option value="antibiotic">آنتی‌بیوتیک‌ها</option>
-          <option value="antipyretic">ضدتب / ضدالتهاب</option>
-          <option value="antihistamine_weight">آنتی‌هیستامین‌ها (وزن‌محور)</option>
-          <option value="decongestant">ضداحتقان‌ها</option>
-        </select>
+      <!-- دکمه‌های دسته‌بندی -->
+      <div class="category-tabs">
+        <button class="cat-btn active" data-cat="antibiotic"><i class="fas fa-bacteria"></i> آنتی‌بیوتیک</button>
+        <button class="cat-btn" data-cat="antipyretic"><i class="fas fa-thermometer-half"></i> ضد درد / ضد تب</button>
+        <button class="cat-btn" data-cat="antihistamine_weight"><i class="fas fa-allergies"></i> آنتی‌هیستامین (وزن‌محور)</button>
+        <button class="cat-btn" data-cat="decongestant"><i class="fas fa-nose"></i> ضداحتقان</button>
       </div>
 
       <div class="field">
@@ -139,7 +135,7 @@
     <footer class="footer">
       <div class="footer-links">
         <span><i class="fas fa-telegram-plane"></i> ارتباط: <a href="https://t.me/reza0rbz" target="_blank">@reza0rbz</a></span>
-        <span><i class="fas fa-book"></i> منابع: Harriet Lane, UpToDate, Nelson, BNFC, WHO</span>
+        <span><i class="fas fa-book"></i> منابع: Harriet Lane (22nd ed.), UpToDate (2025), Nelson (21st ed.), BNFC (2024), WHO Model Formulary for Children</span>
       </div>
     </footer>
   </main>
