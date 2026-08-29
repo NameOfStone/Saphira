@@ -7,11 +7,9 @@ function toPersianDigits(num) {
 }
 
 /* ================================================================
-   دیتابیس داروها – وزن‌محور
+   دیتابیس داروها – وزن‌محور (بر اساس دسته‌بندی)
    ================================================================ */
 const WEIGHT_DRUGS = {
-
-  // ---------- آنتی‌بیوتیک‌ها ----------
   antibiotic: [
     {
       id: "amoxicillin",
@@ -23,7 +21,7 @@ const WEIGHT_DRUGS = {
 ⚠️ در آلرژی شدید به پنی‌سیلین ممنوع.
 ⚠️ در مونونوکلئوز عفونی ممکن است راش ایجاد کند (نه لزوماً آلرژی).
 ⚠️ شربت را قبل از مصرف تکان دهید و در یخچال نگهداری کنید.
-📚 منبع: Harriet Lane 22nd ed., UPToDate 2025`,
+📚 منبع: Harriet Lane 22nd ed., UpToDate 2025`,
       strengths: [
         { id: "amox_125", label: "۱۲۵ mg/5ml", mgPer5ml: 125 },
         { id: "amox_250", label: "۲۵۰ mg/5ml", mgPer5ml: 250 },
@@ -65,7 +63,7 @@ const WEIGHT_DRUGS = {
 ✅ دوز: ۲۵–۵۰ mg/kg/day در ۲–۴ نوبت (عفونت شدید: تا ۱۰۰ mg/kg/day).
 ⚠️ در آلرژی آنافیلاکتیک به پنی‌سیلین با احتیاط.
 ⚠️ همراه غذا یا بدون غذا مصرف شود.
-📚 منبع: Harriet Lane 22nd ed., UPToDate 2025`,
+📚 منبع: Harriet Lane 22nd ed., UpToDate 2025`,
       strengths: [
         { id: "ceph_125", label: "۱۲۵ mg/5ml", mgPer5ml: 125 },
         { id: "ceph_250", label: "۲۵۰ mg/5ml", mgPer5ml: 250 }
@@ -98,7 +96,7 @@ const WEIGHT_DRUGS = {
 ✅ دوز: ۲۰–۳۰ mg/kg/day در ۲ نوبت (هر ۱۲ ساعت).
 ⚠️ همراه غذا برای جذب بهتر.
 ⚠️ طعم ناخوشایند ممکن است؛ به والدین توضیح دهید.
-📚 منبع: Harriet Lane 22nd ed., UPToDate 2025`,
+📚 منبع: Harriet Lane 22nd ed., UpToDate 2025`,
       strengths: [
         { id: "cefu_125", label: "۱۲۵ mg/5ml", mgPer5ml: 125 },
         { id: "cefu_250", label: "۲۵۰ mg/5ml", mgPer5ml: 250 }
@@ -116,7 +114,7 @@ const WEIGHT_DRUGS = {
 ⚠️ نیمه‌عمر طولانی.
 ⚠️ عوارض گوارشی (تهوع، درد شکم، اسهال) شایع است.
 ⚠️ فاصله QT را طولانی می‌کند.
-📚 منبع: Nelson Textbook of Pediatrics 21st ed., UPToDate 2025`,
+📚 منبع: Nelson Textbook of Pediatrics 21st ed., UpToDate 2025`,
       strengths: [
         { id: "azi_100", label: "۱۰۰ mg/5ml", mgPer5ml: 100 },
         { id: "azi_200", label: "۲۰۰ mg/5ml", mgPer5ml: 200 }
@@ -134,7 +132,7 @@ const WEIGHT_DRUGS = {
 ⚠️ همراه غذا برای تحمل گوارشی بهتر.
 ⚠️ طعم فلزی دهان و تهوع شایع است.
 ⚠️ مهارکننده CYP3A4؛ تداخلات دارویی را بررسی کنید.
-📚 منبع: BNFC 2024, UPToDate 2025`,
+📚 منبع: BNFC 2024, UpToDate 2025`,
       strengths: [
         { id: "clar_125", label: "۱۲۵ mg/5ml", mgPer5ml: 125 },
         { id: "clar_250", label: "۲۵۰ mg/5ml", mgPer5ml: 250 }
@@ -150,7 +148,7 @@ const WEIGHT_DRUGS = {
 ✅ دوز: ۲۰–۴۰ mg/kg/day در ۳–۴ نوبت (هر ۶–۸ ساعت).
 ⚠️ خطر کولیت ناشی از Clostridioides difficile؛ در صورت اسهال شدید یا خونی، سریعاً ارزیابی شود.
 ⚠️ همراه با یک لیوان آب مصرف شود و کودک تا چند دقیقه نخوابد.
-📚 منبع: Harriet Lane 22nd ed., UPToDate 2025`,
+📚 منبع: Harriet Lane 22nd ed., UpToDate 2025`,
       strengths: [
         { id: "clin_75", label: "۷۵ mg/5ml", mgPer5ml: 75 }
       ],
@@ -166,7 +164,7 @@ const WEIGHT_DRUGS = {
 ⚠️ همراه با غذا برای کاهش تهوع.
 ⚠️ طعم فلزی دهان و تیره شدن ادرار (بی‌خطر).
 ⚠️ همراه با الکل ممنوع (واکنش شبه دی‌سولفیرام).
-📚 منبع: WHO Model Formulary for Children 2023, UPToDate 2025`,
+📚 منبع: WHO Model Formulary for Children 2023, UpToDate 2025`,
       strengths: [
         { id: "metro_125", label: "۱۲۵ mg/5ml", mgPer5ml: 125 }
       ],
@@ -192,7 +190,6 @@ const WEIGHT_DRUGS = {
     }
   ],
 
-  // ---------- ضدتب / ضدالتهاب ----------
   antipyretic: [
     {
       id: "acetaminophen",
@@ -202,7 +199,7 @@ const WEIGHT_DRUGS = {
 ⚠️ در بیماری کبدی یا سوءتغذیه دوز را کاهش دهید.
 ⚠️ غلظت‌های مختلف (۱۲۰ و ۱۶۰ mg/5ml) را به والدین توضیح دهید.
 ⚠️ همراه غذا یا بدون غذا قابل مصرف است.
-📚 منبع: Harriet Lane 22nd ed., UPToDate 2025`,
+📚 منبع: Harriet Lane 22nd ed., UpToDate 2025`,
       strengths: [
         { id: "apap_120", label: "۱۲۰ mg/5ml", mgPer5ml: 120 },
         { id: "apap_160", label: "۱۶۰ mg/5ml", mgPer5ml: 160 }
@@ -219,7 +216,7 @@ const WEIGHT_DRUGS = {
 ⚠️ همراه غذا مصرف شود تا تحریک گوارشی کاهش یابد.
 ⚠️ در کم‌آبی، استفراغ شدید، بیماری کلیوی، زخم گوارشی با احتیاط.
 ⚠️ در آسم وابسته به NSAID یا حساسیت به آسپرین ممنوع.
-📚 منبع: Harriet Lane 22nd ed., UPToDate 2025`,
+📚 منبع: Harriet Lane 22nd ed., UpToDate 2025`,
       strengths: [
         { id: "ibu_100", label: "۱۰۰ mg/5ml", mgPer5ml: 100 }
       ],
@@ -229,7 +226,6 @@ const WEIGHT_DRUGS = {
     }
   ],
 
-  // ---------- آنتی‌هیستامین‌های وزن‌محور ----------
   antihistamine_weight: [
     {
       id: "chlorpheniramine",
@@ -239,7 +235,7 @@ const WEIGHT_DRUGS = {
 ⚠️ نسل اول؛ خواب‌آلودگی، کاهش تمرکز؛ در کودکان خردسال ممکن است بی‌قراری پارادوکسیک ایجاد کند.
 ⚠️ در گلوکوم زاویه بسته، احتباس ادرار با احتیاط.
 ⚠️ با شربت‌های سرماخوردگی آماده تداخل دارد (جمع نشوند).
-📚 منبع: BNFC 2024, UPToDate 2025`,
+📚 منبع: BNFC 2024, UpToDate 2025`,
       strengths: [
         { id: "cpn_2", label: "۲ mg/5ml", mgPer5ml: 2 }
       ],
@@ -255,7 +251,7 @@ const WEIGHT_DRUGS = {
 ⚠️ خواب‌آور قوی؛ در کودکان خردسال ممکن است بی‌قراری پارادوکسیک ایجاد کند.
 ⚠️ برای درمان مزمن مناسب نیست.
 ⚠️ در کودکان زیر ۲ سال فقط با تجویز متخصص.
-📚 منبع: Harriet Lane 22nd ed., UPToDate 2025`,
+📚 منبع: Harriet Lane 22nd ed., UpToDate 2025`,
       strengths: [
         { id: "dph_12_5", label: "۱۲٫۵ mg/5ml", mgPer5ml: 12.5 }
       ],
@@ -265,7 +261,6 @@ const WEIGHT_DRUGS = {
     }
   ],
 
-  // ---------- ضداحتقان‌ها ----------
   decongestant: [
     {
       id: "pseudoephedrine",
@@ -275,7 +270,7 @@ const WEIGHT_DRUGS = {
 ⚠️ در کودکان زیر ۴ سال معمولاً توصیه نمی‌شود.
 ⚠️ بی‌خوابی، تحریک‌پذیری، افزایش ضربان قلب و فشارخون.
 ⚠️ در بیماری قلبی، فشارخون بالا، پرکاری تیروئید، مصرف MAOI با احتیاط.
-📚 منبع: BNFC 2024, UPToDate 2025`,
+📚 منبع: BNFC 2024, UpToDate 2025`,
       strengths: [
         { id: "pse_15", label: "۱۵ mg/5ml", mgPer5ml: 15 },
         { id: "pse_30", label: "۳۰ mg/5ml", mgPer5ml: 30 }
@@ -292,7 +287,7 @@ const WEIGHT_DRUGS = {
 ⚠️ در کودکان با بیماری قلبی یا فشارخون بالا با احتیاط.
 ⚠️ همراه با MAOI ممنوع.
 ⚠️ از مصرف همزمان با سایر ضداحتقان‌ها اجتناب کنید.
-📚 منبع: BNFC 2024, UPToDate 2025`,
+📚 منبع: BNFC 2024, UpToDate 2025`,
       strengths: [
         { id: "phe_2_5", label: "۲٫۵ mg/5ml", mgPer5ml: 2.5 },
         { id: "phe_5", label: "۵ mg/5ml", mgPer5ml: 5 }
@@ -319,7 +314,7 @@ const AGE_DRUGS = [
 ⚠️ نسل دوم؛ خواب‌آلودگی کمتر اما ممکن است رخ دهد.
 ⚠️ در نارسایی کلیوی دوز را کاهش دهید.
 ⚠️ معمولاً یک‌بار در روز (ترجیحاً عصر).
-📚 منبع: Harriet Lane 22nd ed., UPToDate 2025`,
+📚 منبع: Harriet Lane 22nd ed., UpToDate 2025`,
     strengths: [
       { id: "ctz_5", label: "۵ mg/5ml", mgPer5ml: 5 }
     ],
@@ -339,7 +334,7 @@ const AGE_DRUGS = [
 ⚠️ نسل دوم؛ خواب‌آلودگی بسیار کم.
 ⚠️ در نارسایی کبدی دوز تعدیل شود.
 ⚠️ یک‌بار در روز.
-📚 منبع: Nelson Textbook of Pediatrics 21st ed., UPToDate 2025`,
+📚 منبع: Nelson Textbook of Pediatrics 21st ed., UpToDate 2025`,
     strengths: [
       { id: "lor_5", label: "۵ mg/5ml", mgPer5ml: 5 }
     ],
@@ -357,7 +352,7 @@ const AGE_DRUGS = [
 ⚠️ نسل دوم؛ تقریباً بدون خواب‌آلودگی.
 ⚠️ همراه آب‌میوه (گریپ‌فروت، پرتقال، سیب) مصرف نشود (کاهش جذب).
 ⚠️ برای کهیر مزمن ممکن است دوز بالاتر نیاز باشد (تحت نظر پزشک).
-📚 منبع: BNFC 2024, UPToDate 2025`,
+📚 منبع: BNFC 2024, UpToDate 2025`,
     strengths: [
       { id: "fexo_30", label: "۳۰ mg/5ml", mgPer5ml: 30 }
     ],
@@ -394,7 +389,7 @@ const ageMode = document.getElementById("ageMode");
 const tabWeight = document.getElementById("tabWeight");
 const tabAge = document.getElementById("tabAge");
 
-const categorySelect = document.getElementById("categorySelect");
+const categoryButtons = document.querySelectorAll(".cat-btn");
 const drugSelect = document.getElementById("drugSelect");
 const weightInput = document.getElementById("weight");
 const strengthSelect = document.getElementById("strengthSelect");
@@ -424,8 +419,19 @@ const themeSwitch = document.getElementById("themeSwitch");
 const themeIcon = document.getElementById("themeIcon");
 
 /* ================================================================
-   پر کردن لیست‌ها
+   مدیریت دسته‌بندی (دکمه‌ها)
    ================================================================ */
+let currentCategory = "antibiotic";
+
+categoryButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    categoryButtons.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentCategory = btn.dataset.cat;
+    populateWeightDrugs(currentCategory);
+  });
+});
+
 function populateWeightDrugs(category) {
   drugSelect.innerHTML = '<option value="">-- دارو را انتخاب کنید --</option>';
   const list = WEIGHT_DRUGS[category] || [];
@@ -448,6 +454,9 @@ function populateWeightDrugs(category) {
   resultDiv.innerHTML = '';
 }
 
+/* ================================================================
+   پر کردن لیست داروهای سن‌محور
+   ================================================================ */
 function populateAgeDrugs() {
   AGE_DRUGS.forEach(drug => {
     const opt = document.createElement("option");
@@ -458,7 +467,7 @@ function populateAgeDrugs() {
 }
 
 /* ================================================================
-   تب‌ها
+   تب‌های اصلی
    ================================================================ */
 tabWeight.addEventListener("click", () => {
   tabWeight.classList.add("active");
@@ -474,30 +483,10 @@ tabAge.addEventListener("click", () => {
 });
 
 /* ================================================================
-   تغییر دسته (وزن‌محور)
-   ================================================================ */
-categorySelect.addEventListener("change", () => {
-  const cat = categorySelect.value;
-  if (!cat) {
-    drugSelect.innerHTML = '<option value="">-- ابتدا دسته را انتخاب کنید --</option>';
-    strengthSelect.innerHTML = '';
-    diseaseSelect.innerHTML = '';
-    strengthWrapper.classList.add('hidden');
-    diseaseWrapper.classList.add('hidden');
-    drugNotesWrapper.classList.add('hidden');
-    doseInfoWrapper.classList.add('hidden');
-    resultDiv.classList.add('hidden');
-    return;
-  }
-  populateWeightDrugs(cat);
-});
-
-/* ================================================================
    تغییر دارو (وزن‌محور)
    ================================================================ */
 drugSelect.addEventListener("change", () => {
-  const cat = categorySelect.value;
-  const drug = findWeightDrug(cat, drugSelect.value);
+  const drug = findWeightDrug(currentCategory, drugSelect.value);
 
   strengthSelect.innerHTML = "";
   diseaseSelect.innerHTML = "";
@@ -541,8 +530,7 @@ drugSelect.addEventListener("change", () => {
    انتخاب بیماری (وزن‌محور)
    ================================================================ */
 diseaseSelect.addEventListener("change", () => {
-  const cat = categorySelect.value;
-  const drug = findWeightDrug(cat, drugSelect.value);
+  const drug = findWeightDrug(currentCategory, drugSelect.value);
   const disease = drug?.diseases?.find(d => d.id === diseaseSelect.value);
 
   doseInfoWrapper.classList.add("hidden");
@@ -553,13 +541,13 @@ diseaseSelect.addEventListener("change", () => {
   const { mgPerKgPerDay, extraNote, dosesPerDay, maxMgPerKgPerDay } = disease;
   let html = `
     <strong>دوز انتخاب‌شده:</strong><br />
-    ${toPersianDigits(mgPerKgPerDay)} mg/kg/day &nbsp;|&nbsp; تعداد نوبت: ${toPersianDigits(dosesPerDay)} بار در روز
+    <span dir="ltr">${toPersianDigits(mgPerKgPerDay)} mg/kg/day</span> &nbsp;|&nbsp; تعداد نوبت: <span dir="ltr">${toPersianDigits(dosesPerDay)}</span> بار در روز
   `;
   if (extraNote) {
     html += `<br /><span style="font-size:12px; opacity:0.85;">${extraNote}</span>`;
   }
   if (maxMgPerKgPerDay) {
-    html += `<br /><span style="font-size:12px; color:var(--danger-color);">⚠️ حداکثر مجاز: ${toPersianDigits(maxMgPerKgPerDay)} mg/kg/day</span>`;
+    html += `<br /><span style="font-size:12px; color:var(--danger-color);">⚠️ حداکثر مجاز: <span dir="ltr">${toPersianDigits(maxMgPerKgPerDay)} mg/kg/day</span></span>`;
   }
   doseInfo.innerHTML = html;
   doseInfoWrapper.classList.remove("hidden");
@@ -575,13 +563,7 @@ calcBtn.addEventListener("click", () => {
     return;
   }
 
-  const cat = categorySelect.value;
-  if (!cat) {
-    alert("لطفاً دسته دارو را انتخاب کنید.");
-    return;
-  }
-
-  const drug = findWeightDrug(cat, drugSelect.value);
+  const drug = findWeightDrug(currentCategory, drugSelect.value);
   if (!drug) {
     alert("لطفاً دارو را انتخاب کنید.");
     return;
@@ -607,14 +589,14 @@ calcBtn.addEventListener("click", () => {
     const mlNext = day2_5Mg * (5 / strength.mgPer5ml);
 
     let html = `
-      <strong>وزن کودک: ${toPersianDigits(weight.toFixed(1))} کیلوگرم</strong><br /><br />
+      <strong>وزن کودک: <span dir="ltr">${toPersianDigits(weight.toFixed(1))} کیلوگرم</span></strong><br /><br />
       <div style="background:var(--dose-bg); padding:8px; border-radius:8px; margin-bottom:6px;">
-        <strong>روز اول:</strong> ${toPersianDigits(day1Mg.toFixed(1))} mg (۱۰ mg/kg) 
-        → <span class="highlight-dose">${toPersianDigits(mlDay1.toFixed(1))} ml</span> یک‌بار
+        <strong>روز اول:</strong> <span dir="ltr">${toPersianDigits(day1Mg.toFixed(1))} mg</span> (۱۰ mg/kg) 
+        → <span class="highlight-dose" dir="ltr">${toPersianDigits(mlDay1.toFixed(1))} ml</span> یک‌بار
       </div>
       <div style="background:var(--dose-bg); padding:8px; border-radius:8px;">
-        <strong>روزهای ۲ تا ۵:</strong> ${toPersianDigits(day2_5Mg.toFixed(1))} mg/day (۵ mg/kg) 
-        → <span class="highlight-dose">${toPersianDigits(mlNext.toFixed(1))} ml</span> یک‌بار
+        <strong>روزهای ۲ تا ۵:</strong> <span dir="ltr">${toPersianDigits(day2_5Mg.toFixed(1))} mg/day</span> (۵ mg/kg) 
+        → <span class="highlight-dose" dir="ltr">${toPersianDigits(mlNext.toFixed(1))} ml</span> یک‌بار
       </div>
       <br />مدت درمان: <strong>۵ روز</strong>
     `;
@@ -630,20 +612,20 @@ calcBtn.addEventListener("click", () => {
   const intervalHours = (24 / disease.dosesPerDay).toFixed(1);
 
   let html = `
-    <strong>وزن کودک: ${toPersianDigits(weight.toFixed(1))} کیلوگرم</strong><br /><br />
-    • دوز روزانه: <strong>${toPersianDigits(totalMgPerDay.toFixed(1))} mg</strong><br />
-    • دوز هر نوبت: <strong>${toPersianDigits(mgPerDose.toFixed(1))} mg</strong><br />
-    • حجم هر نوبت: <span class="highlight-dose">${toPersianDigits(mlPerDose.toFixed(1))} ml</span><br />
-    • تعداد نوبت: <strong>${toPersianDigits(disease.dosesPerDay)}</strong> بار در روز<br />
-    • فاصله نوبت‌ها: <span class="highlight-dose">${toPersianDigits(intervalHours)} ساعت</span><br />
-    • مدت درمان: <strong>${toPersianDigits(disease.days)}</strong> روز
+    <strong>وزن کودک: <span dir="ltr">${toPersianDigits(weight.toFixed(1))} کیلوگرم</span></strong><br /><br />
+    • دوز روزانه: <strong dir="ltr">${toPersianDigits(totalMgPerDay.toFixed(1))} mg</strong><br />
+    • دوز هر نوبت: <strong dir="ltr">${toPersianDigits(mgPerDose.toFixed(1))} mg</strong><br />
+    • حجم هر نوبت: <span class="highlight-dose" dir="ltr">${toPersianDigits(mlPerDose.toFixed(1))} ml</span><br />
+    • تعداد نوبت: <strong dir="ltr">${toPersianDigits(disease.dosesPerDay)}</strong> بار در روز<br />
+    • فاصله نوبت‌ها: <span class="highlight-dose" dir="ltr">${toPersianDigits(intervalHours)} ساعت</span><br />
+    • مدت درمان: <strong dir="ltr">${toPersianDigits(disease.days)}</strong> روز
   `;
 
   // ---- اخطار ماکس دوز ----
   if (disease.maxMgPerKgPerDay) {
     const maxTotal = disease.maxMgPerKgPerDay * weight;
     if (totalMgPerDay > maxTotal) {
-      html += `<br /><br /><span class="danger-text"><i class="fas fa-exclamation-triangle"></i> ⚠️ هشدار: دوز محاسبه‌شده (${toPersianDigits(totalMgPerDay.toFixed(1))} mg/day) از حداکثر مجاز (${toPersianDigits(maxTotal.toFixed(1))} mg/day) تجاوز کرده است. لطفاً دوز را بررسی کنید.</span>`;
+      html += `<br /><br /><span class="danger-text"><i class="fas fa-exclamation-triangle"></i> ⚠️ هشدار: دوز محاسبه‌شده (<span dir="ltr">${toPersianDigits(totalMgPerDay.toFixed(1))} mg/day</span>) از حداکثر مجاز (<span dir="ltr">${toPersianDigits(maxTotal.toFixed(1))} mg/day</span>) تجاوز کرده است. لطفاً دوز را بررسی کنید.</span>`;
     }
   }
 
@@ -656,7 +638,6 @@ calcBtn.addEventListener("click", () => {
    ================================================================ */
 resetBtn.addEventListener("click", () => {
   weightInput.value = "";
-  categorySelect.value = "";
   drugSelect.innerHTML = '<option value="">-- ابتدا دسته را انتخاب کنید --</option>';
   strengthSelect.innerHTML = "";
   diseaseSelect.innerHTML = "";
@@ -668,6 +649,11 @@ resetBtn.addEventListener("click", () => {
   drugNotes.textContent = "";
   doseInfo.innerHTML = "";
   resultDiv.innerHTML = "";
+  // فعال کردن دسته پیش‌فرض
+  categoryButtons.forEach(b => b.classList.remove("active"));
+  document.querySelector('.cat-btn[data-cat="antibiotic"]').classList.add("active");
+  currentCategory = "antibiotic";
+  populateWeightDrugs("antibiotic");
 });
 
 /* ================================================================
@@ -722,7 +708,7 @@ function updateAgeDoseInfo() {
   const { mgPerDay, dosesPerDay, label, note } = band;
   let html = `
     <strong>${label}</strong><br />
-    دوز روزانه: ${toPersianDigits(mgPerDay)} mg &nbsp;|&nbsp; ${toPersianDigits(dosesPerDay)} بار در روز
+    دوز روزانه: <span dir="ltr">${toPersianDigits(mgPerDay)} mg</span> &nbsp;|&nbsp; <span dir="ltr">${toPersianDigits(dosesPerDay)}</span> بار در روز
   `;
   if (note) html += `<br /><span style="font-size:12px; opacity:0.85;">${note}</span>`;
   ageDoseInfo.innerHTML = html;
@@ -763,12 +749,12 @@ ageCalcBtn.addEventListener("click", () => {
   const intervalHours = (24 / dosesPerDay).toFixed(1);
 
   const html = `
-    <strong>سن کودک: ${toPersianDigits(ageYears.toFixed(1))} سال</strong> (${label})<br /><br />
-    • دوز روزانه: <strong>${toPersianDigits(mgPerDay)} mg</strong><br />
-    • دوز هر نوبت: <strong>${toPersianDigits(mgPerDose.toFixed(1))} mg</strong><br />
-    • حجم هر نوبت: <span class="highlight-dose">${toPersianDigits(mlPerDose.toFixed(1))} ml</span><br />
-    • تعداد نوبت: <strong>${toPersianDigits(dosesPerDay)}</strong> بار در روز<br />
-    • فاصله نوبت‌ها: <span class="highlight-dose">${toPersianDigits(intervalHours)} ساعت</span>
+    <strong>سن کودک: <span dir="ltr">${toPersianDigits(ageYears.toFixed(1))} سال</span></strong> (${label})<br /><br />
+    • دوز روزانه: <strong dir="ltr">${toPersianDigits(mgPerDay)} mg</strong><br />
+    • دوز هر نوبت: <strong dir="ltr">${toPersianDigits(mgPerDose.toFixed(1))} mg</strong><br />
+    • حجم هر نوبت: <span class="highlight-dose" dir="ltr">${toPersianDigits(mlPerDose.toFixed(1))} ml</span><br />
+    • تعداد نوبت: <strong dir="ltr">${toPersianDigits(dosesPerDay)}</strong> بار در روز<br />
+    • فاصله نوبت‌ها: <span class="highlight-dose" dir="ltr">${toPersianDigits(intervalHours)} ساعت</span>
   `;
   ageResultDiv.innerHTML = html;
   ageResultDiv.classList.remove("hidden");
@@ -805,8 +791,10 @@ themeSwitch.addEventListener("change", () => {
    پر کردن لیست‌ها در شروع
    ================================================================ */
 populateAgeDrugs();
-// categorySelect trigger اولیه
-categorySelect.dispatchEvent(new Event('change'));
+// فعال کردن دسته پیش‌فرض
+document.querySelector('.cat-btn[data-cat="antibiotic"]').classList.add("active");
+currentCategory = "antibiotic";
+populateWeightDrugs("antibiotic");
 
 /* ================================================================
    افکت پس‌زمینه Saphira (بهینه‌شده)
