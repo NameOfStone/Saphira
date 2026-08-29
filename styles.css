@@ -234,7 +234,7 @@ body[data-theme="dark"] .warning {
 }
 
 /* ================================================================
-   تب‌ها
+   تب‌های اصلی
    ================================================================ */
 .tabs {
   display: flex;
@@ -272,6 +272,47 @@ body[data-theme="dark"] .warning {
 }
 body[data-theme="dark"] .tab-btn.active {
   box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+/* ================================================================
+   دکمه‌های دسته‌بندی (زیر تب وزن)
+   ================================================================ */
+.category-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.cat-btn {
+  flex: 1 0 auto;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-color);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), box-shadow var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+.cat-btn i {
+  font-size: 14px;
+}
+.cat-btn.active {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+body[data-theme="dark"] .cat-btn.active {
+  box-shadow: 0 4px 12px rgba(77, 140, 247, 0.3);
 }
 
 /* ================================================================
@@ -477,6 +518,11 @@ body[data-theme="dark"] .btn-secondary:hover {
   .tab-btn i {
     font-size: 14px;
   }
+  .category-tabs .cat-btn {
+    font-size: 11px;
+    padding: 4px 8px;
+    flex: 1 1 auto;
+  }
   .btn-row {
     flex-direction: column;
   }
@@ -516,5 +562,9 @@ body[data-theme="dark"] .btn-secondary:hover {
   input[type="number"], select, button {
     font-size: 14px;
     padding: 8px 10px;
+  }
+  .cat-btn {
+    font-size: 10px !important;
+    padding: 3px 6px !important;
   }
 }
