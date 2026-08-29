@@ -523,7 +523,7 @@
       </div>
 
       <div id="strengthWrapper" class="field hidden">
-        <label for="strengthSelect"><i class="fas fa-flask"></i> غلظت شربت (میلی‌گرم در ۵ میلی‌لیتر)</label>
+        <label for="strengthSelect"><i class="fas fa-flask"></i> غلظت دارو (میلی‌گرم در ۵ میلی‌لیتر)</label>
         <select id="strengthSelect"></select>
       </div>
 
@@ -565,7 +565,7 @@
       </div>
 
       <div id="ageStrengthWrapper" class="field hidden">
-        <label for="ageStrengthSelect"><i class="fas fa-flask"></i> غلظت شربت (میلی‌گرم در ۵ میلی‌لیتر)</label>
+        <label for="ageStrengthSelect"><i class="fas fa-flask"></i> غلظت دارو (میلی‌گرم در ۵ میلی‌لیتر)</label>
         <select id="ageStrengthSelect"></select>
       </div>
 
@@ -605,14 +605,14 @@
       antibiotic: [
         {
           id: "amoxicillin",
-          name: "Amoxicillin شربت",
+          name: "Amoxicillin سوسپانسیون",
           notes: `✅ اندیکاسیون‌ها: اوتیت میانی، فارنژیت استرپتوکی، سینوزیت، پنومونی خفیف، عفونت ادراری.
     ✅ دوز معمول: ۴۰–۴۵ mg/kg/day در ۲–۳ نوبت.
     ✅ دوز بالا (AOM، سینوزیت، CAP مقاوم): ۸۰–۹۰ mg/kg/day در ۲ نوبت.
     ⚠️ همراه غذا برای کاهش عوارض گوارشی.
     ⚠️ در آلرژی شدید به پنی‌سیلین ممنوع.
     ⚠️ در مونونوکلئوز عفونی ممکن است راش ایجاد کند (نه لزوماً آلرژی).
-    ⚠️ شربت را قبل از مصرف تکان دهید و در یخچال نگهداری کنید.
+    ⚠️ سوسپانسیون را قبل از مصرف تکان دهید و در یخچال نگهداری کنید.
     📚 منبع: Harriet Lane 22nd ed., UpToDate 2025`,
           strengths: [
             { id: "amox_125", label: "۱۲۵ mg/5ml", mgPer5ml: 125 },
@@ -628,7 +628,7 @@
         },
         {
           id: "amoxiclav",
-          name: "Amoxicillin/Clavulanate (Co-amoxiclav)",
+          name: "Amoxicillin/Clavulanate سوسپانسیون کوآموکسی‌کلاو",
           notes: `✅ اندیکاسیون‌ها: AOM، سینوزیت، عفونت تنفسی تحتانی، عفونت پوستی (مظنون به بتالاکتاماز).
     ✅ دوز بر اساس آموکسی‌سیلین: ۴۰–۴۵ mg/kg/day (معمول) یا ۸۰–۹۰ mg/kg/day (دوز بالا).
     ⚠️ همراه غذا برای کاهش تهوع و اسهال.
@@ -636,21 +636,21 @@
     ⚠️ اسهال، کاندیدیازیس دهانی و پوشکی شایع است.
     📚 منبع: Nelson Textbook of Pediatrics 21st ed., BNFC 2024`,
           strengths: [
-            { id: "amcl_156", label: "۱۵۶ (۱۲۵/۳۱٫۲۵) mg/5ml – بر اساس ۱۲۵ mg آموکسی‌سیلین", mgPer5ml: 125 },
+            { id: "amcl_156", label: "۱۵۶ (۱۲۵/۳۱٫۲۵) mg/5ml – بر اساس ۱۲۵ mg", mgPer5ml: 125 },
             { id: "amcl_228", label: "۲۲۸ (۲۰۰/۲۸٫۵) mg/5ml – بر اساس ۲۰۰ mg", mgPer5ml: 200 },
             { id: "amcl_312", label: "۳۱۲ (۲۵۰/۶۲٫۵) mg/5ml – بر اساس ۲۵۰ mg", mgPer5ml: 250 },
             { id: "amcl_457", label: "۴۵۷ (۴۰۰/۵۷) mg/5ml – بر اساس ۴۰۰ mg", mgPer5ml: 400 },
             { id: "amcl_643", label: "۶۴۳ (۶۰۰/۴۲٫۹) mg/5ml – بر اساس ۶۰۰ mg", mgPer5ml: 600 }
           ],
           diseases: [
-            { id: "amcl_mild_tds", name: "عفونت خفیف–متوسط – ۳ بار در روز", mgPerKgPerDay: 45, dosesPerDay: 3, days: 7, extraNote: "۴۵ mg/kg/day بر اساس آموکسی‌سیلین در ۳ نوبت" },
+            { id: "amcl_mild_tds", name: "عفونت خفیف–متوسط – ۳ بار در روز", mgPerKgPerDay: 45, dosesPerDay: 3, days: 7, extraNote: "۴۵ mg/kg/day در ۳ نوبت" },
             { id: "amcl_mild_bd", name: "عفونت خفیف–متوسط – ۲ بار در روز", mgPerKgPerDay: 45, dosesPerDay: 2, days: 7, extraNote: "۴۵ mg/kg/day در ۲ نوبت" },
             { id: "amcl_high_bd", name: "AOM / سینوزیت باکتریال – دوز بالا (۲ بار)", mgPerKgPerDay: 90, dosesPerDay: 2, days: 10, extraNote: "۹۰ mg/kg/day در ۲ نوبت" }
           ]
         },
         {
           id: "cephalexin",
-          name: "Cephalexin شربت",
+          name: "Cephalexin سوسپانسیون",
           notes: `✅ اندیکاسیون‌ها: عفونت پوستی (امپتیگو، سلولیت)، عفونت ادراری خفیف، فارنژیت استرپتوکی (در عدم تحمل پنی‌سیلین غیرآنافیلاکسی).
     ✅ دوز: ۲۵–۵۰ mg/kg/day در ۲–۴ نوبت (عفونت شدید: تا ۱۰۰ mg/kg/day).
     ⚠️ در آلرژی آنافیلاکتیک به پنی‌سیلین با احتیاط.
@@ -766,7 +766,7 @@
         },
         {
           id: "tmpsmx",
-          name: "Co-trimoxazole (TMP-SMX) شربت",
+          name: "Co-trimoxazole (TMP-SMX) سوسپانسیون",
           notes: `✅ اندیکاسیون‌ها: UTI، SSTI (از جمله بعضی MRSA)، پروفیلاکسی/درمان PCP.
     ✅ دوز بر اساس جزء TMP: ۸ mg TMP/kg/day در ۲ نوبت.
     ⚠️ در آلرژی به سولفونامیدها ممنوع.
