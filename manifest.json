@@ -1,7 +1,7 @@
 
 {
   "name": "ماشین‌حساب سافیرا",
-  "short_name": "دوز اطفال",
+  "short_name": "ماشین‌حساب سافیرا",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#eef2f6",
