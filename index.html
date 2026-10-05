@@ -18,59 +18,119 @@
     
     <style>
         :root {
-            --bg-main: #eef2f6; --bg-card: #ffffff; --text-primary: #0f172a; --text-secondary: #475569;
-            --border-light: #e2e8f0; --primary-color: #2563eb; --primary-hover: #1d4ed8; --secondary-bg: #f8fafc;
-            --warning-bg: #fff1f2; --warning-border: #fecdd3; --warning-text: #be123c;
-            --info-bg: #f0fdfa; --info-border: #5eead4; --success-text: #047857;
-            --shadow-base: 0 10px 25px -5px rgba(0, 0, 0, 0.05); --radius-soft: 16px;
-            --transition-speed: 0.3s ease; --font-stack: "Vazirmatn", system-ui, sans-serif;
+            --bg-main: #eef2f6;
+            --bg-card: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border-light: #e2e8f0;
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary-bg: #f8fafc;
+            --warning-bg: #fff1f2;
+            --warning-border: #fecdd3;
+            --warning-text: #be123c;
+            --info-bg: #f0fdfa;
+            --info-border: #5eead4;
+            --success-text: #047857;
+            --shadow-base: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            --radius-soft: 16px;
+            --transition-speed: 0.3s ease;
+            --font-stack: "Vazirmatn", system-ui, sans-serif;
         }
+
         body[data-theme="dark"] {
-            --bg-main: #0b0f19; --bg-card: #1e293b; --text-primary: #f1f5f9; --text-secondary: #94a3b8;
-            --border-light: #334155; --primary-color: #3b82f6; --primary-hover: #60a5fa; --secondary-bg: #0f172a;
-            --warning-bg: #4c0519; --warning-border: #881337; --warning-text: #fda4af;
-            --info-bg: #042f2e; --info-border: #0f766e; --shadow-base: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+            --bg-main: #0b0f19;
+            --bg-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-light: #334155;
+            --primary-color: #3b82f6;
+            --primary-hover: #60a5fa;
+            --secondary-bg: #0f172a;
+            --warning-bg: #4c0519;
+            --warning-border: #881337;
+            --warning-text: #fda4af;
+            --info-bg: #042f2e;
+            --info-border: #0f766e;
+            --shadow-base: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
         }
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: var(--font-stack); background-color: var(--bg-main); color: var(--text-primary); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding-block: 20px; padding-inline: 12px; transition: background-color var(--transition-speed); }
+
+        body { 
+            font-family: var(--font-stack); 
+            background-color: var(--bg-main); 
+            color: var(--text-primary); 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding-block: 20px; 
+            padding-inline: 12px; 
+            transition: background-color var(--transition-speed); 
+        }
+
         .top-bar { width: 100%; max-width: 850px; display: flex; justify-content: space-between; align-items: center; margin-block-end: 16px; }
+        
         .top-title { font-size: clamp(1rem, 4vw, 1.3rem); font-weight: 800; color: var(--primary-color); background: var(--bg-card); padding: 8px 20px; border-radius: 50px; box-shadow: var(--shadow-base); }
+        
         .theme-toggle input { display: none; }
+        
         .theme-icon { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: var(--bg-card); border: 1px solid var(--border-light); cursor: pointer; font-size: 1.2rem; transition: transform var(--transition-speed); }
         .theme-icon:hover { transform: scale(1.08); }
+        
         .container { width: 100%; max-width: 850px; background: var(--bg-card); border-radius: var(--radius-soft); box-shadow: var(--shadow-base); padding: clamp(16px, 4vw, 32px); transition: background-color var(--transition-speed); }
+        
         .sub-title { text-align: center; font-weight: 700; color: var(--text-secondary); margin-block-end: 24px; }
+        
         .warning-box, .note-box, .dose-box, .result-box { padding: 16px; border-radius: 12px; margin-block-end: 20px; line-height: 1.7; font-size: 0.95rem; }
         .warning-box { background-color: var(--warning-bg); border: 1px solid var(--warning-border); color: var(--warning-text); display: flex; gap: 12px; }
         .warning-box i { font-size: 1.4rem; padding-block-start: 4px; }
         .note-box { background-color: var(--secondary-bg); border-inline-start: 4px solid var(--primary-color); white-space: pre-line; }
         .dose-box { background-color: var(--info-bg); border: 1px solid var(--info-border); }
         .result-box { background-color: var(--info-bg); border: 2px dashed var(--primary-color); font-size: 1.05rem; }
+        
         .highlight-dose { background: var(--primary-color); color: #fff; padding: 4px 10px; border-radius: 6px; font-weight: 700; margin-inline: 4px; }
+        
         .ltr-text { direction: ltr; display: inline-block; unicode-bidi: isolate; font-family: system-ui, sans-serif; font-weight: 600; }
+        
         .tabs-container { display: flex; gap: 8px; background: var(--secondary-bg); padding: 6px; border-radius: 50px; margin-block-end: 24px; }
+        
         .tab-btn { flex: 1; background: transparent; border: none; padding: 10px; border-radius: 40px; font-family: inherit; font-weight: 700; color: var(--text-primary); cursor: pointer; transition: var(--transition-speed); }
         .tab-btn.active { background: var(--bg-card); box-shadow: 0 4px 6px rgba(0,0,0,0.06); color: var(--primary-color); }
+        
         .category-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-block-end: 24px; }
+        
         .cat-btn { flex: 1 1 calc(33.33% - 8px); padding: 8px 12px; border: 1px solid var(--border-light); background: var(--bg-card); color: var(--text-secondary); border-radius: 30px; font-family: inherit; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: var(--transition-speed); text-align: center; }
         .cat-btn.active { background: var(--primary-color); color: #fff; border-color: var(--primary-color); }
-        .input-group, .info-wrapper { margin-block-end: 20px; }
+        
+        .input-group { margin-block-end: 20px; }
+        .info-wrapper { margin-block-end: 20px; }
+        
         label { display: block; margin-block-end: 8px; font-weight: 600; color: var(--text-primary); }
+        
         input[type="number"], select { width: 100%; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-light); background-color: var(--secondary-bg); color: var(--text-primary); font-family: inherit; font-size: 1rem; transition: border-color var(--transition-speed); outline: none; }
         input[type="number"]:focus, select:focus { border-color: var(--primary-color); }
+        
         .actions-row { display: flex; flex-wrap: wrap; gap: 12px; margin-block-start: 24px; }
+        
         .btn { flex: 1 1 200px; padding: 14px; border: none; border-radius: 12px; font-family: inherit; font-size: 1rem; font-weight: 700; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; transition: var(--transition-speed); }
         .btn-primary { background: var(--primary-color); color: #fff; }
         .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); }
         .btn-secondary { background: var(--secondary-bg); border: 1px solid var(--border-light); color: var(--text-primary); }
+        
         .hidden { display: none !important; }
+        
         .footer { margin-block-start: 32px; padding-block-start: 16px; border-block-start: 1px dashed var(--border-light); text-align: center; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.8; }
+        
         .contact-link { display: inline-flex; align-items: center; gap: 6px; color: var(--primary-color); text-decoration: none; font-weight: 700; margin-top: 8px; transition: color var(--transition-speed); }
         .contact-link:hover { color: var(--primary-hover); }
+        
         @media (max-width: 480px) { .cat-btn { flex: 1 1 45%; } }
     </style>
 </head>
 <body>
+
     <header class="top-bar">
         <div class="header-area">
             <span class="top-title"><i class="fas fa-prescription-bottle-medical" aria-hidden="true"></i> ماشین‌حساب دوز اطفال سافیرا</span>
@@ -111,7 +171,9 @@
 
             <div class="input-group">
                 <label for="drugSelect"><i class="fas fa-capsules" aria-hidden="true"></i> انتخاب دارو</label>
-                <select id="drugSelect"><option value="">-- ابتدا دسته درمانی را انتخاب کنید --</option></select>
+                <select id="drugSelect">
+                    <option value="">-- ابتدا دسته درمانی را انتخاب کنید --</option>
+                </select>
             </div>
 
             <div class="input-group">
@@ -119,13 +181,7 @@
                 <!-- ورودی ترکیبی تایپ + انتخاب کشویی -->
                 <input type="number" id="weightInput" min="0" step="0.1" placeholder="مثلاً ۱۲٫۵ تایپ کنید یا از لیست انتخاب کنید..." inputmode="decimal" list="weightOptions" autocomplete="off" />
                 <datalist id="weightOptions">
-                    <option value="3"></option><option value="4"></option><option value="5"></option>
-                    <option value="6"></option><option value="7"></option><option value="8"></option>
-                    <option value="9"></option><option value="10"></option><option value="11"></option>
-                    <option value="12"></option><option value="13"></option><option value="14"></option>
-                    <option value="15"></option><option value="16"></option><option value="18"></option>
-                    <option value="20"></option><option value="22"></option><option value="25"></option>
-                    <option value="30"></option><option value="35"></option><option value="40"></option>
+                    <option value="3"></option><option value="4"></option><option value="5"></option><option value="6"></option><option value="7"></option><option value="8"></option><option value="9"></option><option value="10"></option><option value="11"></option><option value="12"></option><option value="13"></option><option value="14"></option><option value="15"></option><option value="16"></option><option value="18"></option><option value="20"></option><option value="22"></option><option value="25"></option><option value="30"></option><option value="35"></option><option value="40"></option>
                 </datalist>
             </div>
 
@@ -161,24 +217,31 @@
         <section id="ageMode" class="mode-section hidden">
             <div class="input-group">
                 <label for="ageDrugSelect"><i class="fas fa-pills" aria-hidden="true"></i> انتخاب داروی سن‌محور</label>
-                <select id="ageDrugSelect"><option value="">-- دارو را انتخاب کنید --</option></select>
+                <select id="ageDrugSelect">
+                    <option value="">-- دارو را انتخاب کنید --</option>
+                </select>
             </div>
+
             <div class="input-group">
                 <label for="ageInput"><i class="fas fa-calendar-alt" aria-hidden="true"></i> سن کودک (سال)</label>
                 <input type="number" id="ageInput" min="0" step="0.1" placeholder="مثلاً ۳٫۵ (سه‌سال و نیم)" inputmode="decimal" />
             </div>
+
             <div id="ageDrugNotesWrapper" class="info-wrapper hidden">
                 <label><i class="fas fa-info-circle" aria-hidden="true"></i> ملاحظات فارماکولوژیک</label>
                 <div id="ageDrugNotes" class="info-content note-box"></div>
             </div>
+
             <div id="ageStrengthWrapper" class="input-group hidden">
                 <label for="ageStrengthSelect"><i class="fas fa-flask" aria-hidden="true"></i> غلظت داروی موجود</label>
                 <select id="ageStrengthSelect"></select>
             </div>
+
             <div class="actions-row">
                 <button id="calcBtnAge" class="btn btn-primary"><i class="fas fa-calculator" aria-hidden="true"></i> محاسبه دوز</button>
                 <button id="resetBtnAge" type="button" class="btn btn-secondary"><i class="fas fa-rotate-left" aria-hidden="true"></i> پاک‌کردن مقادیر</button>
             </div>
+
             <div id="resultAge" class="result-box hidden"></div>
         </section>
 
@@ -193,11 +256,25 @@
     </main>
 
     <script>
+        // جلوگیری از کش شدن کدهای قدیمی و حذف فایل‌های آفلاین مشکل‌دار
+        if ('caches' in window) {
+            caches.keys().then(names => {
+                names.forEach(name => caches.delete(name));
+            });
+        }
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(registrations => {
+                for (let registration of registrations) {
+                    registration.unregister();
+                }
+            });
+        }
+
         const DRUGS_DB = {
             weightBased: {
                 antibiotic: [
                     {
-                        id: "amoxicillin", name: "Amoxicillin (آموکسی‌سیلین)",
+                        id: "amoxicillin", name: "Amoxicillin (آموکسی‌‌سیلین)",
                         notes: `✅ کاربرد: اوتیت مدیا حاد، فارنژیت استرپتوکوکی، پنومونی خفیف.\n⚠️ قبل از مصرف تکان داده شود. نگهداری در یخچال.`,
                         strengths: [ { id: "amox_125", label: "125 mg / 5 mL", mgPerMl: 125/5 }, { id: "amox_200", label: "200 mg / 5 mL", mgPerMl: 200/5 }, { id: "amox_250", label: "250 mg / 5 mL", mgPerMl: 250/5 }, { id: "amox_400", label: "400 mg / 5 mL", mgPerMl: 400/5 } ],
                         indications: [ { id: "ind_am_1", name: "عفونت خفیف (هر ۸ ساعت)", mgPerKgPerDay: 45, dosesPerDay: 3, duration: 7 }, { id: "ind_am_2", name: "عفونت خفیف (هر ۱۲ ساعت)", mgPerKgPerDay: 45, dosesPerDay: 2, duration: 7 }, { id: "ind_am_3", name: "AOM / دوز بالا (هر ۱۲ ساعت)", mgPerKgPerDay: 90, dosesPerDay: 2, duration: 10 } ]
@@ -252,7 +329,7 @@
                     },
                     {
                         id: "tmpsmx", name: "Co-trimoxazole (کوتریموکسازول)",
-                        notes: `✅ محاسبات صرفاً بر اساس جزء تری‌متوپریم (TMP) انجام می‌گیرد.\n⚠️️ منع مصرف زیر ۲ ماه و بیماران فاویسم.`,
+                        notes: `✅ محاسبات صرفاً بر اساس جزء تری‌متوپریم (TMP) انجام می‌‌گیرد.\n⚠ منع مصرف زیر ۲ ماه و بیماران فاویسم.`,
                         strengths: [ { id: "tmp_40", label: "40 mg TMP / 5 mL", mgPerMl: 40/5 } ],
                         indications: [ { id: "ind_tmp_1", name: "عفونت خفیف / UTI (هر ۱۲ ساعت)", mgPerKgPerDay: 8, dosesPerDay: 2, duration: 7 } ]
                     }
@@ -310,7 +387,7 @@
                     },
                     {
                         id: "dextromethorphan", name: "Dextromethorphan (دکسترومتروفان)",
-                        notes: `✅ کاربرد: سرکوب‌کننده سرفه‌های خشک و بدون خلط.\n⚠️ در سرفه‌های خلط‌دار به هیچ‌وجه نباید مصرف شود.`,
+                        notes: `✅ کاربرد: سرکوب‌‌کننده سرفه‌های خشک و بدون خلط.\n⚠️ در سرفه‌های خلط‌دار به هیچ‌وجه نباید مصرف شود.`,
                         strengths: [ { id: "dex_15", label: "15 mg / 5 mL", mgPerMl: 3 } ],
                         indications: [ { id: "ind_dex_1", name: "سرفه خشک (هر ۸ ساعت)", mgPerKgPerDay: 1, dosesPerDay: 3, duration: 3 } ]
                     },
@@ -328,7 +405,7 @@
                     },
                     {
                         id: "expectorant_codeine", name: "Expectorant Codeine (اکسپکتورانت کدئین)",
-                        notes: `⛔️ هشدار: حاوی مخدر کدئین است.\n⚠️ به دلیل خطر دپرسیون تنفسی، مصرف در کودکان زیر ۱۲ سال کاملاً ممنوع است. این محاسبه فقط برای نوجوانان بالای ۱۲ سال است.`,
+                        notes: `⛔️ هشدار: حاوی مخدر کدئین است.\n⚠️️ به دلیل خطر دپرسیون تنفسی، مصرف در کودکان زیر ۱۲ سال کاملاً ممنوع است. این محاسبه فقط برای نوجوانان بالای ۱۲ سال است.`,
                         strengths: [ { id: "expc_100", label: "100 mg / 5 mL (گایافنزین)", mgPerMl: 20 } ],
                         indications: [ { id: "ind_expc_1", name: "سرفه شدید (فقط بالای ۱۲ سال) (هر ۶ ساعت)", mgPerKgPerDay: 12, dosesPerDay: 4, duration: 5 } ]
                     },
@@ -372,7 +449,7 @@
                     },
                     {
                         id: "famotidine", name: "Famotidine (فاموتیدین)",
-                        notes: `✅ کاربرد: ریفلاکس اسید معده (GERD).\n⚠️ سوسپانسیون قبل از مصرف باید به خوبی تکان داده شود.`,
+                        notes: `✅ کاربرد: ریفلاکس اسید معده (GERD).\n⚠️️ سوسپانسیون قبل از مصرف باید به خوبی تکان داده شود.`,
                         strengths: [ { id: "fam_40", label: "40 mg / 5 mL", mgPerMl: 8 } ],
                         indications: [ { id: "ind_fam_1", name: "ریفلاکس معده (هر ۱۲ ساعت)", mgPerKgPerDay: 1, dosesPerDay: 2, duration: 14, maxDailyMg: 40 } ]
                     }
@@ -467,14 +544,9 @@
         };
 
         document.addEventListener('DOMContentLoaded', () => {
-
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW Error:', err));
-            }
-            
             const persianMap = { '0':'۰','1':'۱','2':'۲','3':'۳','4':'۴','5':'۵','6':'۶','7':'۷','8':'۸','9':'۹' };
             function toFaDigits(num) {
-                if(num === undefined || num === null || Number.isNaN(num)) return '';
+                if(num === undefined || num === null || isNaN(num)) return '';
                 return num.toString().replace(/[0-9]/g, d => persianMap[d]);
             }
 
@@ -514,32 +586,59 @@
                 });
             }
 
-            DOM.tabWeight.addEventListener('click', () => { DOM.tabWeight.classList.add('active'); DOM.tabAge.classList.remove('active'); DOM.weightMode.classList.remove('hidden'); DOM.ageMode.classList.add('hidden'); });
-            DOM.tabAge.addEventListener('click', () => { DOM.tabAge.classList.add('active'); DOM.tabWeight.classList.remove('active'); DOM.ageMode.classList.remove('hidden'); DOM.weightMode.classList.add('hidden'); });
+            DOM.tabWeight.addEventListener('click', () => { 
+                DOM.tabWeight.classList.add('active'); DOM.tabAge.classList.remove('active'); 
+                DOM.weightMode.classList.remove('hidden'); DOM.ageMode.classList.add('hidden'); 
+            });
+            DOM.tabAge.addEventListener('click', () => { 
+                DOM.tabAge.classList.add('active'); DOM.tabWeight.classList.remove('active'); 
+                DOM.ageMode.classList.remove('hidden'); DOM.weightMode.classList.add('hidden'); 
+            });
 
             function loadWeightDrugs(category) {
                 DOM.drugSelect.innerHTML = '<option value="">-- لطفاً یک دارو انتخاب کنید --</option>';
                 const drugs = DRUGS_DB.weightBased[category] || [];
-                drugs.forEach(d => { let opt = document.createElement('option'); opt.value = d.id; opt.textContent = d.name; DOM.drugSelect.appendChild(opt); });
+                drugs.forEach(d => { 
+                    let opt = document.createElement('option'); 
+                    opt.value = d.id; 
+                    opt.textContent = d.name; 
+                    DOM.drugSelect.appendChild(opt); 
+                });
                 resetWeightFields();
             }
 
             DOM.catBtns.forEach(btn => {
                 btn.addEventListener('click', (e) => {
-                    DOM.catBtns.forEach(b => b.classList.remove('active')); e.target.classList.add('active');
-                    currentCategory = e.target.dataset.cat; loadWeightDrugs(currentCategory);
+                    DOM.catBtns.forEach(b => b.classList.remove('active')); 
+                    e.target.classList.add('active');
+                    currentCategory = e.target.dataset.cat; 
+                    loadWeightDrugs(currentCategory);
                 });
             });
 
             DOM.drugSelect.addEventListener('change', (e) => {
                 resetWeightFields(false);
-                const drugId = e.target.value; if (!drugId) return;
+                const drugId = e.target.value; 
+                if (!drugId) return;
                 currentDrugWeight = DRUGS_DB.weightBased[currentCategory].find(d => d.id === drugId);
-                DOM.drugNotes.innerHTML = currentDrugWeight.notes; DOM.drugNotesWrapper.classList.remove('hidden');
-                currentDrugWeight.strengths.forEach(s => { let opt = document.createElement('option'); opt.value = s.id; opt.textContent = s.label; DOM.strengthSelect.appendChild(opt); });
+                DOM.drugNotes.innerHTML = currentDrugWeight.notes; 
+                DOM.drugNotesWrapper.classList.remove('hidden');
+                
+                currentDrugWeight.strengths.forEach(s => { 
+                    let opt = document.createElement('option'); 
+                    opt.value = s.id; 
+                    opt.textContent = s.label; 
+                    DOM.strengthSelect.appendChild(opt); 
+                });
                 DOM.strengthWrapper.classList.remove('hidden');
+                
                 DOM.diseaseSelect.innerHTML = '<option value="">-- اندیکاسیون را انتخاب کنید --</option>';
-                currentDrugWeight.indications.forEach(i => { let opt = document.createElement('option'); opt.value = i.id; opt.textContent = i.name; DOM.diseaseSelect.appendChild(opt); });
+                currentDrugWeight.indications.forEach(i => { 
+                    let opt = document.createElement('option'); 
+                    opt.value = i.id; 
+                    opt.textContent = i.name; 
+                    DOM.diseaseSelect.appendChild(opt); 
+                });
                 DOM.diseaseWrapper.classList.remove('hidden');
             });
 
@@ -557,7 +656,7 @@
                 const strengthId = DOM.strengthSelect.value;
                 const indId = DOM.diseaseSelect.value;
 
-                if (Number.isNaN(weight) || weight <= 0) return alert("لطفاً وزن معتبر وارد کنید.");
+                if (isNaN(weight) || weight <= 0) return alert("لطفاً وزن معتبر وارد کنید.");
                 if (!currentDrugWeight || !strengthId || !indId) return alert("تکمیل فیلدهای دارو و غلظت الزامی است.");
 
                 const strength = currentDrugWeight.strengths.find(s => s.id === strengthId);
@@ -568,9 +667,14 @@
                 }
 
                 if (ind.isComplexAZI) {
-                    let doseMgDay1 = weight * 10; let doseMgNext = weight * 5;
-                    if(ind.maxDailyMg) { doseMgDay1 = Math.min(doseMgDay1, ind.maxDailyMg); doseMgNext = Math.min(doseMgNext, ind.maxDailyMg); }
-                    let volDay1 = doseMgDay1 / strength.mgPerMl; let volNext = doseMgNext / strength.mgPerMl;
+                    let doseMgDay1 = weight * 10; 
+                    let doseMgNext = weight * 5;
+                    if(ind.maxDailyMg) { 
+                        doseMgDay1 = Math.min(doseMgDay1, ind.maxDailyMg); 
+                        doseMgNext = Math.min(doseMgNext, ind.maxDailyMg); 
+                    }
+                    let volDay1 = doseMgDay1 / strength.mgPerMl; 
+                    let volNext = doseMgNext / strength.mgPerMl;
                     DOM.resultWeight.innerHTML = `<strong>وزن: <span class="ltr-text">${toFaDigits(weight)} kg</span></strong><br><br>
                         <i class="fas fa-check-circle" style="color:var(--success-text);"></i> <strong>روز اول:</strong> <span class="highlight-dose ltr-text">${toFaDigits(volDay1.toFixed(1))} mL</span> (معادل ${toFaDigits(doseMgDay1.toFixed(1))} mg)<br>
                         <i class="fas fa-check-circle" style="color:var(--success-text);"></i> <strong>روز دوم تا پنجم:</strong> <span class="highlight-dose ltr-text">${toFaDigits(volNext.toFixed(1))} mL</span> (معادل ${toFaDigits(doseMgNext.toFixed(1))} mg)<br>`;
@@ -610,31 +714,57 @@
             });
 
             function resetWeightFields(full = true) {
-                if(full) { DOM.drugSelect.value = ""; DOM.weightInput.value = ""; }
-                DOM.strengthSelect.innerHTML = ""; DOM.diseaseSelect.innerHTML = "";
-                DOM.strengthWrapper.classList.add('hidden'); DOM.diseaseWrapper.classList.add('hidden');
-                DOM.drugNotesWrapper.classList.add('hidden'); DOM.doseInfoWrapper.classList.add('hidden');
+                if(full) { 
+                    DOM.drugSelect.value = ""; 
+                    DOM.weightInput.value = ""; 
+                }
+                DOM.strengthSelect.innerHTML = ""; 
+                DOM.diseaseSelect.innerHTML = "";
+                DOM.strengthWrapper.classList.add('hidden'); 
+                DOM.diseaseWrapper.classList.add('hidden');
+                DOM.drugNotesWrapper.classList.add('hidden'); 
+                DOM.doseInfoWrapper.classList.add('hidden');
                 DOM.resultWeight.classList.add('hidden');
             }
             DOM.resetBtnWeight.addEventListener('click', () => resetWeightFields(true));
 
             function loadAgeDrugs() {
-                DRUGS_DB.ageBased.forEach(d => { let opt = document.createElement('option'); opt.value = d.id; opt.textContent = d.name; DOM.ageDrugSelect.appendChild(opt); });
+                DRUGS_DB.ageBased.forEach(d => { 
+                    let opt = document.createElement('option'); 
+                    opt.value = d.id; 
+                    opt.textContent = d.name; 
+                    DOM.ageDrugSelect.appendChild(opt); 
+                });
             }
 
             DOM.ageDrugSelect.addEventListener('change', (e) => {
-                DOM.resultAge.classList.add('hidden'); DOM.ageStrengthSelect.innerHTML = "";
-                const drugId = e.target.value; if(!drugId) { DOM.ageDrugNotesWrapper.classList.add('hidden'); DOM.ageStrengthWrapper.classList.add('hidden'); return; }
+                DOM.resultAge.classList.add('hidden'); 
+                DOM.ageStrengthSelect.innerHTML = "";
+                const drugId = e.target.value; 
+                
+                if(!drugId) { 
+                    DOM.ageDrugNotesWrapper.classList.add('hidden'); 
+                    DOM.ageStrengthWrapper.classList.add('hidden'); 
+                    return; 
+                }
+                
                 currentDrugAge = DRUGS_DB.ageBased.find(d => d.id === drugId);
-                DOM.ageDrugNotes.innerHTML = currentDrugAge.notes; DOM.ageDrugNotesWrapper.classList.remove('hidden');
-                currentDrugAge.strengths.forEach(s => { let opt = document.createElement('option'); opt.value = s.id; opt.textContent = s.label; DOM.ageStrengthSelect.appendChild(opt); });
+                DOM.ageDrugNotes.innerHTML = currentDrugAge.notes; 
+                DOM.ageDrugNotesWrapper.classList.remove('hidden');
+                
+                currentDrugAge.strengths.forEach(s => { 
+                    let opt = document.createElement('option'); 
+                    opt.value = s.id; 
+                    opt.textContent = s.label; 
+                    DOM.ageStrengthSelect.appendChild(opt); 
+                });
                 DOM.ageStrengthWrapper.classList.remove('hidden');
             });
 
             DOM.calcBtnAge.addEventListener('click', () => {
                 const age = parseFloat(DOM.ageInput.value);
                 const strengthId = DOM.ageStrengthSelect.value;
-                if (Number.isNaN(age) || age < 0) return alert("سن وارد شده نامعتبر است.");
+                if (isNaN(age) || age < 0) return alert("سن وارد شده نامعتبر است.");
                 if (!currentDrugAge || !strengthId) return alert("تمامی فیلدها را تکمیل نمایید.");
 
                 const strength = currentDrugAge.strengths.find(s => s.id === strengthId);
@@ -642,7 +772,8 @@
 
                 if(!band) {
                     DOM.resultAge.innerHTML = `<span style="color:var(--warning-text);"><i class="fas fa-ban"></i> دوز استانداردی برای این بازه سنی در رفرنس تعریف نشده است.</span>`;
-                    DOM.resultAge.classList.remove('hidden'); return;
+                    DOM.resultAge.classList.remove('hidden'); 
+                    return;
                 }
 
                 let mgPerDose = band.totalDailyMg / band.doses;
@@ -655,9 +786,17 @@
                 DOM.resultAge.classList.remove('hidden');
             });
 
-            DOM.resetBtnAge.addEventListener('click', () => { DOM.ageDrugSelect.value = ""; DOM.ageInput.value = ""; DOM.ageDrugNotesWrapper.classList.add('hidden'); DOM.ageStrengthWrapper.classList.add('hidden'); DOM.resultAge.classList.add('hidden'); });
+            DOM.resetBtnAge.addEventListener('click', () => { 
+                DOM.ageDrugSelect.value = ""; 
+                DOM.ageInput.value = ""; 
+                DOM.ageDrugNotesWrapper.classList.add('hidden'); 
+                DOM.ageStrengthWrapper.classList.add('hidden'); 
+                DOM.resultAge.classList.add('hidden'); 
+            });
 
-            initTheme(); loadWeightDrugs('antibiotic'); loadAgeDrugs();
+            initTheme(); 
+            loadWeightDrugs('antibiotic'); 
+            loadAgeDrugs();
         });
     </script>
 </body>
