@@ -2,1088 +2,663 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-<meta name="description" content="دستیار هوشمند و ماشین‌حساب محاسبه دوز داروهای اطفال بر اساس وزن و سن" />
-<title>محاسبه دوز شربت اطفال | نسخه حرفه‌ای</title>
-​<link rel="manifest" href="manifest.json" />
-<meta name="theme-color" content="#2563eb" />
-<link rel="apple-touch-icon" href="icon.png" />
-​<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-​<style>
-:root {
---bg-main: #eef2f6;
---bg-card: #ffffff;
---text-primary: #0f172a;
---text-secondary: #475569;
---border-light: #e2e8f0;
---primary-color: #2563eb;
---primary-hover: #1d4ed8;
---secondary-bg: #f8fafc;
---warning-bg: #fff1f2;
---warning-border: #fecdd3;
---warning-text: #be123c;
---info-bg: #f0fdfa;
---info-border: #5eead4;
---success-text: #047857;
---shadow-base: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
---radius-soft: 16px;
---transition-speed: 0.3s ease;
---font-stack: "Vazirmatn", system-ui, sans-serif;
-}
-​body[data-theme="dark"] {
---bg-main: #0b0f19;
---bg-card: #1e293b;
---text-primary: #f1f5f9;
---text-secondary: #94a3b8;
---border-light: #334155;
---primary-color: #3b82f6;
---primary-hover: #60a5fa;
---secondary-bg: #0f172a;
---warning-bg: #4c0519;
---warning-border: #881337;
---warning-text: #fda4af;
---info-bg: #042f2e;
---info-border: #0f766e;
---shadow-base: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-}
-​* { box-sizing: border-box; margin: 0; padding: 0; }
-​body {
-font-family: var(--font-stack);
-background-color: var(--bg-main);
-color: var(--text-primary);
-min-height: 100vh;
-display: flex;
-flex-direction: column;
-align-items: center;
-padding-block: 20px;
-padding-inline: 12px;
-transition: background-color var(--transition-speed);
-}
-​.top-bar {
-width: 100%;
-max-width: 850px;
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-block-end: 16px;
-}
-​.top-title {
-font-size: clamp(1rem, 4vw, 1.3rem);
-font-weight: 800;
-color: var(--primary-color);
-background: var(--bg-card);
-padding: 8px 20px;
-border-radius: 50px;
-box-shadow: var(--shadow-base);
-}
-​.theme-toggle input { display: none; }
-.theme-icon {
-display: flex;
-align-items: center;
-justify-content: center;
-width: 44px;
-height: 44px;
-border-radius: 50%;
-background: var(--bg-card);
-border: 1px solid var(--border-light);
-cursor: pointer;
-font-size: 1.2rem;
-transition: transform var(--transition-speed);
-}
-.theme-icon:hover { transform: scale(1.08); }
-​.container {
-width: 100%;
-max-width: 850px;
-background: var(--bg-card);
-border-radius: var(--radius-soft);
-box-shadow: var(--shadow-base);
-padding: clamp(16px, 4vw, 32px);
-transition: background-color var(--transition-speed);
-}
-​.sub-title {
-text-align: center;
-font-weight: 700;
-color: var(--text-secondary);
-margin-block-end: 24px;
-}
-​.warning-box, .note-box, .dose-box, .result-box {
-padding: 16px;
-border-radius: 12px;
-margin-block-end: 20px;
-line-height: 1.7;
-font-size: 0.95rem;
-}
-​.warning-box {
-background-color: var(--warning-bg);
-border: 1px solid var(--warning-border);
-color: var(--warning-text);
-display: flex;
-gap: 12px;
-}
-​.warning-box i { font-size: 1.4rem; padding-block-start: 4px; }
-​.note-box {
-background-color: var(--secondary-bg);
-border-inline-start: 4px solid var(--primary-color);
-white-space: pre-line;
-}
-​.dose-box { background-color: var(--info-bg); border: 1px solid var(--info-border); }
-​.result-box {
-background-color: var(--info-bg);
-border: 2px dashed var(--primary-color);
-font-size: 1.05rem;
-}
-​.highlight-dose {
-background: var(--primary-color);
-color: #fff;
-padding: 4px 10px;
-border-radius: 6px;
-font-weight: 700;
-margin-inline: 4px;
-}
-​.ltr-text {
-direction: ltr;
-display: inline-block;
-unicode-bidi: isolate;
-font-family: system-ui, sans-serif;
-font-weight: 600;
-}
-​.tabs-container {
-display: flex;
-gap: 8px;
-background: var(--secondary-bg);
-padding: 6px;
-border-radius: 50px;
-margin-block-end: 24px;
-}
-​.tab-btn {
-flex: 1;
-background: transparent;
-border: none;
-padding: 10px;
-border-radius: 40px;
-font-family: inherit;
-font-weight: 700;
-color: var(--text-primary);
-cursor: pointer;
-transition: var(--transition-speed);
-}
-​.tab-btn.active {
-background: var(--bg-card);
-box-shadow: 0 4px 6px rgba(0,0,0,0.06);
-color: var(--primary-color);
-}
-​.category-tabs {
-display: flex;
-flex-wrap: wrap;
-gap: 8px;
-margin-block-end: 24px;
-}
-​.cat-btn {
-flex: 1 1 calc(33.33% - 8px);
-padding: 8px 12px;
-border: 1px solid var(--border-light);
-background: var(--bg-card);
-color: var(--text-secondary);
-border-radius: 30px;
-font-family: inherit;
-font-weight: 600;
-font-size: 0.85rem;
-cursor: pointer;
-transition: var(--transition-speed);
-text-align: center;
-}
-​.cat-btn.active {
-background: var(--primary-color);
-color: #fff;
-border-color: var(--primary-color);
-}
-​.input-group { margin-block-end: 20px; }
-.info-wrapper { margin-block-end: 20px; }
-​label {
-display: block;
-margin-block-end: 8px;
-font-weight: 600;
-color: var(--text-primary);
-}
-​/* استایل‌های مربوط به لیست کشویی روی اینپوت */
-input[type="number"], select {
-width: 100%;
-padding: 12px 16px;
-border-radius: 12px;
-border: 1px solid var(--border-light);
-background-color: var(--secondary-bg);
-color: var(--text-primary);
-font-family: inherit;
-font-size: 1rem;
-transition: border-color var(--transition-speed);
-outline: none;
-}
-​input[type="number"]:focus, select:focus {
-border-color: var(--primary-color);
-}
-​.actions-row {
-display: flex;
-flex-wrap: wrap;
-gap: 12px;
-margin-block-start: 24px;
-}
-​.btn {
-flex: 1 1 200px;
-padding: 14px;
-border: none;
-border-radius: 12px;
-font-family: inherit;
-font-size: 1rem;
-font-weight: 700;
-cursor: pointer;
-display: flex;
-justify-content: center;
-align-items: center;
-gap: 8px;
-transition: var(--transition-speed);
-}
-​.btn-primary { background: var(--primary-color); color: #fff; }
-.btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); }
-.btn-secondary { background: var(--secondary-bg); border: 1px solid var(--border-light); color: var(--text-primary); }
-​.hidden { display: none !important; }
-​.footer {
-margin-block-start: 32px;
-padding-block-start: 16px;
-border-block-start: 1px dashed var(--border-light);
-text-align: center;
-font-size: 0.85rem;
-color: var(--text-secondary);
-line-height: 1.8;
-}
-​.contact-link {
-display: inline-flex;
-align-items: center;
-gap: 6px;
-color: var(--primary-color);
-text-decoration: none;
-font-weight: 700;
-margin-top: 8px;
-transition: color var(--transition-speed);
-}
-​.contact-link:hover {
-color: var(--primary-hover);
-}
-​@media (max-width: 480px) {
-.cat-btn { flex: 1 1 45%; }
-}
-</style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <meta name="description" content="دستیار هوشمند و ماشین‌حساب محاسبه دوز داروهای اطفال بر اساس وزن و سن" />
+    <title>محاسبه دوز شربت اطفال | نسخه حرفه‌ای</title>
+
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#2563eb" />
+    <link rel="apple-touch-icon" href="icon.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    
+    <style>
+        :root {
+            --bg-main: #eef2f6; --bg-card: #ffffff; --text-primary: #0f172a; --text-secondary: #475569;
+            --border-light: #e2e8f0; --primary-color: #2563eb; --primary-hover: #1d4ed8; --secondary-bg: #f8fafc;
+            --warning-bg: #fff1f2; --warning-border: #fecdd3; --warning-text: #be123c;
+            --info-bg: #f0fdfa; --info-border: #5eead4; --success-text: #047857;
+            --shadow-base: 0 10px 25px -5px rgba(0, 0, 0, 0.05); --radius-soft: 16px;
+            --transition-speed: 0.3s ease; --font-stack: "Vazirmatn", system-ui, sans-serif;
+        }
+        body[data-theme="dark"] {
+            --bg-main: #0b0f19; --bg-card: #1e293b; --text-primary: #f1f5f9; --text-secondary: #94a3b8;
+            --border-light: #334155; --primary-color: #3b82f6; --primary-hover: #60a5fa; --secondary-bg: #0f172a;
+            --warning-bg: #4c0519; --warning-border: #881337; --warning-text: #fda4af;
+            --info-bg: #042f2e; --info-border: #0f766e; --shadow-base: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-stack); background-color: var(--bg-main); color: var(--text-primary); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding-block: 20px; padding-inline: 12px; transition: background-color var(--transition-speed); }
+        .top-bar { width: 100%; max-width: 850px; display: flex; justify-content: space-between; align-items: center; margin-block-end: 16px; }
+        .top-title { font-size: clamp(1rem, 4vw, 1.3rem); font-weight: 800; color: var(--primary-color); background: var(--bg-card); padding: 8px 20px; border-radius: 50px; box-shadow: var(--shadow-base); }
+        .theme-toggle input { display: none; }
+        .theme-icon { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: var(--bg-card); border: 1px solid var(--border-light); cursor: pointer; font-size: 1.2rem; transition: transform var(--transition-speed); }
+        .theme-icon:hover { transform: scale(1.08); }
+        .container { width: 100%; max-width: 850px; background: var(--bg-card); border-radius: var(--radius-soft); box-shadow: var(--shadow-base); padding: clamp(16px, 4vw, 32px); transition: background-color var(--transition-speed); }
+        .sub-title { text-align: center; font-weight: 700; color: var(--text-secondary); margin-block-end: 24px; }
+        .warning-box, .note-box, .dose-box, .result-box { padding: 16px; border-radius: 12px; margin-block-end: 20px; line-height: 1.7; font-size: 0.95rem; }
+        .warning-box { background-color: var(--warning-bg); border: 1px solid var(--warning-border); color: var(--warning-text); display: flex; gap: 12px; }
+        .warning-box i { font-size: 1.4rem; padding-block-start: 4px; }
+        .note-box { background-color: var(--secondary-bg); border-inline-start: 4px solid var(--primary-color); white-space: pre-line; }
+        .dose-box { background-color: var(--info-bg); border: 1px solid var(--info-border); }
+        .result-box { background-color: var(--info-bg); border: 2px dashed var(--primary-color); font-size: 1.05rem; }
+        .highlight-dose { background: var(--primary-color); color: #fff; padding: 4px 10px; border-radius: 6px; font-weight: 700; margin-inline: 4px; }
+        .ltr-text { direction: ltr; display: inline-block; unicode-bidi: isolate; font-family: system-ui, sans-serif; font-weight: 600; }
+        .tabs-container { display: flex; gap: 8px; background: var(--secondary-bg); padding: 6px; border-radius: 50px; margin-block-end: 24px; }
+        .tab-btn { flex: 1; background: transparent; border: none; padding: 10px; border-radius: 40px; font-family: inherit; font-weight: 700; color: var(--text-primary); cursor: pointer; transition: var(--transition-speed); }
+        .tab-btn.active { background: var(--bg-card); box-shadow: 0 4px 6px rgba(0,0,0,0.06); color: var(--primary-color); }
+        .category-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-block-end: 24px; }
+        .cat-btn { flex: 1 1 calc(33.33% - 8px); padding: 8px 12px; border: 1px solid var(--border-light); background: var(--bg-card); color: var(--text-secondary); border-radius: 30px; font-family: inherit; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: var(--transition-speed); text-align: center; }
+        .cat-btn.active { background: var(--primary-color); color: #fff; border-color: var(--primary-color); }
+        .input-group, .info-wrapper { margin-block-end: 20px; }
+        label { display: block; margin-block-end: 8px; font-weight: 600; color: var(--text-primary); }
+        input[type="number"], select { width: 100%; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-light); background-color: var(--secondary-bg); color: var(--text-primary); font-family: inherit; font-size: 1rem; transition: border-color var(--transition-speed); outline: none; }
+        input[type="number"]:focus, select:focus { border-color: var(--primary-color); }
+        .actions-row { display: flex; flex-wrap: wrap; gap: 12px; margin-block-start: 24px; }
+        .btn { flex: 1 1 200px; padding: 14px; border: none; border-radius: 12px; font-family: inherit; font-size: 1rem; font-weight: 700; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; transition: var(--transition-speed); }
+        .btn-primary { background: var(--primary-color); color: #fff; }
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); }
+        .btn-secondary { background: var(--secondary-bg); border: 1px solid var(--border-light); color: var(--text-primary); }
+        .hidden { display: none !important; }
+        .footer { margin-block-start: 32px; padding-block-start: 16px; border-block-start: 1px dashed var(--border-light); text-align: center; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.8; }
+        .contact-link { display: inline-flex; align-items: center; gap: 6px; color: var(--primary-color); text-decoration: none; font-weight: 700; margin-top: 8px; transition: color var(--transition-speed); }
+        .contact-link:hover { color: var(--primary-hover); }
+        @media (max-width: 480px) { .cat-btn { flex: 1 1 45%; } }
+    </style>
 </head>
 <body>
-​<header class="top-bar">
-<div class="header-area">
-<span class="top-title"><i class="fas fa-prescription-bottle-medical" aria-hidden="true"></i> ماشین‌حساب دوز اطفال سافیرا</span>
-</div>
-<label class="theme-toggle" title="تغییر حالت روز / شب">
-<input type="checkbox" id="themeSwitch" />
-<span id="themeIcon" class="theme-icon" aria-hidden="true">☀️</span>
-</label>
-</header>
-​<main class="container">
-<div class="sub-title">
-<i class="fas fa-calculator" aria-hidden="true"></i> محاسبه دقیق حجم مصرفی داروهای مایع
-</div>
-​<div class="warning-box">
-<i class="fas fa-shield-halved" aria-hidden="true"></i>
-<span>
-<strong>ایمنی دارویی:</strong> این ابزار یک دستیار محاسباتی بالینی است. جهت پیشگیری از خطای ده‌برابری، تمامی مقادیر صرفاً به <span class="ltr-text">mL</span> ارائه می‌شوند. استفاده از قاشق‌های خانگی اکیداً ممنوع است.
-</span>
-</div>
-​<div class="tabs-container">
-<button id="tabWeight" class="tab-btn active"><i class="fas fa-weight-scale" aria-hidden="true"></i> محاسبه بر اساس وزن</button>
-<button id="tabAge" class="tab-btn"><i class="fas fa-child" aria-hidden="true"></i> محاسبه بر اساس سن</button>
-</div>
-​<!-- بخش وزن‌‌محور -->
-<section id="weightMode" class="mode-section">
-<div class="category-tabs" id="categoryTabs">
-<button class="cat-btn active" data-cat="antibiotic"><i class="fas fa-bacteria" aria-hidden="true"></i> آنتی‌بیوتیک</button>
-<button class="cat-btn" data-cat="antipyretic"><i class="fas fa-thermometer-half" aria-hidden="true"></i> تب‌بر و مسکن</button>
-<button class="cat-btn" data-cat="respiratory"><i class="fas fa-lungs" aria-hidden="true"></i> تنفسی و سرفه</button>
-<button class="cat-btn" data-cat="gastro"><i class="fas fa-stomach" aria-hidden="true"></i> گوارشی</button>
-<button class="cat-btn" data-cat="antihistamine"><i class="fas fa-allergies" aria-hidden="true"></i> آنتی‌هیستامین</button>
-<button class="cat-btn" data-cat="antifungal"><i class="fas fa-disease" aria-hidden="true"></i> ضدقارچ و انگل</button>
-</div>
-​<div class="input-group">
-<label for="drugSelect"><i class="fas fa-capsules" aria-hidden="true"></i> انتخاب دارو</label>
-<select id="drugSelect">
-<option value="">-- ابتدا دسته درمانی را انتخاب کنید --</option>
-</select>
-</div>
-​<div class="input-group">
-<label for="weightInput"><i class="fas fa-weight-hanging" aria-hidden="true"></i> وزن کودک (کیلوگرم)</label>
-<!-- ترکیب فیلد تایپ و لیست کشویی با استفاده از datalist -->
-<input type="number" id="weightInput" min="0" step="0.1" placeholder="مثلاً ۱۲٫۵ تایپ کنید یا از لیست انتخاب کنید..." inputmode="decimal" list="weightOptions" autocomplete="off" />
-<datalist id="weightOptions">
-<option value="3"></option>
-<option value="4"></option>
-<option value="5"></option>
-<option value="6"></option>
-<option value="7"></option>
-<option value="8"></option>
-<option value="9"></option>
-<option value="10"></option>
-<option value="11"></option>
-<option value="12"></option>
-<option value="13"></option>
-<option value="14"></option>
-<option value="15"></option>
-<option value="16"></option>
-<option value="18"></option>
-<option value="20"></option>
-<option value="22"></option>
-<option value="25"></option>
-<option value="30"></option>
-<option value="35"></option>
-<option value="40"></option>
-</datalist>
-</div>
-​<div id="drugNotesWrapper" class="info-wrapper hidden">
-<label><i class="fas fa-info-circle" aria-hidden="true"></i> پروتکل بالینی و هشدارها</label>
-<div id="drugNotes" class="info-content note-box"></div>
-</div>
-​<div id="strengthWrapper" class="input-group hidden">
-<label for="strengthSelect"><i class="fas fa-flask" aria-hidden="true"></i> غلظت داروی موجود</label>
-<select id="strengthSelect"></select>
-</div>
-​<div id="diseaseWrapper" class="input-group hidden">
-<label for="diseaseSelect"><i class="fas fa-stethoscope" aria-hidden="true"></i> اندیکاسیون درمانی</label>
-<select id="diseaseSelect"></select>
-</div>
-​<div id="doseInfoWrapper" class="info-wrapper hidden">
-<label><i class="fas fa-book-medical" aria-hidden="true"></i> راهنمای دوز رفرنس</label>
-<div id="doseInfo" class="info-content dose-box"></div>
-</div>
-​<div class="actions-row">
-<button id="calcBtnWeight" class="btn btn-primary"><i class="fas fa-calculator" aria-hidden="true"></i> محاسبه دقیق دوز</button>
-<button id="resetBtnWeight" type="button" class="btn btn-secondary"><i class="fas fa-rotate-left" aria-hidden="true"></i> پاک‌کردن مقادیر</button>
-</div>
-​<div id="resultWeight" class="result-box hidden"></div>
-</section>
-​<!-- بخش سن‌محور -->
-<section id="ageMode" class="mode-section hidden">
-<div class="input-group">
-<label for="ageDrugSelect"><i class="fas fa-pills" aria-hidden="true"></i> انتخاب داروی سن‌محور</label>
-<select id="ageDrugSelect">
-<option value="">-- دارو را انتخاب کنید --</option>
-</select>
-</div>
-​<div class="input-group">
-<label for="ageInput"><i class="fas fa-calendar-alt" aria-hidden="true"></i> سن کودک (سال)</label>
-<input type="number" id="ageInput" min="0" step="0.1" placeholder="مثلاً ۳٫۵ (سه‌سال و نیم)" inputmode="decimal" />
-</div>
-​<div id="ageDrugNotesWrapper" class="info-wrapper hidden">
-<label><i class="fas fa-info-circle" aria-hidden="true"></i> ملاحظات فارماکولوژیک</label>
-<div id="ageDrugNotes" class="info-content note-box"></div>
-</div>
-​<div id="ageStrengthWrapper" class="input-group hidden">
-<label for="ageStrengthSelect"><i class="fas fa-flask" aria-hidden="true"></i> غلظت داروی موجود</label>
-<select id="ageStrengthSelect"></select>
-</div>
-​<div class="actions-row">
-<button id="calcBtnAge" class="btn btn-primary"><i class="fas fa-calculator" aria-hidden="true"></i> محاسبه دوز</button>
-<button id="resetBtnAge" type="button" class="btn btn-secondary"><i class="fas fa-rotate-left" aria-hidden="true"></i> پاک‌کردن مقادیر</button>
-</div>
-​<div id="resultAge" class="result-box hidden"></div>
-</section>
-​<footer class="footer">
-<div class="footer-links">
-<div>توسعه‌یافته بر اساس مستندات بالینی UpToDate, Nelson Pediatrics و Harriet Lane</div>
-<a href="https://t.me/reza0rbz" target="_blank" rel="noopener noreferrer" class="contact-link">
-<i class="fab fa-telegram" style="font-size: 1.2rem;" aria-hidden="true"></i> ارتباط با توسعه‌دهنده (تلگرامِ سافیرا)
-</a>
-</div>
-</footer>
-</main>
-​<script>
-// --- بخش پایگاه داده دارویی ---
-const DRUGS_DB = {
-weightBased: {
-antibiotic: [
-{
-id: "amoxicillin",
-name: "Amoxicillin (آموکسی‌سیلین)",
-notes: ✅ کاربرد: اوتیت مدیا حاد (AOM)، فارنژیت استرپتوکوکی، پنومونی خفیف. ✅ دوز استاندارد: ۴۰–۴۵ mg/kg/day در ۲ تا ۳ دوز منقسم. ✅ دوز بالا: ۸۰–۹۰ mg/kg/day در ۲ دوز منقسم برای پوشش پنوموکوک مقاوم. ⚠️ قبل از مصرف سوسپانسیون تکان داده شود. نگهداری در یخچال.,
-strengths: [
-{ id: "amox_125", label: "125 mg / 5 mL", mgPerMl: 125/5 },
-{ id: "amox_200", label: "200 mg / 5 mL", mgPerMl: 200/5 },
-{ id: "amox_250", label: "250 mg / 5 mL", mgPerMl: 250/5 },
-{ id: "amox_400", label: "400 mg / 5 mL", mgPerMl: 400/5 }
-],
-indications: [
-{ id: "ind_am_1", name: "عفونت خفیف (هر ۸ ساعت)", mgPerKgPerDay: 45, dosesPerDay: 3, duration: 7 },
-{ id: "ind_am_2", name: "عفونت خفیف (هر ۱۲ ساعت)", mgPerKgPerDay: 45, dosesPerDay: 2, duration: 7 },
-{ id: "ind_am_3", name: "AOM / دوز بالا (هر ۱۲ ساعت)", mgPerKgPerDay: 90, dosesPerDay: 2, duration: 10 }
-]
-},
-{
-id: "amoxiclav",
-name: "Co-amoxiclav (کوآموکسی‌کلاو)",
-notes: ✅ محاسبات حجم دارو همواره بر اساس جزء «آموکسی‌سیلین» صورت می‌گیرد. ✅ دوز معمول: ۴۰-۴۵ mg/kg/day | دوز بالا: ۸۰-۹۰ mg/kg/day. ⚠️ عوارض گوارشی شایع است؛ دارو ترجیحاً در ابتدای وعده غذایی مصرف شود. ⚠️ سوسپانسیون ES-600 مختص دوز بالا جهت به حداقل رساندن اسهال ناشی از کلاوولانات است.,
-strengths: [
-{ id: "amc_156", label: "156 (125/31.25) mg / 5 mL", mgPerMl: 125/5 },
-{ id: "amc_228", label: "228 (200/28.5) mg / 5 mL", mgPerMl: 200/5 },
-{ id: "amc_312", label: "312 (250/62.5) mg / 5 mL", mgPerMl: 250/5 },
-{ id: "amc_457", label: "457 (400/57) mg / 5 mL", mgPerMl: 400/5 },
-{ id: "amc_es600", label: "ES-600 (600/42.9) mg / 5 mL", mgPerMl: 600/5 }
-],
-indications: [
-{ id: "ind_amc_1", name: "عفونت متوسط (هر ۸ ساعت)", mgPerKgPerDay: 40, dosesPerDay: 3, duration: 7 },
-{ id: "ind_amc_2", name: "عفونت متوسط (هر ۱۲ ساعت)", mgPerKgPerDay: 45, dosesPerDay: 2, duration: 7 },
-{ id: "ind_amc_3", name: "عفونت شدید / دوز بالا (هر ۱۲ ساعت)", mgPerKgPerDay: 90, dosesPerDay: 2, duration: 10 }
-]
-},
-{
-id: "cephalexin",
-name: "Cephalexin (سفالکسین)",
-notes: ✅ کاربرد: عفونت‌های پوستی (زردزخم، سلولیت)، UTI خفیف، فارنژیت در صورت حساسیت به پنی‌سیلین. ✅ دوز: ۲۵–۵۰ mg/kg/day (در عفونت شدید تا ۱۰۰ میلی‌گرم). ⚠️ در آلرژی آنافیلاکتیک به پنی‌سیلین با احتیاط مصرف شود.,
-strengths: [
-{ id: "ceph_125", label: "125 mg / 5 mL", mgPerMl: 125/5 },
-{ id: "ceph_250", label: "250 mg / 5 mL", mgPerMl: 250/5 }
-],
-indications: [
-{ id: "ind_ceph_1", name: "عفونت خفیف پوستی/ادراری (هر ۸ ساعت)", mgPerKgPerDay: 40, dosesPerDay: 3, duration: 7 },
-{ id: "ind_ceph_2", name: "عفونت شدید پوستی (هر ۶ ساعت)", mgPerKgPerDay: 80, dosesPerDay: 4, duration: 10, maxDailyMg: 4000 }
-]
-},
-{
-id: "cefixime",
-name: "Cefixime (سفیکسیم)",
-notes: ✅ کاربرد: UTI، سینوزیت، اوتیت مدیا. ✅ دوز: ۸ mg/kg/day یک‌بار در روز یا منقسم در ۲ دوز. ⚠️ پوشش ضعیفی بر روی استافیلوکوک اورئوس دارد، لذا برای عفونت پوستی مناسب نیست. اسهال از عوارض شایع است.,
-strengths: [
-{ id: "cef_100", label: "100 mg / 5 mL", mgPerMl: 100/5 }
-],
-indications: [
-{ id: "ind_cef_1", name: "یک‌بار در روز (OD)", mgPerKgPerDay: 8, dosesPerDay: 1, duration: 7 },
-{ id: "ind_cef_2", name: "دو بار در روز (هر ۱۲ ساعت)", mgPerKgPerDay: 8, dosesPerDay: 2, duration: 7 }
-]
-},
-{
-id: "cefuroxime",
-name: "Cefuroxime (سفوروکسیم)",
-notes: ✅ کاربرد: اوتیت مدیا، سینوزیت، عفونت‌های تنفسی تحتانی و پوستی. ✅ دوز: ۲۰–۳۰ mg/kg/day در ۲ دوز منقسم. ⚠️ برای افزایش جذب گوارشی، دارو ترجیحاً همراه با غذا مصرف شود. طعم سوسپانسیون ممکن است برای کودک ناخوشایند باشد.,
-strengths: [
-{ id: "cefuro_125", label: "125 mg / 5 mL", mgPerMl: 125/5 },
-{ id: "cefuro_250", label: "250 mg / 5 mL", mgPerMl: 250/5 }
-],
-indications: [
-{ id: "ind_cefuro_1", name: "عفونت‌های معمول (هر ۱۲ ساعت)", mgPerKgPerDay: 30, dosesPerDay: 2, duration: 7 }
-]
-},
-{
-id: "azithromycin",
-name: "Azithromycin (آزیترومایسین)",
-notes: ✅ کاربرد: پنومونی آتیپیک، فارنژیت، اوتیت مدیا. ✅ رژیم ۳ روزه: ۱۰ mg/kg/day.  ✅ رژیم ۵ روزه: روز اول ۱۰ mg/kg و سپس روزهای ۲ تا ۵ معادل ۵ mg/kg. ⚠️ هشدار: در بیماران با اختلالات قلبی و فواصل طولانی QT با احتیاط تجویز شود.,
-strengths: [
-{ id: "azi_100", label: "100 mg / 5 mL", mgPerMl: 100/5 },
-{ id: "azi_200", label: "200 mg / 5 mL", mgPerMl: 200/5 }
-],
-indications: [
-{ id: "ind_azi_1", name: "رژیم ۳ روزه (یک‌بار در روز)", mgPerKgPerDay: 10, dosesPerDay: 1, duration: 3, maxDailyMg: 500 },
-{ id: "ind_azi_2", name: "رژیم ۵ روزه (تغییر دوز پس از روز اول)", mgPerKgPerDay: 10, dosesPerDay: 1, duration: 5, maxDailyMg: 500, isComplexAZI: true }
-]
-},
-{
-id: "clarithromycin",
-name: "Clarithromycin (کلاریترومایسین)",
-notes: ✅ کاربرد: عفونت‌های تنفسی، جایگزین پنی‌سیلین، ریشه‌کنی H. pylori. ✅ دوز: ۱۵ mg/kg/day در ۲ نوبت. ⚠️ مصرف همراه غذا تحمل گوارشی را بالا می‌برد. طعم فلزی در دهان از عوارض آن است. مهارکننده قوی سیتوکروم P450 (تداخلات بررسی شود).,
-strengths: [
-{ id: "clar_125", label: "125 mg / 5 mL", mgPerMl: 125/5 },
-{ id: "clar_250", label: "250 mg / 5 mL", mgPerMl: 250/5 }
-],
-indications: [
-{ id: "ind_clar_1", name: "عفونت تنفسی (هر ۱۲ ساعت)", mgPerKgPerDay: 15, dosesPerDay: 2, duration: 10, maxDailyMg: 1000 }
-]
-},
-{
-id: "clindamycin",
-name: "Clindamycin (کلیندامایسین)",
-notes: ✅ کاربرد: عفونت‌های پوستی با شک به MRSA، عفونت دندانی، فارنژیت در حساسیت شدید به پنی‌‌سیلین. ✅ دوز: ۲۰–۴۰ mg/kg/day در ۳-۴ دوز. ⚠️ هشدار: ریسک بالای انتروکولیت با غشای کاذب ناشی از کلستریدیوم دیفیسیل (اسهال خونی سریعاً پیگیری شود). با یک لیوان پر آب مصرف شود.,
-strengths: [
-{ id: "clin_75", label: "75 mg / 5 mL", mgPerMl: 75/5 }
-],
-indications: [
-{ id: "ind_clin_1", name: "عفونت پوستی / دندانی (هر ۸ ساعت)", mgPerKgPerDay: 30, dosesPerDay: 3, duration: 10, maxDailyMg: 1800 }
-]
-},
-{
-id: "erythromycin",
-name: "Erythromycin (اریترومایسین)",
-notes: ✅ کاربرد: جایگزین پنی‌سیلین، سیاه‌سرفه، عفونت‌های کلامیدیایی. ✅ دوز معمول: ۳۰–۵۰ mg/kg/day در ۴ دوز منقسم. ⚠️ عوارض گوارشی شایع است. دارای تداخلات دارویی متعدد می‌باشد.,
-strengths: [
-{ id: "ery_200", label: "200 mg / 5 mL", mgPerMl: 200/5 }
-],
-indications: [
-{ id: "ind_ery_1", name: "عفونت تنفسی (هر ۶ ساعت)", mgPerKgPerDay: 40, dosesPerDay: 4, duration: 10 }
-]
-},
-{
-id: "tmpsmx",
-name: "Co-trimoxazole / TMP-SMX (کوتریموکسازول)",
-notes: ✅ کاربرد: عفونت ادراری (UTI)، پروفیلاکسی PCP، عفونت‌های MRSA انتخابی. ✅ محاسبات صرفاً بر اساس جزء تری‌متوپریم (TMP) انجام می‌گیرد. دوز معمول: ۸ mg/kg/day (جزء TMP) در ۲ نوبت. ⚠️ منع مصرف در نوزادان زیر ۲ ماه (خطر کرن‌ایکتروس). در بیماران فاویسم (G6PD deficiency) با احتیاط مصرف شود.,
-strengths: [
-{ id: "tmp_40", label: "40 mg TMP / 5 mL (200/40)", mgPerMl: 40/5 }
-],
-indications: [
-{ id: "ind_tmp_1", name: "درمان UTI / عفونت خفیف (هر ۱۲ ساعت)", mgPerKgPerDay: 8, dosesPerDay: 2, duration: 7 }
-]
-}
-],
-antipyretic: [
-{
-id: "acetaminophen",
-name: "Acetaminophen (استامینوفن / پاراستامول)",
-notes: ✅ کاربرد: تب و دردهای خفیف تا متوسط. ✅ دوز: ۱۰ تا ۱۵ mg/kg هر ۴ تا ۶ ساعت. ⚠️ هشدار کبدی: حداکثر دوز ایمن روزانه ۷۵ mg/kg یا ۴۰۰۰ میلی‌گرم (هرکدام که کمتر است) می‌باشد. تفاوت غلظت قطره و شربت به دقت لحاظ شود.,
-strengths: [
-{ id: "apa_drop", label: "قطره 100 mg / 1 mL", mgPerMl: 100/1 },
-{ id: "apa_120", label: "شربت 120 mg / 5 mL", mgPerMl: 120/5 },
-{ id: "apa_160", label: "شربت 160 mg / 5 mL", mgPerMl: 160/5 }
-],
-indications: [
-{ id: "ind_apa_1", name: "کنترل تب و درد (هر ۶ ساعت)", mgPerKgPerDay: 60, dosesPerDay: 4, duration: 3, maxDailyMg: 4000 }
-]
-},
-{
-id: "ibuprofen",
-name: "Ibuprofen (ایبوپروفن)",
-notes: ✅ کاربرد: تب، اوتیت، دردهای اسکلتی-عضلانی و التهابی. ✅ دوز: ۵ تا ۱۰ mg/kg هر ۶ تا ۸ ساعت. ⚠️ هشدار: در کودکان مبتلا به کاهش حجم مایعات (اسهال/استفراغ) ریسک نارسایی حاد کلیوی دارد. حتماً پس از غذا مصرف شود. زیر ۶ ماه ممنوع.,
-strengths: [
-{ id: "ibu_100", label: "100 mg / 5 mL", mgPerMl: 100/5 }
-],
-indications: [
-{ id: "ind_ibu_1", name: "درد و تب التهابی (هر ۸ ساعت)", mgPerKgPerDay: 30, dosesPerDay: 3, duration: 3, maxDailyMg: 2400 }
-]
-},
-{
-id: "mefenamic",
-name: "Mefenamic Acid (مفنامیک اسید)",
-notes: ✅ کاربرد: دردهای عضلانی، دندان‌درد، و تب. ✅ دوز: ۴ تا ۶٫۵ mg/kg در هر نوبت، قابل تکرار هر ۸ ساعت. ⚠️ در کودکان زیر ۶ ماه توصیه نمی‌شود. دوره درمان نباید طولانی گردد.,
-strengths: [
-{ id: "mef_50", label: "50 mg / 5 mL", mgPerMl: 50/5 },
-{ id: "mef_100", label: "100 mg / 5 mL", mgPerMl: 100/5 }
-],
-indications: [
-{ id: "ind_mef_1", name: "تسکین درد/تب (هر ۸ ساعت)", mgPerKgPerDay: 15, dosesPerDay: 3, duration: 3 }
-]
-}
-],
-respiratory: [
-{
-id: "theophylline_g",
-name: "Theophylline G (تئوفیلین جی)",
-notes: ✅ ترکیب گشادکننده برونش (تئوفیلین) و خلط‌آور (گایافنزین). کاربرد: آسم و تنگی نفس با خلط غلیظ[span_0](start_span)[span_0](end_span). ⚠️ هشدار: حاشیه ایمنی باریک. تداخل شدید با ماکرولیدها و داروهای قلبی. خطر تپش قلب و تشنج در دوز بالا[span_1](start_span)[span_1](end_span)[span_2](start_span)[span_2](end_span). ✅ محاسبات دوز بر اساس جزء تئوفیلین (50mg در هر 5ml) انجام شده است.,
-strengths: [ { id: "theo_g_50", label: "50 mg / 5 mL (تئوفیلین)", mgPerMl: 10 } ],
-indications: [ { id: "ind_theo_1", name: "برونکواسپاسم (هر ۶ ساعت)", mgPerKgPerDay: 20, dosesPerDay: 4, duration: 5 } ]
-},
-{
-id: "salbutamol",
-name: "Salbutamol (سالبوتامول)",
-notes: ✅ کاربرد: رفع اسپاسم راه‌های هوایی در برونشیولیت یا آسم خفیف[span_3](start_span)[span_3](end_span). ✅ دوز خوراکی: ۰٫۱ تا ۰٫۱۵ mg/kg در هر نوبت. ⚠️ تاکیکاردی (تپش قلب) و لرزش دست‌ها از عوارض شایع اما گذرا می‌باشد.,
-strengths: [ { id: "salb_2", label: "2 mg / 5 mL", mgPerMl: 2/5 } ],
-indications: [ { id: "ind_salb_1", name: "برونکواسپاسم (هر ۸ ساعت)", mgPerKgPerDay: 0.45, dosesPerDay: 3, duration: 5, maxDailyMg: 12 } ]
-},
-{
-id: "ketotifen",
-name: "Ketotifen (کتوتیفن)",
-notes: ✅ کاربرد: پروفیلاکسی آسم، حساسیت‌های مزمن و رینیت آلرژیک[span_4](start_span)[span_4](end_span). ⚠️ عارضه شایع: خواب‌آلودگی شدید و افزایش اشتها. این دارو اثر فوری برای حملات حاد ندارد.,
-strengths: [ { id: "keto_1", label: "1 mg / 5 mL", mgPerMl: 1/5 } ],
-indications: [ { id: "ind_keto_1", name: "حساسیت و سرفه (هر ۱۲ ساعت)", mgPerKgPerDay: 0.1, dosesPerDay: 2, duration: 7 } ]
-},
-{
-id: "bromhexine",
-name: "Bromhexine (برم‌هگزین)",
-notes: ✅ کاربرد: خلط‌آور و موکولیتیک قوی برای سرفه‌های خلط‌دار[span_5](start_span)[span_5](end_span). ⚠️ در کودکان زیر ۲ سال به دلیل ناتوانی در تخلیه کامل ترشحات توصیه نمی‌شود.,
-strengths: [ { id: "brom_4", label: "4 mg / 5 mL", mgPerMl: 4/5 } ],
-indications: [ { id: "ind_brom_1", name: "رقیق‌کننده خلط (هر ۸ ساعت)", mgPerKgPerDay: 0.3, dosesPerDay: 3, duration: 5 } ]
-},
-{
-id: "guaifenesin",
-name: "Guaifenesin (گایافنزین)",
-notes: ✅ کاربرد: اکسپکتورانت برای تسهیل خروج ترشحات ریوی.  ⚠️ حتماً با یک لیوان پر آب مصرف شود تا اثر رقیق‌کنندگی خلط افزایش یابد.,
-strengths: [ { id: "guai_100", label: "100 mg / 5 mL", mgPerMl: 20 } ],
-indications: [ { id: "ind_guai_1", name: "خلط‌آور (هر ۶ ساعت)", mgPerKgPerDay: 12, dosesPerDay: 4, duration: 5 } ]
-},
-{
-id: "dextromethorphan",
-name: "Dextromethorphan (دکسترومتروفان)",
-notes: ✅ کاربرد: سرکوب‌کننده سرفه‌های خشک و بدون خلط[span_6](start_span)[span_6](end_span). ⚠️ در سرفه‌های خلط‌دار به هیچ‌وجه نباید مصرف شود زیرا مانع تخلیه ترشحات عفونی می‌گردد.,
-strengths: [ { id: "dex_15", label: "15 mg / 5 mL", mgPerMl: 3 } ],
-indications: [ { id: "ind_dex_1", name: "سرفه خشک (هر ۸ ساعت)", mgPerKgPerDay: 1, dosesPerDay: 3, duration: 3 } ]
-},
-{
-id: "dextro_p",
-name: "Dextromethorphan P (دکسترومتروفان پی)",
-notes: ✅ ترکیب دکسترومتروفان و پسودوافدرین. کاربرد: سرفه خشک همراه با احتقان و گرفتگی بینی[span_7](start_span)[span_7](end_span). ⚠️ در کودکان زیر ۲ سال توصیه نمی‌شود. محاسبات بر اساس جزء دکسترومتروفان انجام شده است.,
-strengths: [ { id: "dexp_15", label: "15 mg / 5 mL (دکسترو)", mgPerMl: 3 } ],
-indications: [ { id: "ind_dexp_1", name: "سرفه و احتقان بینی (هر ۸ ساعت)", mgPerKgPerDay: 1, dosesPerDay: 3, duration: 5 } ]
-},
-{
-id: "expectorant",
-name: "Expectorant (اکسپکتورانت)",
-notes: ✅ ترکیب گایافنزین، کلرفنیرامین و پسودوافدرین. کاربرد: سرفه‌های خلط‌دار و کاهش علائم سرماخوردگی[span_10](start_span)[span_10](end_span). ⚠️️ در کودکان زیر ۲ سال توصیه نمی‌شود. محاسبات بر اساس جزء گایافنزین (100mg) انجام شده است.,
-strengths: [ { id: "exp_100", label: "100 mg / 5 mL (گایافنزین)", mgPerMl: 20 } ],
-indications: [ { id: "ind_exp_1", name: "سرفه خلط‌دار و سرماخوردگی (هر ۶ ساعت)", mgPerKgPerDay: 12, dosesPerDay: 4, duration: 5 } ]
-},
-{
-id: "expectorant_codeine",
-name: "Expectorant Codeine (اکسپکتورانت کدئین)",
-notes: ⛔️ هشدار: حاوی مخدر کدئین است و عوارض جدی ایجاد می‌کند[span_11](start_span)[span_11](end_span). ⚠️ به دلیل خطر دپرسیون تنفسی و خطر مرگ، مصرف آن در کودکان زیر ۱۲ سال کاملاً ممنوع است[span_12](start_span)[span_12](end_span). این محاسبات صرفاً برای نوجوانان بالای ۱۲ سال (بر اساس جزء گایافنزین) تعبیه شده است.,
-strengths: [ { id: "expc_100", label: "100 mg / 5 mL (گایافنزین)", mgPerMl: 20 } ],
-indications: [ { id: "ind_expc_1", name: "سرفه شدید (فقط بالای ۱۲ سال) (هر ۶ ساعت)", mgPerKgPerDay: 12, dosesPerDay: 4, duration: 5 } ]
-},
-{
-id: "corizan",
-name: "Corizan Cold & Flu (کوریزان سرماخوردگی)",
-notes: ✅ شربت ترکیبی رایج اطفال برای تب، آبریزش و احتقان بینی. ⚠️ محاسبات دقیقاً بر اساس جزء استامینوفن (160mg در هر 5ml) انجام شده است و سایر اجزا متناسب با آن محاسبه می‌شوند.,
-strengths: [ { id: "cori_160", label: "160 mg / 5 mL (استامینوفن)", mgPerMl: 32 } ],
-indications: [ { id: "ind_cori_1", name: "سرماخوردگی و تب (هر ۶ ساعت)", mgPerKgPerDay: 60, dosesPerDay: 4, duration: 3 } ]
-}
-],
-gastro: [
-{
-id: "domperidone",
-name: "Domperidone (دومپریدون)",
-notes: ✅ کاربرد: ضدتهوع، استفراغ و تنظیم حرکات معده (پروکینتیک). ⚠️ در بیماران دارای اختلال قلبی با احتیاط و با کنترل نوار قلب تجویز شود[span_13](start_span)[span_13](end_span)[span_14](start_span)[span_14](end_span). بهتر است قبل از غذا مصرف شود.,
-strengths: [ { id: "dom_5", label: "5 mg / 5 mL", mgPerMl: 1 } ],
-indications: [ { id: "ind_dom_1", name: "ضدتهوع (هر ۸ ساعت)", mgPerKgPerDay: 0.9, dosesPerDay: 3, duration: 3, maxDailyMg: 30 } ]
-},
-{
-id: "metoclopramide_drop",
-name: "Metoclopramide (قطره متوکلوپرامید)",
-notes: ⛔️ هشدار ایمنی: خطر بالای عوارض اکستراپیرامیدال (اسپاسم و قفل شدن عضلات فک و گردن) در اطفال[span_15](start_span)[span_15](end_span). ⚠️ در زیر ۱ سال به دلیل نقص سد خونی‌مغزی ممنوع است[span_16](start_span)[span_16](end_span). در اطفال، داروی اندانسترون انتخاب بسیار ایمن‌تری است.,
-strengths: [ { id: "meto_4", label: "قطره 4 mg / 1 mL", mgPerMl: 4 } ],
-indications: [ { id: "ind_meto_1", name: "تهوع مقاوم (هر ۸ ساعت)", mgPerKgPerDay: 0.45, dosesPerDay: 3, duration: 2, maxDailyMg: 15 } ]
-},
-{
-id: "ondansetron",
-name: "Ondansetron (اندانسترون)",
-notes: ✅ کاربرد: پیشگیری از تهوع و استفراغ ناشی از گاستروآنتریت جهت تسهیل دریافت ORT. ✅ دوز: ۰٫۱۵ mg/kg در هر نوبت. (روزی ۳ بار قابل تکرار). ⚠️ در بیماران دارای اختلال الکترولیتی یا سندرم QT طولانی ارزیابی نوار قلب الزامی است.,
-strengths: [
-{ id: "onda_4", label: "4 mg / 5 mL", mgPerMl: 4/5 }
-],
-indications: [
-{ id: "ind_onda_1", name: "گاستروآنتریت / تهوع (هر ۸ ساعت)", mgPerKgPerDay: 0.45, dosesPerDay: 3, duration: 2, maxDailyMg: 16 }
-]
-},
-{
-id: "dicyclomine",
-name: "Dicyclomine (دیسیکلومین)",
-notes: ✅ کاربرد: تسکین دردهای کولیکی و اسپاسم گوارشی در اطفال. ⚠️ در نوزادان زیر ۶ ماه به دلیل خطر آپنه [span_8](start_span)[span_8](end_span)(توقف تنفس) مطلقاً ممنوع است. دارای عوارض جانبی آنتی‌کولینرژیک (خشکی دهان، تاری دید) می‌باشد.,
-strengths: [ { id: "dicy_10", label: "10 mg / 5 mL", mgPerMl: 2 } ],
-indications: [ { id: "ind_dicy_1", name: "کولیک و اسپاسم (هر ۸ ساعت)", mgPerKgPerDay: 0.5, dosesPerDay: 3, duration: 3 } ]
-},
-{
-id: "lactulose",
-name: "Lactulose (لاکتولوز)",
-notes: ✅ کاربرد: ملین اسموتیک برای درمان یبوست اطفال. ⚠️ دوز به صورت میلی‌گرم تنظیم شده است (هر[span_9](start_span)[span_9](end_span) ۱ میلی‌لیتر شربت حاوی ۶۶۷ میلی‌گرم لاکتولوز است). می‌توان دوز را با آب یا آبمیوه مخلوط کرد.,
-strengths: [ { id: "lac_10", label: "10 g / 15 mL (667 mg / mL)", mgPerMl: 667 } ],
-indications: [
-{ id: "ind_lac_1", name: "درمان یبوست (روزانه)", mgPerKgPerDay: 1000, dosesPerDay: 1, duration: 7 },
-{ id: "ind_lac_2", name: "یبوست (هر ۱۲ ساعت)", mgPerKgPerDay: 1000, dosesPerDay: 2, duration: 7 }
-]
-},
-{
-id: "famotidine",
-name: "Famotidine (فاموتیدین)",
-notes: ✅ کاربرد: ریفلاکس اسید معده (GERD) و التهاب مری. ⚠️ سوسپانسیون قبل از مصرف باید به خوبی تکان داده شود.,
-strengths: [ { id: "fam_40", label: "40 mg / 5 mL", mgPerMl: 8 } ],
-indications: [ { id: "ind_fam_1", name: "ریفلاکس معده (هر ۱۲ ساعت)", mgPerKgPerDay: 1, dosesPerDay: 2, duration: 14, maxDailyMg: 40 } ]
-}
-],
-antifungal: [
-{
-id: "metronidazole",
-name: "Metronidazole (مترونیدازول)",
-notes: ✅ کاربرد: ژیاردیازیس، آمیبیازیس، عفونت بی‌هوازی. ✅ دوز: ۳۰–۵۰ mg/kg/day در ۳ نوبت. ⚠️ طعم فلزی دهان. در صورت مصرف سوسپانسیون، ادرار ممکن است تیره شود (بی‌خطر).,
-strengths: [
-{ id: "metro_125", label: "125 mg / 5 mL", mgPerMl: 125/5 }
-],
-indications: [
-{ id: "ind_metro_1", name: "ژیاردیا / بی‌هوازی (هر ۸ ساعت)", mgPerKgPerDay: 40, dosesPerDay: 3, duration: 7, maxDailyMg: 2250 }
-]
-},
-{
-id: "nitazoxanide",
-name: "Nitazoxanide (نیتازوکسانید)",
-notes: ✅ کاربرد: اسهال ناشی از پروتوزوآها نظیر ژیاردیا و کریپتوسپوریدیوم. ✅ دوز وزنی/سنی: تقریباً ۷٫۵ mg/kg در هر نوبت (هر ۱۲ ساعت). ⚠️ دوره درمان دقیقاً ۳ روز است. جهت جذب بهتر با غذا مصرف شود. رنگ ادرار ممکن است زرد روشن شود.,
-strengths: [
-{ id: "nita_100", label: "100 mg / 5 mL", mgPerMl: 100/5 }
-],
-indications: [
-{ id: "ind_nita_1", name: "اسهال انگلی (هر ۱۲ ساعت)", mgPerKgPerDay: 15, dosesPerDay: 2, duration: 3 }
-]
-},
-{
-id: "nystatin",
-name: "Nystatin (نیستاتین)",
-notes: ✅ کاربرد: کاندیدیازیس دهانی (برفک). ✅ دوز بر اساس حجم: نوزادان (۲ میلی‌لیتر در هر نوبت) / کودکان (۴ تا ۶ میلی‌لیتر در هر نوبت). ⚠️ در این ماشین‌حساب، دوز بر اساس استاندارد ۲ میلی‌لیتر در هر نوبت (مجموع ۸ میلی‌لیتر در روز) برای وزن‌های پایین، و ۴ میلی‌لیتر برای وزن‌های بالاتر تنظیم شده است. باید در دهان مزه‌مزه شود.,
-strengths: [
-{ id: "nys_100k", label: "100,000 Unit / 1 mL", mgPerMl: 100000/1 }
-],
-indications: [
-{ id: "ind_nys_1", name: "برفک دهان - اطفال (هر ۶ ساعت)", mgPerKgPerDay: 160000, dosesPerDay: 4, duration: 7 }
-]
-}
-],
-antihistamine: [
-{
-id: "diphenhydramine",
-name: "Diphenhydramine (دیفن‌هیدرامین)",
-notes: ✅ کاربرد: کنترل سریع کهیر حاد و واکنش آلرژیک. ✅ دوز: ۵ mg/kg/day در ۴ دوز منقسم. ⚠️ به دلیل عبور از سد خونی-مغزی، سداسیون (خواب‌آلودگی) و در برخی موارد بی‌قراری پارادوکسیکال ایجاد می‌کند. زیر ۲ سال ممنوع.,
-strengths: [
-{ id: "dph_12_5", label: "12.5 mg / 5 mL", mgPerMl: 12.5/5 }
-],
-indications: [
-{ id: "ind_dph_1", name: "آلرژی حاد (هر ۶ ساعت)", mgPerKgPerDay: 5, dosesPerDay: 4, duration: 3, maxDailyMg: 300 }
-]
-},
-{
-id: "chlorpheniramine",
-name: "Chlorpheniramine (کلرفنیرامین)",
-notes: ✅ کاربرد: رینیت آلرژیک، آبریزش شدید. ✅ دوز: ۰٫۳۵ میلی‌گرم/کیلوگرم/روز در ۴ دوز. ⚠️ آنتی‌هیستامین نسل اول با عوارض آنتی‌کولینرژیک (خشکی دهان، خواب‌آلودگی).,
-strengths: [
-{ id: "cpm_2", label: "2 mg / 5 mL", mgPerMl: 2/5 }
-],
-indications: [
-{ id: "ind_cpm_1", name: "علائم آلرژیک (هر ۶ ساعت)", mgPerKgPerDay: 0.35, dosesPerDay: 4, duration: 5, maxDailyMg: 12 }
-]
-},
-{
-id: "hydroxyzine",
-name: "Hydroxyzine (هیدروکسی‌زین)",
-notes: ✅ کاربرد: خارش شدید پوست، کهیر مقاوم. ✅ دوز: ۰٫۵ mg/kg در هر نوبت. (روزی ۴ بار). ⚠️ اثرات آرام‌بخشی بسیار قوی دارد.,
-strengths: [
-{ id: "hyd_10", label: "10 mg / 5 mL", mgPerMl: 10/5 }
-],
-indications: [
-{ id: "ind_hyd_1", name: "خارش و کهیر (هر ۶ ساعت)", mgPerKgPerDay: 2, dosesPerDay: 4, duration: 5, maxDailyMg: 100 }
-]
-},
-{
-id: "pseudoephedrine",
-name: "Pseudoephedrine (پسودوافدرین)",
-notes: ✅ کاربرد: ضداحتقان بینی در سینوزیت یا سرماخوردگی. ✅ دوز: ۴ mg/kg/day در ۴ دوز. ⚠️ عوارض: بی‌خوابی، تحریک‌پذیری، تپش قلب. زیر ۴ سال توصیه نمی‌شود.,
-strengths: [
-{ id: "pse_15", label: "15 mg / 5 mL", mgPerMl: 15/5 },
-{ id: "pse_30", label: "30 mg / 5 mL", mgPerMl: 30/5 }
-],
-indications: [
-{ id: "ind_pse_1", name: "احتقان بینی (هر ۶ ساعت)", mgPerKgPerDay: 4, dosesPerDay: 4, duration: 5, maxDailyMg: 120 }
-]
-}
-]
-},
-ageBased: [
-{
-id: "cetirizine",
-name: "Cetirizine (ستیریزین)",
-notes: ✅ نسل دوم آنتی‌هیستامین‌ها. ✅ کاربرد: رینیت آلرژیک فصلی، کهیر مزمن. ⚠️ در نارسایی کلیوی نیاز به تنظیم دوز دارد.,
-strengths: [
-{ id: "cet_5", label: "5 mg / 5 mL", mgPerMl: 5/5 }
-],
-ageBands: [
-{ minAge: 0.5, maxAge: 1.9, totalDailyMg: 2.5, doses: 1, note: "۲٫۵ میلی‌گرم یک‌بار در روز (معادل ۲٫۵ سی‌سی)" },
-{ minAge: 2, maxAge: 5.9, totalDailyMg: 5, doses: 1, note: "۵ میلی‌گرم یک‌بار در روز (معادل ۵ سی‌سی)" },
-{ minAge: 6, maxAge: 18, totalDailyMg: 10, doses: 1, note: "۱۰ میلی‌‌گرم یک‌بار در روز (معادل ۱۰ سی‌سی)" }
-]
-},
-{
-id: "loratadine",
-name: "Loratadine (لوراتادین)",
-notes: ✅ نسل دوم آنتی‌هیستامین‌ها با حداقل عبور از سد خونی مغزی. ✅ کاربرد: حساسیت‌های فصلی و تنفسی.,
-strengths: [
-{ id: "lor_5", label: "5 mg / 5 mL", mgPerMl: 5/5 }
-],
-ageBands: [
-{ minAge: 2, maxAge: 5.9, totalDailyMg: 5, doses: 1, note: "۵ میلی‌گرم یک‌بار در روز" },
-{ minAge: 6, maxAge: 18, totalDailyMg: 10, doses: 1, note: "۱۰ میلی‌‌گرم یک‌بار در روز" }
-]
-},
-{
-id: "fexofenadine",
-name: "Fexofenadine (فکسوفنادین)",
-notes: ✅ ایمن‌ترین آنتی‌هیستامین از نظر عدم ایجاد خواب‌آلودگی. ⚠️ مصرف همزمان با آب‌میوه‌ها (گریپ‌فروت، پرتقال، سیب) جذب دارو را به‌شدت کاهش می‌دهد؛ با آب میل شود.,
-strengths: [
-{ id: "fexo_30", label: "30 mg / 5 mL", mgPerMl: 30/5 }
-],
-ageBands: [
-{ minAge: 2, maxAge: 11.9, totalDailyMg: 60, doses: 2, note: "۳۰ میلی‌گرم (۵ سی‌سی) دو بار در روز" },
-{ minAge: 12, maxAge: 18, totalDailyMg: 120, doses: 1, note: "۱۲۰ میلی‌گرم روزانه (معمولاً فرم قرص ترجیح داده می‌شود)" }
-]
-},
-{
-id: "desloratadine_age",
-name: "Desloratadine (دسلوراتادین)",
-notes: ✅ متابولیت فعال لوراتادین با اثربخشی سریع‌تر. ✅ طعم مطلوب شربت، پذیرش (Palatability) آن را در اطفال افزایش می‌دهد.,
-strengths: [
-{ id: "des_2_5", label: "2.5 mg / 5 mL", mgPerMl: 2.5/5 }
-],
-ageBands: [
-{ minAge: 0.5, maxAge: 0.9, totalDailyMg: 1, doses: 1, note: "۱ میلی‌گرم روزانه (۲ سی‌سی)" },
-{ minAge: 1, maxAge: 5.9, totalDailyMg: 1.25, doses: 1, note: "۱٫۲۵ میلی‌گرم روزانه (۲٫۵ سی‌سی)" },
-{ minAge: 6, maxAge: 11.9, totalDailyMg: 2.5, doses: 1, note: "۲٫۵ میلی‌گرم روزانه (۵ سی‌سی)" }
-]
-}
-]
-};
-​// --- بخش منطق محاسباتی و رابط کاربری ---
-document.addEventListener('DOMContentLoaded', () => {
-​// ثبت فایل آفلاین
-if ('serviceWorker' in navigator) {
-navigator.serviceWorker.register('./sw.js')
-.catch(err => console.log('خطا در ثبت Service Worker', err));
-}
-​const persianMap = { '0':'۰','1':'۱','2':'۲','3':'۳','4':'۴','5':'۵','6':'۶','7':'۷','8':'۸','9':'۹' };
-function toFaDigits(num) {
-if(num === undefined |
-​| num === null) return '';
-return num.toString().replace(/[0-9]/g, d => persianMap[d]);
-}
-​const DOM = {
-themeSwitch: document.getElementById('themeSwitch'),
-themeIcon: document.getElementById('themeIcon'),
-tabWeight: document.getElementById('tabWeight'),
-tabAge: document.getElementById('tabAge'),
-weightMode: document.getElementById('weightMode'),
-ageMode: document.getElementById('ageMode'),
-catBtns: document.querySelectorAll('.cat-btn'),
-drugSelect: document.getElementById('drugSelect'),
-weightInput: document.getElementById('weightInput'),
-strengthWrapper: document.getElementById('strengthWrapper'),
-strengthSelect: document.getElementById('strengthSelect'),
-diseaseWrapper: document.getElementById('diseaseWrapper'),
-diseaseSelect: document.getElementById('diseaseSelect'),
-drugNotesWrapper: document.getElementById('drugNotesWrapper'),
-drugNotes: document.getElementById('drugNotes'),
-doseInfoWrapper: document.getElementById('doseInfoWrapper'),
-doseInfo: document.getElementById('doseInfo'),
-calcBtnWeight: document.getElementById('calcBtnWeight'),
-resetBtnWeight: document.getElementById('resetBtnWeight'),
-resultWeight: document.getElementById('resultWeight'),
-ageDrugSelect: document.getElementById('ageDrugSelect'),
-ageInput: document.getElementById('ageInput'),
-ageDrugNotesWrapper: document.getElementById('ageDrugNotesWrapper'),
-ageDrugNotes: document.getElementById('ageDrugNotes'),
-ageStrengthWrapper: document.getElementById('ageStrengthWrapper'),
-ageStrengthSelect: document.getElementById('ageStrengthSelect'),
-calcBtnAge: document.getElementById('calcBtnAge'),
-resetBtnAge: document.getElementById('resetBtnAge'),
-resultAge: document.getElementById('resultAge')
-};
-​let currentCategory = 'antibiotic';
-let currentDrugWeight = null;
-let currentDrugAge = null;
-​function initTheme() {
-try {
-const savedTheme = localStorage.getItem('theme') |
-​| 'light';
-document.body.setAttribute('data-theme', savedTheme);
-DOM.themeSwitch.checked = (savedTheme === 'dark');
-DOM.themeIcon.textContent = savedTheme === 'dark' ? '🌙' : '☀️';
-} catch(e) {
-// Fallback for environments where localStorage is restricted
-}
-​DOM.themeSwitch.addEventListener('change', (e) => {
-const theme = e.target.checked ? 'dark' : 'light';
-document.body.setAttribute('data-theme', theme);
-DOM.themeIcon.textContent = theme === 'dark' ? '🌙' : '☀️';
-try { localStorage.setItem('theme', theme); } catch(e) {}
-});
-}
-​DOM.tabWeight.addEventListener('click', () => {
-DOM.tabWeight.classList.add('active');
-DOM.tabAge.classList.remove('active');
-DOM.weightMode.classList.remove('hidden');
-DOM.ageMode.classList.add('hidden');
-});
-​DOM.tabAge.addEventListener('click', () => {
-DOM.tabAge.classList.add('active');
-DOM.tabWeight.classList.remove('active');
-DOM.ageMode.classList.remove('hidden');
-DOM.weightMode.classList.add('hidden');
-});
-​function loadWeightDrugs(category) {
-DOM.drugSelect.innerHTML = '<option value="">-- لطفاً یک دارو انتخاب کنید --</option>';
-const drugs = DRUGS_DB.weightBased[category] |
-​| [];
-drugs.forEach(d => {
-let opt = document.createElement('option');
-opt.value = d.id;
-opt.textContent = d.name;
-DOM.drugSelect.appendChild(opt);
-});
-resetWeightFields();
-}
-​DOM.catBtns.forEach(btn => {
-btn.addEventListener('click', (e) => {
-DOM.catBtns.forEach(b => b.classList.remove('active'));
-e.target.classList.add('active');
-currentCategory = e.target.dataset.cat;
-loadWeightDrugs(currentCategory);
-});
-});
-​DOM.drugSelect.addEventListener('change', (e) => {
-resetWeightFields(false);
-const drugId = e.target.value;
-if (!drugId) return;
-​currentDrugWeight = DRUGS_DB.weightBased[currentCategory].find(d => d.id === drugId);
-​DOM.drugNotes.innerHTML = currentDrugWeight.notes;
-DOM.drugNotesWrapper.classList.remove('hidden');
-​currentDrugWeight.strengths.forEach(s => {
-let opt = document.createElement('option');
-opt.value = s.id;
-opt.textContent = s.label;
-DOM.strengthSelect.appendChild(opt);
-});
-DOM.strengthWrapper.classList.remove('hidden');
-​DOM.diseaseSelect.innerHTML = '<option value="">-- اندیکاسیون را انتخاب کنید --</option>';
-currentDrugWeight.indications.forEach(i => {
-let opt = document.createElement('option');
-opt.value = i.id;
-opt.textContent = i.name;
-DOM.diseaseSelect.appendChild(opt);
-});
-DOM.diseaseWrapper.classList.remove('hidden');
-});
-​DOM.diseaseSelect.addEventListener('change', (e) => {
-const indId = e.target.value;
-if(!indId) {
-DOM.doseInfoWrapper.classList.add('hidden');
-return;
-}
-const ind = currentDrugWeight.indications.find(i => i.id === indId);
-let unitLabel = currentDrugWeight.id === 'nystatin' ? 'Unit/kg/day' : 'mg/kg/day';
-​DOM.doseInfo.innerHTML = پایه رفرنس: <span class="ltr-text">${toFaDigits(ind.mgPerKgPerDay)} ${unitLabel}</span> در ${toFaDigits(ind.dosesPerDay)} دوز منقسم.;
-DOM.doseInfoWrapper.classList.remove('hidden');
-});
-​DOM.calcBtnWeight.addEventListener('click', () => {
-const weight = parseFloat(DOM.weightInput.value);
-const strengthId = DOM.strengthSelect.value;
-const indId = DOM.diseaseSelect.value;
-​if (!weight |
-​| weight <= 0) return alert("لطفاً وزن معتبر وارد کنید.");
-if (!currentDrugWeight |
-​| !strengthId |
-| !indId) return alert("تکمیل فیلدهای دارو و غلظت الزامی است.");
-​const strength = currentDrugWeight.strengths.find(s => s.id === strengthId);
-const ind = currentDrugWeight.indications.find(i => i.id === indId);
-​// هشدار امنیتی اضافی برای کدئین
-if (currentDrugWeight.id === 'expectorant_codeine' && weight < 40) {
-alert("هشدار جدی: مصرف داروهای حاوی کدئین برای کودکان زیر ۱۲ سال به دلیل خطر دپرسیون تنفسی ممنوع است. لطفاً از داروهای جایگزین استفاده کنید.");
-// ادامه محاسبه برای افراد مجاز با وزن بالاتر
-}
-​if (ind.isComplexAZI) {
-let doseMgDay1 = weight * 10;
-let doseMgNext = weight * 5;
-​if(ind.maxDailyMg) {
-doseMgDay1 = Math.min(doseMgDay1, ind.maxDailyMg);
-doseMgNext = Math.min(doseMgNext, ind.maxDailyMg);
-}
-​let volDay1 = doseMgDay1 / strength.mgPerMl;
-let volNext = doseMgNext / strength.mgPerMl;
-​DOM.resultWeight.innerHTML = <strong>وزن محاسبه‌شده: <span class="ltr-text">${toFaDigits(weight)} kg</span></strong><br><br> <i class="fas fa-check-circle" style="color:var(--success-text);"></i> <strong>روز اول:</strong> <span class="highlight-dose ltr-text">${toFaDigits(volDay1.toFixed(1))} mL</span> (معادل ${toFaDigits(doseMgDay1.toFixed(1))} mg)<br> <i class="fas fa-check-circle" style="color:var(--success-text);"></i> <strong>روز دوم تا پنجم:</strong> <span class="highlight-dose ltr-text">${toFaDigits(volNext.toFixed(1))} mL</span> (معادل ${toFaDigits(doseMgNext.toFixed(1))} mg)<br>;
-DOM.resultWeight.classList.remove('hidden');
-return;
-}
-​if (currentDrugWeight.id === 'nystatin') {
-let nysVol = weight < 10 ? 2 : 4;
-DOM.resultWeight.innerHTML = <strong>وزن: <span class="ltr-text">${toFaDigits(weight)} kg</span></strong><br><br> • حجم هر نوبت: <span class="highlight-dose ltr-text">${toFaDigits(nysVol)} mL</span> (مجموعاً ${toFaDigits(nysVol*2)} mL در روز)<br> • فواصل مصرف: <strong>هر ۶ ساعت</strong> (نیمی در سمت راست و نیمی در سمت چپ دهان)<br> • طول درمان: حداقل تا ۴۸ ساعت پس از رفع علائم.;
-DOM.resultWeight.classList.remove('hidden');
-return;
-}
-​let totalMgDay = weight * ind.mgPerKgPerDay;
-let warningHtml = "";
-​if (ind.maxDailyMg && totalMgDay > ind.maxDailyMg) {
-totalMgDay = ind.maxDailyMg;
-warningHtml = <br><span style="color:var(--warning-text);"><i class="fas fa-shield-halved"></i> <strong>سیستم ایمنی:</strong> سقف دوز مجاز روزانه (${toFaDigits(ind.maxDailyMg)} mg) روی محاسبات اعمال گردید.</span>;
-}
-​let mgPerDose = totalMgDay / ind.dosesPerDay;
-let mlPerDose = mgPerDose / strength.mgPerMl;
-​let formattedVol = mlPerDose < 1 ? ۰٫${toFaDigits(Math.round(mlPerDose*10))} : toFaDigits(parseFloat(mlPerDose.toFixed(1)));
-let interval = 24 / ind.dosesPerDay;
-​DOM.resultWeight.innerHTML = <strong>وزن: <span class="ltr-text">${toFaDigits(weight)} kg</span></strong><br><br> • حجم هر نوبت: <span class="highlight-dose ltr-text">${formattedVol} mL</span><br> • فواصل مصرف: <strong>هر <span class="ltr-text">${toFaDigits(interval)}</span> ساعت</strong><br> • دوره درمان: <strong><span class="ltr-text">${toFaDigits(ind.duration)}</span> روز</strong><br> • معادل ماده موثره: <span class="ltr-text">${toFaDigits(mgPerDose.toFixed(1))} mg</span> در هر دوز ${warningHtml};
-DOM.resultWeight.classList.remove('hidden');
-});
-​function resetWeightFields(full = true) {
-if(full) {
-DOM.drugSelect.value = "";
-DOM.weightInput.value = "";
-}
-DOM.strengthSelect.innerHTML = "";
-DOM.diseaseSelect.innerHTML = "";
-DOM.strengthWrapper.classList.add('hidden');
-DOM.diseaseWrapper.classList.add('hidden');
-DOM.drugNotesWrapper.classList.add('hidden');
-DOM.doseInfoWrapper.classList.add('hidden');
-DOM.resultWeight.classList.add('hidden');
-}
-DOM.resetBtnWeight.addEventListener('click', () => resetWeightFields(true));
-​function loadAgeDrugs() {
-DRUGS_DB.ageBased.forEach(d => {
-let opt = document.createElement('option');
-opt.value = d.id;
-opt.textContent = d.name;
-DOM.ageDrugSelect.appendChild(opt);
-});
-}
-​DOM.ageDrugSelect.addEventListener('change', (e) => {
-DOM.resultAge.classList.add('hidden');
-DOM.ageStrengthSelect.innerHTML = "";
-const drugId = e.target.value;
-if(!drugId) {
-DOM.ageDrugNotesWrapper.classList.add('hidden');
-DOM.ageStrengthWrapper.classList.add('hidden');
-return;
-}
-​currentDrugAge = DRUGS_DB.ageBased.find(d => d.id === drugId);
-DOM.ageDrugNotes.innerHTML = currentDrugAge.notes;
-DOM.ageDrugNotesWrapper.classList.remove('hidden');
-​currentDrugAge.strengths.forEach(s => {
-let opt = document.createElement('option');
-opt.value = s.id;
-opt.textContent = s.label;
-DOM.ageStrengthSelect.appendChild(opt);
-});
-DOM.ageStrengthWrapper.classList.remove('hidden');
-});
-​DOM.calcBtnAge.addEventListener('click', () => {
-const age = parseFloat(DOM.ageInput.value);
-const strengthId = DOM.ageStrengthSelect.value;
-​if (!age |
-​| age < 0) return alert("سن وارد شده نامعتبر است.");
-if (!currentDrugAge |
-​| !strengthId) return alert("تمامی فیلدها را تکمیل نمایید.");
-​const strength = currentDrugAge.strengths.find(s => s.id === strengthId);
-const band = currentDrugAge.ageBands.find(b => age >= b.minAge && age <= b.maxAge);
-​if(!band) {
-DOM.resultAge.innerHTML = <span style="color:var(--warning-text);"><i class="fas fa-ban"></i> متأسفانه در رفرنس‌های دارویی، دوز استانداردی برای این بازه سنی تعریف نشده است.</span>;
-DOM.resultAge.classList.remove('hidden');
-return;
-}
-​let mgPerDose = band.totalDailyMg / band.doses;
-let mlPerDose = mgPerDose / strength.mgPerMl;
-let formattedVol = mlPerDose < 1 ? ۰٫${toFaDigits(Math.round(mlPerDose*10))} : toFaDigits(parseFloat(mlPerDose.toFixed(1)));
-​DOM.resultAge.innerHTML = <strong>سن کودک: <span class="ltr-text">${toFaDigits(age)} سال</span></strong><br><br> • حجم هر نوبت: <span class="highlight-dose ltr-text">${formattedVol} mL</span><br> • دستور بالینی: <strong>${band.note}</strong>;
-DOM.resultAge.classList.remove('hidden');
-});
-​DOM.resetBtnAge.addEventListener('click', () => {
-DOM.ageDrugSelect.value = "";
-DOM.ageInput.value = "";
-DOM.ageDrugNotesWrapper.classList.add('hidden');
-DOM.ageStrengthWrapper.classList.add('hidden');
-DOM.resultAge.classList.add('hidden');
-});
-​initTheme();
-loadWeightDrugs('antibiotic');
-loadAgeDrugs();
-});
-</script>
+    <header class="top-bar">
+        <div class="header-area">
+            <span class="top-title"><i class="fas fa-prescription-bottle-medical" aria-hidden="true"></i> ماشین‌حساب دوز اطفال سافیرا</span>
+        </div>
+        <label class="theme-toggle" title="تغییر حالت روز / شب">
+            <input type="checkbox" id="themeSwitch" />
+            <span id="themeIcon" class="theme-icon" aria-hidden="true">☀️</span>
+        </label>
+    </header>
+
+    <main class="container">
+        <div class="sub-title">
+            <i class="fas fa-calculator" aria-hidden="true"></i> محاسبه دقیق حجم مصرفی داروهای مایع
+        </div>
+
+        <div class="warning-box">
+            <i class="fas fa-shield-halved" aria-hidden="true"></i>
+            <span>
+                <strong>ایمنی دارویی:</strong> این ابزار یک دستیار محاسباتی بالینی است. جهت پیشگیری از خطای ده‌برابری، تمامی مقادیر صرفاً به <span class="ltr-text">mL</span> ارائه می‌شوند. استفاده از قاشق‌های خانگی اکیداً ممنوع است.
+            </span>
+        </div>
+
+        <div class="tabs-container">
+            <button id="tabWeight" class="tab-btn active"><i class="fas fa-weight-scale" aria-hidden="true"></i> بر اساس وزن</button>
+            <button id="tabAge" class="tab-btn"><i class="fas fa-child" aria-hidden="true"></i> بر اساس سن</button>
+        </div>
+
+        <!-- بخش وزن‌محور -->
+        <section id="weightMode" class="mode-section">
+            <div class="category-tabs" id="categoryTabs">
+                <button class="cat-btn active" data-cat="antibiotic"><i class="fas fa-bacteria" aria-hidden="true"></i> آنتی‌بیوتیک</button>
+                <button class="cat-btn" data-cat="antipyretic"><i class="fas fa-thermometer-half" aria-hidden="true"></i> مسکن و تب‌بر</button>
+                <button class="cat-btn" data-cat="respiratory"><i class="fas fa-lungs" aria-hidden="true"></i> تنفسی و سرفه</button>
+                <button class="cat-btn" data-cat="gastro"><i class="fas fa-stomach" aria-hidden="true"></i> گوارشی</button>
+                <button class="cat-btn" data-cat="antihistamine"><i class="fas fa-allergies" aria-hidden="true"></i> آنتی‌هیستامین</button>
+                <button class="cat-btn" data-cat="antifungal"><i class="fas fa-disease" aria-hidden="true"></i> ضدقارچ/انگل</button>
+            </div>
+
+            <div class="input-group">
+                <label for="drugSelect"><i class="fas fa-capsules" aria-hidden="true"></i> انتخاب دارو</label>
+                <select id="drugSelect"><option value="">-- ابتدا دسته درمانی را انتخاب کنید --</option></select>
+            </div>
+
+            <div class="input-group">
+                <label for="weightInput"><i class="fas fa-weight-hanging" aria-hidden="true"></i> وزن کودک (کیلوگرم)</label>
+                <!-- ورودی ترکیبی تایپ + انتخاب کشویی -->
+                <input type="number" id="weightInput" min="0" step="0.1" placeholder="مثلاً ۱۲٫۵ تایپ کنید یا از لیست انتخاب کنید..." inputmode="decimal" list="weightOptions" autocomplete="off" />
+                <datalist id="weightOptions">
+                    <option value="3"></option><option value="4"></option><option value="5"></option>
+                    <option value="6"></option><option value="7"></option><option value="8"></option>
+                    <option value="9"></option><option value="10"></option><option value="11"></option>
+                    <option value="12"></option><option value="13"></option><option value="14"></option>
+                    <option value="15"></option><option value="16"></option><option value="18"></option>
+                    <option value="20"></option><option value="22"></option><option value="25"></option>
+                    <option value="30"></option><option value="35"></option><option value="40"></option>
+                </datalist>
+            </div>
+
+            <div id="drugNotesWrapper" class="info-wrapper hidden">
+                <label><i class="fas fa-info-circle" aria-hidden="true"></i> پروتکل بالینی و هشدارها</label>
+                <div id="drugNotes" class="info-content note-box"></div>
+            </div>
+
+            <div id="strengthWrapper" class="input-group hidden">
+                <label for="strengthSelect"><i class="fas fa-flask" aria-hidden="true"></i> غلظت داروی موجود</label>
+                <select id="strengthSelect"></select>
+            </div>
+
+            <div id="diseaseWrapper" class="input-group hidden">
+                <label for="diseaseSelect"><i class="fas fa-stethoscope" aria-hidden="true"></i> اندیکاسیون درمانی</label>
+                <select id="diseaseSelect"></select>
+            </div>
+
+            <div id="doseInfoWrapper" class="info-wrapper hidden">
+                <label><i class="fas fa-book-medical" aria-hidden="true"></i> راهنمای دوز رفرنس</label>
+                <div id="doseInfo" class="info-content dose-box"></div>
+            </div>
+
+            <div class="actions-row">
+                <button id="calcBtnWeight" class="btn btn-primary"><i class="fas fa-calculator" aria-hidden="true"></i> محاسبه دقیق دوز</button>
+                <button id="resetBtnWeight" type="button" class="btn btn-secondary"><i class="fas fa-rotate-left" aria-hidden="true"></i> پاک‌کردن مقادیر</button>
+            </div>
+
+            <div id="resultWeight" class="result-box hidden"></div>
+        </section>
+
+        <!-- بخش سن‌محور -->
+        <section id="ageMode" class="mode-section hidden">
+            <div class="input-group">
+                <label for="ageDrugSelect"><i class="fas fa-pills" aria-hidden="true"></i> انتخاب داروی سن‌محور</label>
+                <select id="ageDrugSelect"><option value="">-- دارو را انتخاب کنید --</option></select>
+            </div>
+            <div class="input-group">
+                <label for="ageInput"><i class="fas fa-calendar-alt" aria-hidden="true"></i> سن کودک (سال)</label>
+                <input type="number" id="ageInput" min="0" step="0.1" placeholder="مثلاً ۳٫۵ (سه‌سال و نیم)" inputmode="decimal" />
+            </div>
+            <div id="ageDrugNotesWrapper" class="info-wrapper hidden">
+                <label><i class="fas fa-info-circle" aria-hidden="true"></i> ملاحظات فارماکولوژیک</label>
+                <div id="ageDrugNotes" class="info-content note-box"></div>
+            </div>
+            <div id="ageStrengthWrapper" class="input-group hidden">
+                <label for="ageStrengthSelect"><i class="fas fa-flask" aria-hidden="true"></i> غلظت داروی موجود</label>
+                <select id="ageStrengthSelect"></select>
+            </div>
+            <div class="actions-row">
+                <button id="calcBtnAge" class="btn btn-primary"><i class="fas fa-calculator" aria-hidden="true"></i> محاسبه دوز</button>
+                <button id="resetBtnAge" type="button" class="btn btn-secondary"><i class="fas fa-rotate-left" aria-hidden="true"></i> پاک‌کردن مقادیر</button>
+            </div>
+            <div id="resultAge" class="result-box hidden"></div>
+        </section>
+
+        <footer class="footer">
+            <div class="footer-links">
+                <div>توسعه‌یافته بر اساس مستندات بالینی UpToDate, Nelson و Harriet Lane</div>
+                <a href="https://t.me/reza0rbz" target="_blank" rel="noopener noreferrer" class="contact-link">
+                    <i class="fab fa-telegram" style="font-size: 1.2rem;" aria-hidden="true"></i> ارتباط با توسعه‌دهنده (تلگرامِ سافیرا)
+                </a>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        const DRUGS_DB = {
+            weightBased: {
+                antibiotic: [
+                    {
+                        id: "amoxicillin", name: "Amoxicillin (آموکسی‌سیلین)",
+                        notes: `✅ کاربرد: اوتیت مدیا حاد، فارنژیت استرپتوکوکی، پنومونی خفیف.\n⚠️ قبل از مصرف تکان داده شود. نگهداری در یخچال.`,
+                        strengths: [ { id: "amox_125", label: "125 mg / 5 mL", mgPerMl: 125/5 }, { id: "amox_200", label: "200 mg / 5 mL", mgPerMl: 200/5 }, { id: "amox_250", label: "250 mg / 5 mL", mgPerMl: 250/5 }, { id: "amox_400", label: "400 mg / 5 mL", mgPerMl: 400/5 } ],
+                        indications: [ { id: "ind_am_1", name: "عفونت خفیف (هر ۸ ساعت)", mgPerKgPerDay: 45, dosesPerDay: 3, duration: 7 }, { id: "ind_am_2", name: "عفونت خفیف (هر ۱۲ ساعت)", mgPerKgPerDay: 45, dosesPerDay: 2, duration: 7 }, { id: "ind_am_3", name: "AOM / دوز بالا (هر ۱۲ ساعت)", mgPerKgPerDay: 90, dosesPerDay: 2, duration: 10 } ]
+                    },
+                    {
+                        id: "amoxiclav", name: "Co-amoxiclav (کوآموکسی‌کلاو)",
+                        notes: `✅ محاسبات حجم دارو همواره بر اساس جزء «آموکسی‌سیلین» صورت می‌گیرد.\n⚠️ عوارض گوارشی شایع است؛ ترجیحاً در ابتدای غذا مصرف شود.`,
+                        strengths: [ { id: "amc_156", label: "156 (125/31.25) mg / 5 mL", mgPerMl: 125/5 }, { id: "amc_228", label: "228 (200/28.5) mg / 5 mL", mgPerMl: 200/5 }, { id: "amc_312", label: "312 (250/62.5) mg / 5 mL", mgPerMl: 250/5 }, { id: "amc_457", label: "457 (400/57) mg / 5 mL", mgPerMl: 400/5 }, { id: "amc_es600", label: "ES-600 (600/42.9) mg / 5 mL", mgPerMl: 600/5 } ],
+                        indications: [ { id: "ind_amc_1", name: "عفونت متوسط (هر ۸ ساعت)", mgPerKgPerDay: 40, dosesPerDay: 3, duration: 7 }, { id: "ind_amc_2", name: "عفونت متوسط (هر ۱۲ ساعت)", mgPerKgPerDay: 45, dosesPerDay: 2, duration: 7 }, { id: "ind_amc_3", name: "عفونت شدید / دوز بالا (هر ۱۲ ساعت)", mgPerKgPerDay: 90, dosesPerDay: 2, duration: 10 } ]
+                    },
+                    {
+                        id: "cephalexin", name: "Cephalexin (سفالکسین)",
+                        notes: `✅ کاربرد: عفونت‌های پوستی، UTI خفیف، فارنژیت در صورت حساسیت به پنی‌سیلین.`,
+                        strengths: [ { id: "ceph_125", label: "125 mg / 5 mL", mgPerMl: 125/5 }, { id: "ceph_250", label: "250 mg / 5 mL", mgPerMl: 250/5 } ],
+                        indications: [ { id: "ind_ceph_1", name: "عفونت خفیف (هر ۸ ساعت)", mgPerKgPerDay: 40, dosesPerDay: 3, duration: 7 }, { id: "ind_ceph_2", name: "عفونت شدید پوستی (هر ۶ ساعت)", mgPerKgPerDay: 80, dosesPerDay: 4, duration: 10, maxDailyMg: 4000 } ]
+                    },
+                    {
+                        id: "cefixime", name: "Cefixime (سفیکسیم)",
+                        notes: `✅ کاربرد: UTI، سینوزیت، اوتیت مدیا.\n⚠️ اسهال از عوارض شایع است.`,
+                        strengths: [ { id: "cef_100", label: "100 mg / 5 mL", mgPerMl: 100/5 } ],
+                        indications: [ { id: "ind_cef_1", name: "یک‌بار در روز (OD)", mgPerKgPerDay: 8, dosesPerDay: 1, duration: 7 }, { id: "ind_cef_2", name: "دو بار در روز (هر ۱۲ ساعت)", mgPerKgPerDay: 8, dosesPerDay: 2, duration: 7 } ]
+                    },
+                    {
+                        id: "cefuroxime", name: "Cefuroxime (سفوروکسیم)",
+                        notes: `✅ کاربرد: اوتیت مدیا، سینوزیت، عفونت‌های تنفسی.\n⚠️ برای افزایش جذب ترجیحاً با غذا مصرف شود.`,
+                        strengths: [ { id: "cefuro_125", label: "125 mg / 5 mL", mgPerMl: 125/5 }, { id: "cefuro_250", label: "250 mg / 5 mL", mgPerMl: 250/5 } ],
+                        indications: [ { id: "ind_cefuro_1", name: "عفونت‌های معمول (هر ۱۲ ساعت)", mgPerKgPerDay: 30, dosesPerDay: 2, duration: 7 } ]
+                    },
+                    {
+                        id: "azithromycin", name: "Azithromycin (آزیترومایسین)",
+                        notes: `✅ کاربرد: پنومونی آتیپیک، فارنژیت.\n⚠️ در بیماران با اختلالات قلبی با احتیاط تجویز شود.`,
+                        strengths: [ { id: "azi_100", label: "100 mg / 5 mL", mgPerMl: 100/5 }, { id: "azi_200", label: "200 mg / 5 mL", mgPerMl: 200/5 } ],
+                        indications: [ { id: "ind_azi_1", name: "رژیم ۳ روزه (یک‌بار در روز)", mgPerKgPerDay: 10, dosesPerDay: 1, duration: 3, maxDailyMg: 500 }, { id: "ind_azi_2", name: "رژیم ۵ روزه (تغییر دوز از روز دوم)", mgPerKgPerDay: 10, dosesPerDay: 1, duration: 5, maxDailyMg: 500, isComplexAZI: true } ]
+                    },
+                    {
+                        id: "clarithromycin", name: "Clarithromycin (کلاریترومایسین)",
+                        notes: `✅ کاربرد: عفونت‌های تنفسی، جایگزین پنی‌سیلین.\n⚠️ طعم فلزی در دهان از عوارض آن است.`,
+                        strengths: [ { id: "clar_125", label: "125 mg / 5 mL", mgPerMl: 125/5 }, { id: "clar_250", label: "250 mg / 5 mL", mgPerMl: 250/5 } ],
+                        indications: [ { id: "ind_clar_1", name: "عفونت تنفسی (هر ۱۲ ساعت)", mgPerKgPerDay: 15, dosesPerDay: 2, duration: 10, maxDailyMg: 1000 } ]
+                    },
+                    {
+                        id: "clindamycin", name: "Clindamycin (کلیندامایسین)",
+                        notes: `✅ کاربرد: عفونت‌های پوستی و دندانی.\n⚠️ ریسک بالای انتروکولیت با غشای کاذب (اسهال خونی سریعاً پیگیری شود).`,
+                        strengths: [ { id: "clin_75", label: "75 mg / 5 mL", mgPerMl: 75/5 } ],
+                        indications: [ { id: "ind_clin_1", name: "عفونت پوستی / دندانی (هر ۸ ساعت)", mgPerKgPerDay: 30, dosesPerDay: 3, duration: 10, maxDailyMg: 1800 } ]
+                    },
+                    {
+                        id: "erythromycin", name: "Erythromycin (اریترومایسین)",
+                        notes: `✅ کاربرد: جایگزین پنی‌سیلین، سیاه‌سرفه.`,
+                        strengths: [ { id: "ery_200", label: "200 mg / 5 mL", mgPerMl: 200/5 } ],
+                        indications: [ { id: "ind_ery_1", name: "عفونت تنفسی (هر ۶ ساعت)", mgPerKgPerDay: 40, dosesPerDay: 4, duration: 10 } ]
+                    },
+                    {
+                        id: "tmpsmx", name: "Co-trimoxazole (کوتریموکسازول)",
+                        notes: `✅ محاسبات صرفاً بر اساس جزء تری‌متوپریم (TMP) انجام می‌گیرد.\n⚠️️ منع مصرف زیر ۲ ماه و بیماران فاویسم.`,
+                        strengths: [ { id: "tmp_40", label: "40 mg TMP / 5 mL", mgPerMl: 40/5 } ],
+                        indications: [ { id: "ind_tmp_1", name: "عفونت خفیف / UTI (هر ۱۲ ساعت)", mgPerKgPerDay: 8, dosesPerDay: 2, duration: 7 } ]
+                    }
+                ],
+                antipyretic: [
+                    {
+                        id: "acetaminophen", name: "Acetaminophen (استامینوفن)",
+                        notes: `✅ کاربرد: تب و دردهای خفیف.\n⚠️ هشدار کبدی: حداکثر دوز روزانه ۷۵ mg/kg یا ۴۰۰۰ میلی‌گرم.`,
+                        strengths: [ { id: "apa_drop", label: "قطره 100 mg / 1 mL", mgPerMl: 100/1 }, { id: "apa_120", label: "شربت 120 mg / 5 mL", mgPerMl: 120/5 }, { id: "apa_160", label: "شربت 160 mg / 5 mL", mgPerMl: 160/5 } ],
+                        indications: [ { id: "ind_apa_1", name: "کنترل تب و درد (هر ۶ ساعت)", mgPerKgPerDay: 60, dosesPerDay: 4, duration: 3, maxDailyMg: 4000 } ]
+                    },
+                    {
+                        id: "ibuprofen", name: "Ibuprofen (ایبوپروفن)",
+                        notes: `✅ کاربرد: تب و دردهای التهابی.\n⚠️ منع مصرف در زیر ۶ ماه و کودکان مبتلا به اسهال/استفراغ شدید (خطر کلیوی).`,
+                        strengths: [ { id: "ibu_100", label: "100 mg / 5 mL", mgPerMl: 100/5 } ],
+                        indications: [ { id: "ind_ibu_1", name: "درد و تب التهابی (هر ۸ ساعت)", mgPerKgPerDay: 30, dosesPerDay: 3, duration: 3, maxDailyMg: 2400 } ]
+                    },
+                    {
+                        id: "mefenamic", name: "Mefenamic Acid (مفنامیک اسید)",
+                        notes: `✅ کاربرد: دردهای عضلانی، دندان‌درد.\n⚠️ در کودکان زیر ۶ ماه توصیه نمی‌شود.`,
+                        strengths: [ { id: "mef_50", label: "50 mg / 5 mL", mgPerMl: 50/5 }, { id: "mef_100", label: "100 mg / 5 mL", mgPerMl: 100/5 } ],
+                        indications: [ { id: "ind_mef_1", name: "تسکین درد (هر ۸ ساعت)", mgPerKgPerDay: 15, dosesPerDay: 3, duration: 3 } ]
+                    }
+                ],
+                respiratory: [
+                    {
+                        id: "theophylline_g", name: "Theophylline G (تئوفیلین جی)",
+                        notes: `✅ ترکیب گشادکننده برونش (تئوفیلین) و خلط‌آور (گایافنزین). کاربرد: آسم و تنگی نفس با خلط.\n⚠️ حاشیه ایمنی باریک. خطر تپش قلب و تشنج. محاسبات دوز بر اساس تئوفیلین است.`,
+                        strengths: [ { id: "theo_g_50", label: "50 mg / 5 mL (تئوفیلین)", mgPerMl: 10 } ],
+                        indications: [ { id: "ind_theo_1", name: "برونکواسپاسم (هر ۶ ساعت)", mgPerKgPerDay: 20, dosesPerDay: 4, duration: 5 } ]
+                    },
+                    {
+                        id: "salbutamol", name: "Salbutamol (سالبوتامول)",
+                        notes: `✅ کاربرد: رفع اسپاسم راه‌های هوایی در برونشیولیت یا آسم خفیف.\n⚠️ تپش قلب و لرزش دست‌ها از عوارض شایع اما گذرا می‌باشد.`,
+                        strengths: [ { id: "salb_2", label: "2 mg / 5 mL", mgPerMl: 2/5 } ],
+                        indications: [ { id: "ind_salb_1", name: "برونکواسپاسم (هر ۸ ساعت)", mgPerKgPerDay: 0.45, dosesPerDay: 3, duration: 5, maxDailyMg: 12 } ]
+                    },
+                    {
+                        id: "ketotifen", name: "Ketotifen (کتوتیفن)",
+                        notes: `✅ کاربرد: پروفیلاکسی آسم، حساسیت‌های مزمن.\n⚠️ عارضه شایع: خواب‌آلودگی شدید و افزایش اشتها. اثر فوری برای حملات حاد ندارد.`,
+                        strengths: [ { id: "keto_1", label: "1 mg / 5 mL", mgPerMl: 1/5 } ],
+                        indications: [ { id: "ind_keto_1", name: "حساسیت و سرفه (هر ۱۲ ساعت)", mgPerKgPerDay: 0.1, dosesPerDay: 2, duration: 7 } ]
+                    },
+                    {
+                        id: "bromhexine", name: "Bromhexine (برم‌هگزین)",
+                        notes: `✅ کاربرد: خلط‌آور و موکولیتیک قوی برای سرفه‌های خلط‌دار.\n⚠️ در کودکان زیر ۲ سال به دلیل ناتوانی در تخلیه ترشحات توصیه نمی‌شود.`,
+                        strengths: [ { id: "brom_4", label: "4 mg / 5 mL", mgPerMl: 4/5 } ],
+                        indications: [ { id: "ind_brom_1", name: "رقیق‌کننده خلط (هر ۸ ساعت)", mgPerKgPerDay: 0.3, dosesPerDay: 3, duration: 5 } ]
+                    },
+                    {
+                        id: "guaifenesin", name: "Guaifenesin (گایافنزین)",
+                        notes: `✅ کاربرد: اکسپکتورانت برای تسهیل خروج ترشحات ریوی.\n⚠️ حتماً با یک لیوان پر آب مصرف شود.`,
+                        strengths: [ { id: "guai_100", label: "100 mg / 5 mL", mgPerMl: 20 } ],
+                        indications: [ { id: "ind_guai_1", name: "خلط‌آور (هر ۶ ساعت)", mgPerKgPerDay: 12, dosesPerDay: 4, duration: 5 } ]
+                    },
+                    {
+                        id: "dextromethorphan", name: "Dextromethorphan (دکسترومتروفان)",
+                        notes: `✅ کاربرد: سرکوب‌کننده سرفه‌های خشک و بدون خلط.\n⚠️ در سرفه‌های خلط‌دار به هیچ‌وجه نباید مصرف شود.`,
+                        strengths: [ { id: "dex_15", label: "15 mg / 5 mL", mgPerMl: 3 } ],
+                        indications: [ { id: "ind_dex_1", name: "سرفه خشک (هر ۸ ساعت)", mgPerKgPerDay: 1, dosesPerDay: 3, duration: 3 } ]
+                    },
+                    {
+                        id: "dextro_p", name: "Dextromethorphan P (دکسترومتروفان پی)",
+                        notes: `✅ کاربرد: سرفه خشک همراه با احتقان بینی.\n⚠️ زیر ۲ سال توصیه نمی‌شود. محاسبه بر اساس دکسترومتروفان.`,
+                        strengths: [ { id: "dexp_15", label: "15 mg / 5 mL (دکسترو)", mgPerMl: 3 } ],
+                        indications: [ { id: "ind_dexp_1", name: "سرفه و احتقان (هر ۸ ساعت)", mgPerKgPerDay: 1, dosesPerDay: 3, duration: 5 } ]
+                    },
+                    {
+                        id: "expectorant", name: "Expectorant (اکسپکتورانت ساده)",
+                        notes: `✅ ترکیب گایافنزین، کلرفنیرامین و پسودوافدرین.\n⚠ در کودکان زیر ۲ سال توصیه نمی‌شود. محاسبه بر اساس گایافنزین.`,
+                        strengths: [ { id: "exp_100", label: "100 mg / 5 mL (گایافنزین)", mgPerMl: 20 } ],
+                        indications: [ { id: "ind_exp_1", name: "سرفه خلط‌دار (هر ۶ ساعت)", mgPerKgPerDay: 12, dosesPerDay: 4, duration: 5 } ]
+                    },
+                    {
+                        id: "expectorant_codeine", name: "Expectorant Codeine (اکسپکتورانت کدئین)",
+                        notes: `⛔️ هشدار: حاوی مخدر کدئین است.\n⚠️ به دلیل خطر دپرسیون تنفسی، مصرف در کودکان زیر ۱۲ سال کاملاً ممنوع است. این محاسبه فقط برای نوجوانان بالای ۱۲ سال است.`,
+                        strengths: [ { id: "expc_100", label: "100 mg / 5 mL (گایافنزین)", mgPerMl: 20 } ],
+                        indications: [ { id: "ind_expc_1", name: "سرفه شدید (فقط بالای ۱۲ سال) (هر ۶ ساعت)", mgPerKgPerDay: 12, dosesPerDay: 4, duration: 5 } ]
+                    },
+                    {
+                        id: "corizan", name: "Corizan Cold & Flu (کوریزان)",
+                        notes: `✅ شربت ترکیبی برای تب، آبریزش و احتقان بینی.\n⚠️ محاسبه دقیقاً بر اساس جزء استامینوفن انجام شده است.`,
+                        strengths: [ { id: "cori_160", label: "160 mg / 5 mL (استامینوفن)", mgPerMl: 32 } ],
+                        indications: [ { id: "ind_cori_1", name: "سرماخوردگی و تب (هر ۶ ساعت)", mgPerKgPerDay: 60, dosesPerDay: 4, duration: 3 } ]
+                    }
+                ],
+                gastro: [
+                    {
+                        id: "domperidone", name: "Domperidone (دومپریدون)",
+                        notes: `✅ کاربرد: ضدتهوع، استفراغ و تنظیم حرکات معده.\n⚠️ در بیماران دارای اختلال قلبی با احتیاط تجویز شود. قبل از غذا مصرف شود.`,
+                        strengths: [ { id: "dom_5", label: "5 mg / 5 mL", mgPerMl: 1 } ],
+                        indications: [ { id: "ind_dom_1", name: "ضدتهوع (هر ۸ ساعت)", mgPerKgPerDay: 0.9, dosesPerDay: 3, duration: 3, maxDailyMg: 30 } ]
+                    },
+                    {
+                        id: "metoclopramide_drop", name: "Metoclopramide (قطره متوکلوپرامید)",
+                        notes: `⛔️ خطر بالای عوارض عضلانی (قفل شدن فک و گردن) در اطفال.\n⚠️ زیر ۱ سال ممنوع است. در اطفال داروی اندانسترون انتخاب بسیار ایمن‌تری است.`,
+                        strengths: [ { id: "meto_4", label: "قطره 4 mg / 1 mL", mgPerMl: 4 } ],
+                        indications: [ { id: "ind_meto_1", name: "تهوع مقاوم (هر ۸ ساعت)", mgPerKgPerDay: 0.45, dosesPerDay: 3, duration: 2, maxDailyMg: 15 } ]
+                    },
+                    {
+                        id: "ondansetron", name: "Ondansetron (اندانسترون)",
+                        notes: `✅ کاربرد: پیشگیری از تهوع در گاستروآنتریت.\n⚠️ در بیماران دارای سندرم QT طولانی ارزیابی نوار قلب الزامی است.`,
+                        strengths: [ { id: "onda_4", label: "4 mg / 5 mL", mgPerMl: 4/5 } ],
+                        indications: [ { id: "ind_onda_1", name: "گاستروآنتریت (هر ۸ ساعت)", mgPerKgPerDay: 0.45, dosesPerDay: 3, duration: 2, maxDailyMg: 16 } ]
+                    },
+                    {
+                        id: "dicyclomine", name: "Dicyclomine (دیسیکلومین)",
+                        notes: `✅ کاربرد: تسکین دردهای کولیکی و اسپاسم.\n⚠️ در نوزادان زیر ۶ ماه به دلیل خطر آپنه مطلقاً ممنوع است.`,
+                        strengths: [ { id: "dicy_10", label: "10 mg / 5 mL", mgPerMl: 2 } ],
+                        indications: [ { id: "ind_dicy_1", name: "کولیک و اسپاسم (هر ۸ ساعت)", mgPerKgPerDay: 0.5, dosesPerDay: 3, duration: 3 } ]
+                    },
+                    {
+                        id: "lactulose", name: "Lactulose (لاکتولوز)",
+                        notes: `✅ کاربرد: ملین اسموتیک برای یبوست.\n⚠️ می‌توان دوز را با آب یا آبمیوه مخلوط کرد. دوز بر اساس میلی‌گرم تنظیم شده است.`,
+                        strengths: [ { id: "lac_10", label: "10 g / 15 mL (667 mg / mL)", mgPerMl: 667 } ],
+                        indications: [ { id: "ind_lac_1", name: "یبوست (روزانه)", mgPerKgPerDay: 1000, dosesPerDay: 1, duration: 7 }, { id: "ind_lac_2", name: "یبوست (هر ۱۲ ساعت)", mgPerKgPerDay: 1000, dosesPerDay: 2, duration: 7 } ]
+                    },
+                    {
+                        id: "famotidine", name: "Famotidine (فاموتیدین)",
+                        notes: `✅ کاربرد: ریفلاکس اسید معده (GERD).\n⚠️ سوسپانسیون قبل از مصرف باید به خوبی تکان داده شود.`,
+                        strengths: [ { id: "fam_40", label: "40 mg / 5 mL", mgPerMl: 8 } ],
+                        indications: [ { id: "ind_fam_1", name: "ریفلاکس معده (هر ۱۲ ساعت)", mgPerKgPerDay: 1, dosesPerDay: 2, duration: 14, maxDailyMg: 40 } ]
+                    }
+                ],
+                antifungal: [
+                    {
+                        id: "metronidazole", name: "Metronidazole (مترونیدازول)",
+                        notes: `✅ کاربرد: ژیاردیازیس، عفونت بی‌هوازی.\n⚠️ ادرار ممکن است تیره شود (بی‌خطر).`,
+                        strengths: [ { id: "metro_125", label: "125 mg / 5 mL", mgPerMl: 125/5 } ],
+                        indications: [ { id: "ind_metro_1", name: "بی‌هوازی/ژیاردیا (هر ۸ ساعت)", mgPerKgPerDay: 40, dosesPerDay: 3, duration: 7, maxDailyMg: 2250 } ]
+                    },
+                    {
+                        id: "nitazoxanide", name: "Nitazoxanide (نیتازوکسانید)",
+                        notes: `✅ کاربرد: اسهال ناشی از پروتوزوآها.\n⚠️ دوره درمان دقیقاً ۳ روز است. با غذا مصرف شود.`,
+                        strengths: [ { id: "nita_100", label: "100 mg / 5 mL", mgPerMl: 100/5 } ],
+                        indications: [ { id: "ind_nita_1", name: "اسهال انگلی (هر ۱۲ ساعت)", mgPerKgPerDay: 15, dosesPerDay: 2, duration: 3 } ]
+                    },
+                    {
+                        id: "nystatin", name: "Nystatin (نیستاتین)",
+                        notes: `✅ کاربرد: برفک دهانی.\n⚠️ در این ماشین‌حساب، دوز بر اساس استاندارد (نوزاد ۲ سی‌سی / کودک ۴ سی‌سی) تنظیم شده.`,
+                        strengths: [ { id: "nys_100k", label: "100,000 Unit / 1 mL", mgPerMl: 100000/1 } ],
+                        indications: [ { id: "ind_nys_1", name: "برفک دهان (هر ۶ ساعت)", mgPerKgPerDay: 160000, dosesPerDay: 4, duration: 7 } ]
+                    }
+                ],
+                antihistamine: [
+                    {
+                        id: "diphenhydramine", name: "Diphenhydramine (دیفن‌هیدرامین)",
+                        notes: `✅ کاربرد: کهیر حاد و واکنش آلرژیک.\n⚠️ خواب‌آور است. زیر ۲ سال ممنوع.`,
+                        strengths: [ { id: "dph_12_5", label: "12.5 mg / 5 mL", mgPerMl: 12.5/5 } ],
+                        indications: [ { id: "ind_dph_1", name: "آلرژی حاد (هر ۶ ساعت)", mgPerKgPerDay: 5, dosesPerDay: 4, duration: 3, maxDailyMg: 300 } ]
+                    },
+                    {
+                        id: "chlorpheniramine", name: "Chlorpheniramine (کلرفنیرامین)",
+                        notes: `✅ کاربرد: رینیت آلرژیک، آبریزش شدید.`,
+                        strengths: [ { id: "cpm_2", label: "2 mg / 5 mL", mgPerMl: 2/5 } ],
+                        indications: [ { id: "ind_cpm_1", name: "علائم آلرژیک (هر ۶ ساعت)", mgPerKgPerDay: 0.35, dosesPerDay: 4, duration: 5, maxDailyMg: 12 } ]
+                    },
+                    {
+                        id: "hydroxyzine", name: "Hydroxyzine (هیدروکسی‌زین)",
+                        notes: `✅ کاربرد: خارش شدید پوست، کهیر مقاوم.\n⚠️ اثرات آرام‌بخشی بسیار قوی دارد.`,
+                        strengths: [ { id: "hyd_10", label: "10 mg / 5 mL", mgPerMl: 10/5 } ],
+                        indications: [ { id: "ind_hyd_1", name: "خارش و کهیر (هر ۶ ساعت)", mgPerKgPerDay: 2, dosesPerDay: 4, duration: 5, maxDailyMg: 100 } ]
+                    },
+                    {
+                        id: "pseudoephedrine", name: "Pseudoephedrine (پسودوافدرین)",
+                        notes: `✅ کاربرد: ضداحتقان بینی در سینوزیت.\n⚠️ عوارض: بی‌خوابی، تپش قلب. زیر ۴ سال توصیه نمی‌شود.`,
+                        strengths: [ { id: "pse_15", label: "15 mg / 5 mL", mgPerMl: 15/5 }, { id: "pse_30", label: "30 mg / 5 mL", mgPerMl: 30/5 } ],
+                        indications: [ { id: "ind_pse_1", name: "احتقان بینی (هر ۶ ساعت)", mgPerKgPerDay: 4, dosesPerDay: 4, duration: 5, maxDailyMg: 120 } ]
+                    }
+                ]
+            },
+            ageBased: [
+                {
+                    id: "cetirizine", name: "Cetirizine (ستیریزین)",
+                    notes: `✅ کاربرد: رینیت آلرژیک فصلی.`,
+                    strengths: [ { id: "cet_5", label: "5 mg / 5 mL", mgPerMl: 5/5 } ],
+                    ageBands: [
+                        { minAge: 0.5, maxAge: 1.9, totalDailyMg: 2.5, doses: 1, note: "۲٫۵ میلی‌گرم روزانه (۲٫۵ سی‌سی)" },
+                        { minAge: 2, maxAge: 5.9, totalDailyMg: 5, doses: 1, note: "۵ میلی‌گرم روزانه (۵ سی‌سی)" },
+                        { minAge: 6, maxAge: 18, totalDailyMg: 10, doses: 1, note: "۱۰ میلی‌گرم روزانه (۱۰ سی‌سی)" }
+                    ]
+                },
+                {
+                    id: "loratadine", name: "Loratadine (لوراتادین)",
+                    notes: `✅ حساسیت‌های فصلی. حداقل خواب‌آلودگی.`,
+                    strengths: [ { id: "lor_5", label: "5 mg / 5 mL", mgPerMl: 5/5 } ],
+                    ageBands: [
+                        { minAge: 2, maxAge: 5.9, totalDailyMg: 5, doses: 1, note: "۵ میلی‌گرم روزانه" },
+                        { minAge: 6, maxAge: 18, totalDailyMg: 10, doses: 1, note: "۱۰ میلی‌گرم روزانه" }
+                    ]
+                },
+                {
+                    id: "fexofenadine", name: "Fexofenadine (فکسوفنادین)",
+                    notes: `⚠️ مصرف همزمان با آب‌میوه‌ها جذب دارو را به‌شدت کاهش می‌دهد.`,
+                    strengths: [ { id: "fexo_30", label: "30 mg / 5 mL", mgPerMl: 30/5 } ],
+                    ageBands: [
+                        { minAge: 2, maxAge: 11.9, totalDailyMg: 60, doses: 2, note: "۳۰ میلی‌گرم (۵ سی‌سی) دو بار در روز" },
+                        { minAge: 12, maxAge: 18, totalDailyMg: 120, doses: 1, note: "۱۲۰ میلی‌گرم روزانه" }
+                    ]
+                },
+                {
+                    id: "desloratadine_age", name: "Desloratadine (دسلوراتادین)",
+                    notes: `✅ اثربخشی سریع‌تر و طعم مطلوب.`,
+                    strengths: [ { id: "des_2_5", label: "2.5 mg / 5 mL", mgPerMl: 2.5/5 } ],
+                    ageBands: [
+                        { minAge: 0.5, maxAge: 0.9, totalDailyMg: 1, doses: 1, note: "۱ میلی‌گرم روزانه (۲ سی‌‌سی)" },
+                        { minAge: 1, maxAge: 5.9, totalDailyMg: 1.25, doses: 1, note: "۱٫۲۵ میلی‌گرم روزانه (۲٫۵ سی‌سی)" },
+                        { minAge: 6, maxAge: 11.9, totalDailyMg: 2.5, doses: 1, note: "۲٫۵ میلی‌گرم روزانه (۵ سی‌سی)" }
+                    ]
+                }
+            ]
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW Error:', err));
+            }
+            
+            const persianMap = { '0':'۰','1':'۱','2':'۲','3':'۳','4':'۴','5':'۵','6':'۶','7':'۷','8':'۸','9':'۹' };
+            function toFaDigits(num) {
+                if(num === undefined || num === null || Number.isNaN(num)) return '';
+                return num.toString().replace(/[0-9]/g, d => persianMap[d]);
+            }
+
+            const DOM = {
+                themeSwitch: document.getElementById('themeSwitch'), themeIcon: document.getElementById('themeIcon'),
+                tabWeight: document.getElementById('tabWeight'), tabAge: document.getElementById('tabAge'),
+                weightMode: document.getElementById('weightMode'), ageMode: document.getElementById('ageMode'),
+                catBtns: document.querySelectorAll('.cat-btn'), drugSelect: document.getElementById('drugSelect'),
+                weightInput: document.getElementById('weightInput'), strengthWrapper: document.getElementById('strengthWrapper'),
+                strengthSelect: document.getElementById('strengthSelect'), diseaseWrapper: document.getElementById('diseaseWrapper'),
+                diseaseSelect: document.getElementById('diseaseSelect'), drugNotesWrapper: document.getElementById('drugNotesWrapper'),
+                drugNotes: document.getElementById('drugNotes'), doseInfoWrapper: document.getElementById('doseInfoWrapper'),
+                doseInfo: document.getElementById('doseInfo'), calcBtnWeight: document.getElementById('calcBtnWeight'),
+                resetBtnWeight: document.getElementById('resetBtnWeight'), resultWeight: document.getElementById('resultWeight'),
+                ageDrugSelect: document.getElementById('ageDrugSelect'), ageInput: document.getElementById('ageInput'),
+                ageDrugNotesWrapper: document.getElementById('ageDrugNotesWrapper'), ageDrugNotes: document.getElementById('ageDrugNotes'),
+                ageStrengthWrapper: document.getElementById('ageStrengthWrapper'), ageStrengthSelect: document.getElementById('ageStrengthSelect'),
+                calcBtnAge: document.getElementById('calcBtnAge'), resetBtnAge: document.getElementById('resetBtnAge'), resultAge: document.getElementById('resultAge')
+            };
+
+            let currentCategory = 'antibiotic';
+            let currentDrugWeight = null;
+            let currentDrugAge = null;
+
+            function initTheme() {
+                try {
+                    const savedTheme = localStorage.getItem('theme') || 'light';
+                    document.body.setAttribute('data-theme', savedTheme);
+                    DOM.themeSwitch.checked = (savedTheme === 'dark');
+                    DOM.themeIcon.textContent = savedTheme === 'dark' ? '🌙' : '☀️';
+                } catch(e) {}
+                DOM.themeSwitch.addEventListener('change', (e) => {
+                    const theme = e.target.checked ? 'dark' : 'light';
+                    document.body.setAttribute('data-theme', theme);
+                    DOM.themeIcon.textContent = theme === 'dark' ? '🌙' : '☀️';
+                    try { localStorage.setItem('theme', theme); } catch(e) {}
+                });
+            }
+
+            DOM.tabWeight.addEventListener('click', () => { DOM.tabWeight.classList.add('active'); DOM.tabAge.classList.remove('active'); DOM.weightMode.classList.remove('hidden'); DOM.ageMode.classList.add('hidden'); });
+            DOM.tabAge.addEventListener('click', () => { DOM.tabAge.classList.add('active'); DOM.tabWeight.classList.remove('active'); DOM.ageMode.classList.remove('hidden'); DOM.weightMode.classList.add('hidden'); });
+
+            function loadWeightDrugs(category) {
+                DOM.drugSelect.innerHTML = '<option value="">-- لطفاً یک دارو انتخاب کنید --</option>';
+                const drugs = DRUGS_DB.weightBased[category] || [];
+                drugs.forEach(d => { let opt = document.createElement('option'); opt.value = d.id; opt.textContent = d.name; DOM.drugSelect.appendChild(opt); });
+                resetWeightFields();
+            }
+
+            DOM.catBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    DOM.catBtns.forEach(b => b.classList.remove('active')); e.target.classList.add('active');
+                    currentCategory = e.target.dataset.cat; loadWeightDrugs(currentCategory);
+                });
+            });
+
+            DOM.drugSelect.addEventListener('change', (e) => {
+                resetWeightFields(false);
+                const drugId = e.target.value; if (!drugId) return;
+                currentDrugWeight = DRUGS_DB.weightBased[currentCategory].find(d => d.id === drugId);
+                DOM.drugNotes.innerHTML = currentDrugWeight.notes; DOM.drugNotesWrapper.classList.remove('hidden');
+                currentDrugWeight.strengths.forEach(s => { let opt = document.createElement('option'); opt.value = s.id; opt.textContent = s.label; DOM.strengthSelect.appendChild(opt); });
+                DOM.strengthWrapper.classList.remove('hidden');
+                DOM.diseaseSelect.innerHTML = '<option value="">-- اندیکاسیون را انتخاب کنید --</option>';
+                currentDrugWeight.indications.forEach(i => { let opt = document.createElement('option'); opt.value = i.id; opt.textContent = i.name; DOM.diseaseSelect.appendChild(opt); });
+                DOM.diseaseWrapper.classList.remove('hidden');
+            });
+
+            DOM.diseaseSelect.addEventListener('change', (e) => {
+                const indId = e.target.value;
+                if(!indId) { DOM.doseInfoWrapper.classList.add('hidden'); return; }
+                const ind = currentDrugWeight.indications.find(i => i.id === indId);
+                let unitLabel = currentDrugWeight.id === 'nystatin' ? 'Unit/kg/day' : 'mg/kg/day';
+                DOM.doseInfo.innerHTML = `پایه رفرنس: <span class="ltr-text">${toFaDigits(ind.mgPerKgPerDay)} ${unitLabel}</span> در ${toFaDigits(ind.dosesPerDay)} دوز منقسم.`;
+                DOM.doseInfoWrapper.classList.remove('hidden');
+            });
+
+            DOM.calcBtnWeight.addEventListener('click', () => {
+                const weight = parseFloat(DOM.weightInput.value);
+                const strengthId = DOM.strengthSelect.value;
+                const indId = DOM.diseaseSelect.value;
+
+                if (Number.isNaN(weight) || weight <= 0) return alert("لطفاً وزن معتبر وارد کنید.");
+                if (!currentDrugWeight || !strengthId || !indId) return alert("تکمیل فیلدهای دارو و غلظت الزامی است.");
+
+                const strength = currentDrugWeight.strengths.find(s => s.id === strengthId);
+                const ind = currentDrugWeight.indications.find(i => i.id === indId);
+
+                if (currentDrugWeight.id === 'expectorant_codeine' && weight < 40) {
+                     alert("هشدار جدی: مصرف داروهای حاوی کدئین برای کودکان زیر ۱۲ سال به دلیل خطر دپرسیون تنفسی ممنوع است. لطفاً از داروهای جایگزین استفاده کنید.");
+                }
+
+                if (ind.isComplexAZI) {
+                    let doseMgDay1 = weight * 10; let doseMgNext = weight * 5;
+                    if(ind.maxDailyMg) { doseMgDay1 = Math.min(doseMgDay1, ind.maxDailyMg); doseMgNext = Math.min(doseMgNext, ind.maxDailyMg); }
+                    let volDay1 = doseMgDay1 / strength.mgPerMl; let volNext = doseMgNext / strength.mgPerMl;
+                    DOM.resultWeight.innerHTML = `<strong>وزن: <span class="ltr-text">${toFaDigits(weight)} kg</span></strong><br><br>
+                        <i class="fas fa-check-circle" style="color:var(--success-text);"></i> <strong>روز اول:</strong> <span class="highlight-dose ltr-text">${toFaDigits(volDay1.toFixed(1))} mL</span> (معادل ${toFaDigits(doseMgDay1.toFixed(1))} mg)<br>
+                        <i class="fas fa-check-circle" style="color:var(--success-text);"></i> <strong>روز دوم تا پنجم:</strong> <span class="highlight-dose ltr-text">${toFaDigits(volNext.toFixed(1))} mL</span> (معادل ${toFaDigits(doseMgNext.toFixed(1))} mg)<br>`;
+                    DOM.resultWeight.classList.remove('hidden');
+                    return;
+                }
+                
+                if (currentDrugWeight.id === 'nystatin') {
+                    let nysVol = weight < 10 ? 2 : 4; 
+                    DOM.resultWeight.innerHTML = `<strong>وزن: <span class="ltr-text">${toFaDigits(weight)} kg</span></strong><br><br>
+                        • حجم هر نوبت: <span class="highlight-dose ltr-text">${toFaDigits(nysVol)} mL</span> (مجموعاً ${toFaDigits(nysVol*2)} mL در روز)<br>
+                        • فواصل مصرف: <strong>هر ۶ ساعت</strong> (نیمی در دو سمت دهان)<br>• طول درمان: حداقل تا ۴۸ ساعت پس از رفع علائم.`;
+                    DOM.resultWeight.classList.remove('hidden');
+                    return;
+                }
+
+                let totalMgDay = weight * ind.mgPerKgPerDay;
+                let warningHtml = "";
+
+                if (ind.maxDailyMg && totalMgDay > ind.maxDailyMg) {
+                    totalMgDay = ind.maxDailyMg;
+                    warningHtml = `<br><span style="color:var(--warning-text);"><i class="fas fa-shield-halved"></i> <strong>سقف مجاز:</strong> دوز روزانه (${toFaDigits(ind.maxDailyMg)} mg) روی محاسبات اعمال گردید.</span>`;
+                }
+
+                let mgPerDose = totalMgDay / ind.dosesPerDay;
+                let mlPerDose = mgPerDose / strength.mgPerMl;
+                let formattedVol = mlPerDose < 1 ? `۰٫${toFaDigits(Math.round(mlPerDose*10))}` : toFaDigits(parseFloat(mlPerDose.toFixed(1)));
+                let interval = 24 / ind.dosesPerDay;
+
+                DOM.resultWeight.innerHTML = `<strong>وزن: <span class="ltr-text">${toFaDigits(weight)} kg</span></strong><br><br>
+                    • حجم هر نوبت: <span class="highlight-dose ltr-text">${formattedVol} mL</span><br>
+                    • فواصل مصرف: <strong>هر <span class="ltr-text">${toFaDigits(interval)}</span> ساعت</strong><br>
+                    • دوره درمان: <strong><span class="ltr-text">${toFaDigits(ind.duration)}</span> روز</strong><br>
+                    • معادل ماده موثره: <span class="ltr-text">${toFaDigits(mgPerDose.toFixed(1))} mg</span> در هر دوز
+                    ${warningHtml}`;
+                DOM.resultWeight.classList.remove('hidden');
+            });
+
+            function resetWeightFields(full = true) {
+                if(full) { DOM.drugSelect.value = ""; DOM.weightInput.value = ""; }
+                DOM.strengthSelect.innerHTML = ""; DOM.diseaseSelect.innerHTML = "";
+                DOM.strengthWrapper.classList.add('hidden'); DOM.diseaseWrapper.classList.add('hidden');
+                DOM.drugNotesWrapper.classList.add('hidden'); DOM.doseInfoWrapper.classList.add('hidden');
+                DOM.resultWeight.classList.add('hidden');
+            }
+            DOM.resetBtnWeight.addEventListener('click', () => resetWeightFields(true));
+
+            function loadAgeDrugs() {
+                DRUGS_DB.ageBased.forEach(d => { let opt = document.createElement('option'); opt.value = d.id; opt.textContent = d.name; DOM.ageDrugSelect.appendChild(opt); });
+            }
+
+            DOM.ageDrugSelect.addEventListener('change', (e) => {
+                DOM.resultAge.classList.add('hidden'); DOM.ageStrengthSelect.innerHTML = "";
+                const drugId = e.target.value; if(!drugId) { DOM.ageDrugNotesWrapper.classList.add('hidden'); DOM.ageStrengthWrapper.classList.add('hidden'); return; }
+                currentDrugAge = DRUGS_DB.ageBased.find(d => d.id === drugId);
+                DOM.ageDrugNotes.innerHTML = currentDrugAge.notes; DOM.ageDrugNotesWrapper.classList.remove('hidden');
+                currentDrugAge.strengths.forEach(s => { let opt = document.createElement('option'); opt.value = s.id; opt.textContent = s.label; DOM.ageStrengthSelect.appendChild(opt); });
+                DOM.ageStrengthWrapper.classList.remove('hidden');
+            });
+
+            DOM.calcBtnAge.addEventListener('click', () => {
+                const age = parseFloat(DOM.ageInput.value);
+                const strengthId = DOM.ageStrengthSelect.value;
+                if (Number.isNaN(age) || age < 0) return alert("سن وارد شده نامعتبر است.");
+                if (!currentDrugAge || !strengthId) return alert("تمامی فیلدها را تکمیل نمایید.");
+
+                const strength = currentDrugAge.strengths.find(s => s.id === strengthId);
+                const band = currentDrugAge.ageBands.find(b => age >= b.minAge && age <= b.maxAge);
+
+                if(!band) {
+                    DOM.resultAge.innerHTML = `<span style="color:var(--warning-text);"><i class="fas fa-ban"></i> دوز استانداردی برای این بازه سنی در رفرنس تعریف نشده است.</span>`;
+                    DOM.resultAge.classList.remove('hidden'); return;
+                }
+
+                let mgPerDose = band.totalDailyMg / band.doses;
+                let mlPerDose = mgPerDose / strength.mgPerMl;
+                let formattedVol = mlPerDose < 1 ? `۰٫${toFaDigits(Math.round(mlPerDose*10))}` : toFaDigits(parseFloat(mlPerDose.toFixed(1)));
+
+                DOM.resultAge.innerHTML = `<strong>سن: <span class="ltr-text">${toFaDigits(age)} سال</span></strong><br><br>
+                    • حجم هر نوبت: <span class="highlight-dose ltr-text">${formattedVol} mL</span><br>
+                    • دستور بالینی: <strong>${band.note}</strong>`;
+                DOM.resultAge.classList.remove('hidden');
+            });
+
+            DOM.resetBtnAge.addEventListener('click', () => { DOM.ageDrugSelect.value = ""; DOM.ageInput.value = ""; DOM.ageDrugNotesWrapper.classList.add('hidden'); DOM.ageStrengthWrapper.classList.add('hidden'); DOM.resultAge.classList.add('hidden'); });
+
+            initTheme(); loadWeightDrugs('antibiotic'); loadAgeDrugs();
+        });
+    </script>
 </body>
 </html>
